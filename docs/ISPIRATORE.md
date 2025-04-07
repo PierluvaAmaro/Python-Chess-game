@@ -2,7 +2,7 @@
 
 Robin Milner (13 gennaio 1934 - 20 marzo 2010) è stato un informatico britannico e vincitore del Premio Turing Award, il più alto riconoscimento nel campo dell'informatica.
 
-![Robin Milner](milner.png)
+![Robin Milner](.test/milner.png)
 
 ## Contributi
 Il lavoro di Milner include, tra gli altri, lo sviluppo del linguaggio di programmazione ML, ampiamente utilizzato in ambito accademico come linguaggio introduttivo per la didattica, nonché il primo linguaggio a introdurre una gestione delle eccezioni type-safe (sicura rispetto ai tipi).
