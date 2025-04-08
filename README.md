@@ -1,4 +1,4 @@
-# App scacchi
+# App scacchi [![Continuous Integration and Continuous Delivery (CI/CD)](https://github.com/softeng2425-inf-uniba/project2-milner/actions/workflows/CI-CD.yml/badge.svg)](https://github.com/softeng2425-inf-uniba/project2-milner/actions/workflows/CI-CD.yml)
 
 * Applicazione per il gioco *2-players* degli scacchi
 
