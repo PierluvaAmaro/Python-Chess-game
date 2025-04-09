@@ -16,7 +16,7 @@ Mettersi d'accordo su chi sarà il primo componente del gruppo che accetterà l'
 
 **Le seguenti azioni sono di responsabilità del componente designato dal gruppo**:
 
-- Il componente designato dal gruppo dovrà scrivere sul canale `Formazione gruppi` di Teams un messaggio rivolto al docente (usare il *mention* con *@*) dichiarando che "il gruppo *x* è pronto" dove *x* è il nome del gruppo.
+- Il componente designato dal gruppo dovrà scrivere sul canale `Formazione gruppi` di Teams un messaggio rivolto al docente (usare il *mention* con *@*) dichiarando che "il gruppo *Milner* è pronto".
 - Il docente risponderà inviando allo studente in chat privata il link di assegnazione del progetto.
 - Cliccare sul link di assegnazione del progetto che il docente ha inviato in chat privata su Teams.
 - Scorrere la lista e cliccare sul proprio indirizzo di email
