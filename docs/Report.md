@@ -52,22 +52,24 @@ Un diagramma delle classi è una rappresentazione grafica utilizzata nella progr
 
 Ci sono diversi modi per rappresentare un diagramma delle classi, a seconda dello strumento e dello stile utilizzato. In questo progetto viene utilizzato il linguaggio di markup [Mermaid](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams) per creare diagrammi direttamente in file Markdown.
 
+#### Modello del progetto
+
 ```mermaid
 classDiagram
    class Giocatore {
-      +id: int
-      +nome: string
-      +colore: string
+      id: int
+      nome: string
+      colore: string
    }
 
    class Partita {
-      +id: int
-      +stato: string
-      +turno: string
+      id: int
+      stato: string
+      turno: string
    }
 
    class Scacchiera {
-      +griglia: Pezzo<><>
+      griglia: dimensione<><>
    }
 
    class Mossa {
@@ -79,10 +81,6 @@ classDiagram
       colore: string
       posizione: string
       simbolo: string
-   }
-
-   class Parser {
-      +converti(): string 
    }
 
    class Re
@@ -99,11 +97,17 @@ classDiagram
    Pezzo <|-- Cavallo
    Pezzo <|-- Pedone
 
-   Partita "1" -- "1..*" Giocatore
-   Partita "1" -- "1" Scacchiera
-   Partita "1" -- "1..*" Mossa 
-   Scacchiera "1" -- "1..*" Pezzo 
-   Mossa "1" -- "1" Parser
+   Mossa <|-- Scacco : mette in
+   Mossa <|-- Arrocco : esegue
+   Mossa <|-- Promozione : trasforma
+   Mossa <|-- Mangia : cattura
+
+   Scacco <|-- Matto
+
+   Partita "1..1" -- "1..*" Giocatore : coinvolge
+   Partita "1..1" -- "1..1" Scacchiera : utilizza
+   Giocatore "1..*" -- "1..*" Mossa : effettua
+   Scacchiera "1..1" -- "1..*" Pezzo : contiene
 
 
 ```
@@ -113,8 +117,6 @@ classDiagram
 ## Requisiti specifici
 ### Requisiti funzionali
 [//]: # (Implementazione dei requisiti funzionali)
-
----
 
 ### Requisiti non funzionali
 [//]: # (Implementazione dei requisiti non funzionali)
