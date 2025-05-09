@@ -33,10 +33,80 @@ Questo progetto mira a:
 - **Python** (logica di gioco e interfaccia testuale)
 - **Git/GitHub** (gestione della versione del codice e collaborazione)
 
+#### Riferimenti al team
+Il progetto è realizzato grazie alla collaborazione dei membri del team "Milner": 
+- [Amato Pierluca](https://github.com/PierluvaAmaro)
+- [Catalano Mirco Saverio](https://github.com/catalanomircosav)
+- [Nicola de Bari](https://github.com/nikegyz)
+- [Amorosini Antonio](https://github.com/Shadow484)
+- [Gesmundo Guglielmo](https://github.com/Ges201)
+- [Amato Lorenzo](https://github.com/loreamat)
+
 ---
 
 ## Modello di dominio
 [//]: # (Implementazione del modello di dominio)
+#### Che cosa è?
+Un diagramma delle classi è una rappresentazione grafica utilizzata nella programmazione orientata agli oggetti per mostrare la struttura di un sistema.
+ È uno strumento fondamentale per modellare il software, facilitando la comprensione del design e supportando la fase di sviluppo.
+
+Ci sono diversi modi per rappresentare un diagramma delle classi, a seconda dello strumento e dello stile utilizzato. In questo progetto viene utilizzato il linguaggio di markup [Mermaid](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams) per creare diagrammi direttamente in file Markdown.
+
+```mermaid
+classDiagram
+   class Giocatore {
+      +id: int
+      +nome: string
+      +colore: string
+   }
+
+   class Partita {
+      +id: int
+      +stato: string
+      +turno: string
+   }
+
+   class Scacchiera {
+      +griglia: Pezzo<><>
+   }
+
+   class Mossa {
+      origine: string
+      destinazione: string
+   }
+
+   class Pezzo {
+      colore: string
+      posizione: string
+      simbolo: string
+   }
+
+   class Parser {
+      +converti(): string 
+   }
+
+   class Re
+   class Regina
+   class Torre
+   class Alfiere
+   class Cavallo
+   class Pedone
+
+   Pezzo <|-- Re
+   Pezzo <|-- Regina
+   Pezzo <|-- Torre
+   Pezzo <|-- Alfiere
+   Pezzo <|-- Cavallo
+   Pezzo <|-- Pedone
+
+   Partita "1" -- "1..*" Giocatore
+   Partita "1" -- "1" Scacchiera
+   Partita "1" -- "1..*" Mossa 
+   Scacchiera "1" -- "1..*" Pezzo 
+   Mossa "1" -- "1" Parser
+
+
+```
 
 ---
 
@@ -51,10 +121,12 @@ Questo progetto mira a:
 
 ---
 
-
 ## Analisi retrospettiva
 ### Sprint 0
 [//]: # (Implementazione dell'AR relativa allo sprint 0)
 
 ---
+
+
+
 
