@@ -3,21 +3,34 @@ from Pezzi.Pezzo import Pezzo
 
 
 class Pedone(Pezzo):
-    """Classe che definisce il pezzo basico degli scacchi: il pedone."""
-
-    def __init__(self, init: Coordinata, colore: str, id: str):
-        """Costruttore che richiama il costruttore della classe madre."""
-        super().__init__(init, colore, id, True)
+    """Classe che rappresenta il pezzo base degli scacchi: il Pedone."""
     
-    def check_move(self, move: Coordinata) -> bool:
-        """Metodo che verifica se la posizione inserita dal giocatore e' corretta."""
-        if self.primo and self.init.y + 2 == move.y or self.init.y + 1 == move.y:
-            # mossa possibile
-            self.init = move
+    def __init__(self, simbolo: str, coord: Coordinata, turno: int = 1):
+        super().__init__(simbolo, coord, turno)
+
+    def check_move(self, final: Coordinata) -> bool:
+        if final is None:
+            raise ValueError("Coordinata non valida.")
+        if self.id.x == final.x and self.id.y == final.y:
+            raise ValueError("Coordinata non valida.")
+
+        dx = final.x - self.id.x
+        dy = final.y - self.id.y
+
+        print(f"{final.y} - {self.id.y} = ?")
+
+        # Il pedone può muoversi solo in verticale (dx deve essere 0)
+        if dx != 0:
+            return False
+        
+        # Il pedone si sposta di una casella in avanti
+        if dy == 1:
+            self.primo = False
+            return True
+        
+        # Il pedone può spostarsi di due caselle solo al primo movimento
+        if dy == 2 and self.primo:
             self.primo = False
             return True
 
-        else:
-            # mossa non valida.
-            print("Mossa non valida.")
-            return False
+        return False

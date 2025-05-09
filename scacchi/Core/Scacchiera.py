@@ -1,67 +1,94 @@
 from Core.Coordinata import Coordinata
+from Pezzi.Pedone import Pedone
 from Pezzi.Pezzo import Pezzo
 
 
-class Scacchiera:
-    """Rappresenta l'insieme dei pezzi vivi non catturati nella partita."""
+def crea_pezzo(simbolo: str, id: Coordinata, colore: int):
+    """Funzione che permette di generare un pezzo.
+
+    Il pezzo viene generato da simbolo e dalla sua Coordinata iniziale
+    """
+    match simbolo:
+        case "♟":
+            return Pedone("♟", id, colore)
+
+        case _:
+            raise ValueError(f"Pezzo non conosciuto: {simbolo}")
+
+def leggi_scacchiera(file="scacchiera.txt"):
+    """Funzione che restituisce un dizionario Coordinata->Pezzo."""
+    scacchiera = {}
+
+    with open(file) as f:
+        righe = [line.strip() for line in f.readlines() if line.strip()]
+
+    if len(righe) != 8:
+        raise ValueError(f"File non valido: le righe devono essere 8 ma sono: "
+                         f"{len.righe}"
+                        )
     
+    for y_riga, riga in enumerate(righe):
+        y = 8 - y_riga
+
+        if len(riga) != 8:
+            raise ValueError(f"File non valido: le colonne devono essere 8 ma sono"
+                             f"{len(riga)}"
+                            )
+
+        for x_col, simbolo in enumerate(riga):
+            if simbolo != ".":
+                x = x_col + 1
+
+                coord = Coordinata(x, y)
+                if y == 2 or y == 1:
+                    colore = 1  # Pedoni bianchi (turno 1)
+                elif y == 7 or y == 8:
+                    colore = -1  # Pedoni neri (turno -1)
+
+                pezzo = crea_pezzo(simbolo, coord, colore)
+                scacchiera[coord] = pezzo
+
+    return scacchiera
+
+class Scacchiera:
+    """CLasse che rappresenta un dizionari di pezzi.
+    
+    Rappresenta un dizionari con i pezzi non catturati come matrice 8x8 
+    """
+
     def __init__(self, pezzi_vivi: dict[Coordinata, Pezzo]):
         self.pezzi_vivi = pezzi_vivi
 
-    def check_position(self, pezzo: Pezzo, final: Coordinata):
-        if not pezzo.check_move(final):
-            return False
-        
-        # verifica se il pezzo e' ancora in gioco
-        if pezzo not in self.pezzi_vivi.values():
-            return False
-
-        # verifica se la posizione final e' la stessa di partenza
-        if (pezzo.init.x == final.x and pezzo.init.y == final.y
-            and pezzo.final.x == final.x and pezzo.final.y == final.y
-        ):
-            return False
-        
-        # verifica se la posizione e' occupata
-        if final in self.pezzi_vivi:
-            altro = self.pezzi_vivi[final]
-            if altro.colore == pezzo.colore:
-                return False
-            else:
-                self.pezzi_vivi.pop(final)
-
-        old = pezzo.init
-        pezzo.init = final
-
-        self.pezzi_vivi[final] = pezzo
-        self.pezzi_vivi.pop(old)
-
-        print("Posizione finale del pezzo: " + str(pezzo.init.x) 
-              + " : " + str(pezzo.init.y))
-        return True
-    
     def draw(self):
-        # Pulisce lo schermo
-        print("\033[2J", end="")
+        """Disegna la scacchiera con i pezzi vivi."""
+        # system('cls' if name == 'nt' else 'clear')
 
-         # Crea matrice vuota
         griglia = [[" . " for _ in range(8)] for _ in range(8)]
 
-        # Inserisce i pezzi nella matrice
         for coord, pezzo in self.pezzi_vivi.items():
-            x = coord.x - 1  # colonna da 0 a 7
-            y = 8 - coord.y  # riga da 0 (in alto) a 7 (in basso)
-            griglia[y][x] = f" {pezzo.id} "
+            if pezzo is not None:
+                x = coord.x - 1  # colonne da 0 a 7
+                y = 8 - coord.y  # righe da 0 a 7 (inverso)
+                griglia[y][x] = f" {pezzo.simbolo} "
 
-        # Stampa la griglia con le etichette
-        for riga in range(8):
-            print(f"{8 - riga} ", end="")  # numeri da 8 a 1
-            for cella in griglia[riga]:
-                print(cella, end="")
-            print()
-
-        # Colonne (a-h)
-        print("  ", end="")
-        for c in range(8):
-            print(f" {chr(ord('a') + c)} ", end="")
+        header = "   " + "".join(f" {chr(97 + i)}  " for i in range(8))
         print()
+        print("  +" + "---+" * 8)
+
+        for i, riga in enumerate(griglia):
+            numero_riga = 8 - i
+            print(f"{numero_riga} |" + "|".join(riga) + "|")
+            print("  +" + "---+" * 8)
+
+        print(header)
+
+    def find_piece(self, final: Coordinata):
+        for _, piece in self.pezzi_vivi.items():
+            if piece is not None and piece.check_move(final):
+                return piece
+
+
+    def muovi(self, pezzo: Pezzo, final: Coordinata):
+        self.pezzi_vivi.pop(pezzo.id)
+        pezzo.id = final
+        self.pezzi_vivi[final] = pezzo

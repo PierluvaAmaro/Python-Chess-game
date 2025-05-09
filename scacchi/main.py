@@ -1,6 +1,5 @@
-from Core.Coordinata import Coordinata
-from Core.Scacchiera import Scacchiera
-from Pezzi.Pedone import Pedone
+from Core.Parser import Parser
+from Core.Scacchiera import Scacchiera, leggi_scacchiera
 from rich import print
 from UI.UI import UI
 
@@ -16,9 +15,16 @@ def main():
         "Iniziamo a giocare a [bold]scacchi[/bold]!"
     )
 
-    pedone = Pedone(Coordinata(1,1), "bianco", "♟")
-    scacchiera = Scacchiera({pedone.init: pedone})
-    scacchiera.check_position(pedone, Coordinata(1,2))
+    parser = Parser()
+    scacchiera = Scacchiera(leggi_scacchiera())
     
+    while True:
+        scacchiera.draw()
+
+        mossa = parser.leggi_mossa()
+        pezzo = scacchiera.find_piece(mossa)
+        if pezzo is not None:
+            scacchiera.muovi(pezzo, mossa)
+
 if __name__ == "__main__":
     main()
