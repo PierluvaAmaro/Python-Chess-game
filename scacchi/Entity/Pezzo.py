@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from Core.Coordinata import Coordinata
+from Entity.Coordinata import Coordinata
 
 
 class Pezzo(ABC):
@@ -39,11 +39,3 @@ class Pezzo(ABC):
 
         """
         pass
-
-    def display(self):
-        """Stampa le informazioni correnti del pezzo per il debug."""
-        print(f"\nCoordinata: {self.init.x}, {self.init.y}\n"
-              f"movimento: {self.primo}\n"
-              f"simbolo: {'Bianco' if self.colore else 'Nero'}\n"
-            )
-    

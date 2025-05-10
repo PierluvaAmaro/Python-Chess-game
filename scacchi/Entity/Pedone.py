@@ -1,5 +1,5 @@
-from Core.Coordinata import Coordinata
-from Pezzi.Pezzo import Pezzo
+from Entity.Coordinata import Coordinata
+from Entity.Pezzo import Pezzo
 
 
 class Pedone(Pezzo):

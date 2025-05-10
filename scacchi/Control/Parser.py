@@ -1,4 +1,4 @@
-from Core.Coordinata import Coordinata
+from Entity.Coordinata import Coordinata
 
 
 class Parser:
@@ -7,26 +7,6 @@ class Parser:
     def __init__(self):
         """Inizializza un nuovo parser."""
         pass
-
-    def leggi_mossa(self, prompt="Inserisci mossa (es. e4): ") -> Coordinata:
-        """Legge una mossa dell'utente e la converte in una Coordinata.
-        
-        Continua a chiedere l'input finche' l'utente non inserisce una mossa valida. 
-        
-        Args:
-            prompt (str): Messaggio da mostrare all'utente
-        
-        Returns:
-            Coordinata: L'oggetto coordinata corrispondente alla mossa inserita.
-
-        """
-        while True:
-            try:
-                mossa = input(prompt).strip()
-                return self.parse_mossa(mossa)
-
-            except ValueError as e:
-                print(f"Errore: {e}. Riprova.")
 
     def parse_mossa(self, notazione: str) -> Coordinata:
         """Converti una stringa di notazione scacchistica in una coordinata.

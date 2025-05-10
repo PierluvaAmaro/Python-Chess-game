@@ -35,10 +35,6 @@ class Coordinata:
         else:
             raise ValueError("Valore Y non valido.")
 
-    def display(self):
-        """Stampa le coordinate in formato leggibile."""
-        print(f"[x: {self.x}, y: {self.y}]\n")
-
     def __eq__(self, other):
         """Confronta due coordinate per uguaglianza.
 
