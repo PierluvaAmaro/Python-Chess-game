@@ -43,7 +43,7 @@ def leggi_scacchiera(file="scacchiera.txt"):
                 if y == 2 or y == 1:
                     colore = 1  # Pedoni bianchi (turno 1)
                 elif y == 7 or y == 8:
-                    colore = -1  # Pedoni neri (turno -1)
+                    colore = 0  # Pedoni neri (turno -1)
 
                 pezzo = crea_pezzo(simbolo, coord, colore)
                 scacchiera[coord] = pezzo
@@ -61,8 +61,6 @@ class Scacchiera:
 
     def draw(self):
         """Disegna la scacchiera con i pezzi vivi."""
-        # system('cls' if name == 'nt' else 'clear')
-
         griglia = [[" . " for _ in range(8)] for _ in range(8)]
 
         for coord, pezzo in self.pezzi_vivi.items():
@@ -82,13 +80,21 @@ class Scacchiera:
 
         print(header)
 
-    def find_piece(self, final: Coordinata):
+    def find_piece(self, final: Coordinata, colore: bool) -> Pezzo:
+        # il primo pezzo che puo fare una determinata mossa la fa, per ora.
         for _, piece in self.pezzi_vivi.items():
-            if piece is not None and piece.check_move(final):
+            if piece is not None and piece.check_move(final) and piece.colore == colore:
+                piece.print()
                 return piece
 
+    def muovi(self, pezzo: Pezzo, final: Coordinata) -> bool:
+        if not self.is_occupied(final):
+            self.pezzi_vivi.pop(pezzo.init)
+            pezzo.init = final
+            self.pezzi_vivi[final] = pezzo
+            return True
+        
+        return False
 
-    def muovi(self, pezzo: Pezzo, final: Coordinata):
-        self.pezzi_vivi.pop(pezzo.id)
-        pezzo.id = final
-        self.pezzi_vivi[final] = pezzo
+    def is_occupied(self, final: Coordinata) -> bool:
+        return final in self.pezzi_vivi

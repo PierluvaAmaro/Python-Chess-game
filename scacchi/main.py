@@ -17,14 +17,16 @@ def main():
 
     parser = Parser()
     scacchiera = Scacchiera(leggi_scacchiera())
-    
+    colore = 1
     while True:
+        print("Turno Bianco" if colore == 1 else "Turno nero")
         scacchiera.draw()
 
         mossa = parser.leggi_mossa()
-        pezzo = scacchiera.find_piece(mossa)
-        if pezzo is not None:
-            scacchiera.muovi(pezzo, mossa)
+        pezzo = scacchiera.find_piece(mossa, colore)
 
+        if pezzo is not None and scacchiera.muovi(pezzo, mossa):
+            colore = not colore
+    
 if __name__ == "__main__":
     main()
