@@ -104,10 +104,12 @@ classDiagram
 
    Scacco <|-- Matto
 
-   Partita "1..1" -- "1..*" Giocatore : coinvolge
+   Partita "1..1" -- "1..*" Giocatore : Avvia
+   Partita "1..1" -- "1..*" Giocatore : Patta
+   Partita "1..1" -- "1..*" Giocatore : Ferma
    Partita "1..1" -- "1..1" Scacchiera : utilizza
    Giocatore "1..*" -- "1..*" Mossa : effettua
-   Scacchiera "1..1" -- "1..*" Pezzo : contiene
+   Scacchiera "0..*" -- "1..1" Pezzo : contiene
 
 
 ```
