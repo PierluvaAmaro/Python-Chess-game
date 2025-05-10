@@ -3,10 +3,20 @@ from Pezzi.Pedone import Pedone
 from Pezzi.Pezzo import Pezzo
 
 
-def crea_pezzo(simbolo: str, id: Coordinata, colore: int):
-    """Funzione che permette di generare un pezzo.
+def crea_pezzo(simbolo: str, id: Coordinata, colore: bool):
+    """Crea un oggetto Pezzo corrispondente al simbolo e al colore specificato.
 
-    Il pezzo viene generato da simbolo e dalla sua Coordinata iniziale
+    Args:
+        simbolo (str): Simbolo del pezzo da creare.
+        id (Coordinata): Coordinata iniziale del pezzo.
+        colore (int): Colore del pezzo da creare (0 = nero, 1 = bianco).
+    
+    Returns:
+        Pezzo: Oggetto derivato dalla classe Pezzo (es. Pedone).
+
+    Raises:
+        ValueError: Se il simbolo non corrisponde a un pezzo riconosciuto.
+
     """
     match simbolo:
         case "♟":
@@ -16,7 +26,23 @@ def crea_pezzo(simbolo: str, id: Coordinata, colore: int):
             raise ValueError(f"Pezzo non conosciuto: {simbolo}")
 
 def leggi_scacchiera(file="scacchiera.txt"):
-    """Funzione che restituisce un dizionario Coordinata->Pezzo."""
+    """Legge la disposizione della tastiera da un file di testo.
+
+    Il file deve contenere 8 righe da 8 caratteri ciascuna, dove ogni simbolo 
+    rappresenta un pezzo. I punti (.) indicano caselle vuote. I pezzi vengono associati 
+    a un colore in base alla riga.
+
+    Args:
+        file (str): Percorso del file da cui leggere la disposizione.
+    
+    Returns:
+        dict[Coordinata, Pezzo]: Dizionario che associa una Coordinata a un Pezzo.
+
+    Raises:
+        ValueError: Se il file non contiene esattamente 8 righe o se una riga non 
+        contiene 8 colonne.
+    
+    """
     scacchiera = {}
 
     with open(file) as f:
@@ -39,28 +65,34 @@ def leggi_scacchiera(file="scacchiera.txt"):
             if simbolo != ".":
                 x = x_col + 1
 
-                coord = Coordinata(x, y)
+                # determina il colore del pezzo in base alla posizione
                 if y == 2 or y == 1:
-                    colore = 1  # Pedoni bianchi (turno 1)
+                    colore = True # colore bianco
                 elif y == 7 or y == 8:
-                    colore = 0  # Pedoni neri (turno -1)
-
+                    colore = False # colore nero
+                else:
+                    continue # nessun pezzo previsto in quella casa.
+                
+                coord = Coordinata(x, y)
                 pezzo = crea_pezzo(simbolo, coord, colore)
                 scacchiera[coord] = pezzo
 
     return scacchiera
 
 class Scacchiera:
-    """CLasse che rappresenta un dizionari di pezzi.
-    
-    Rappresenta un dizionari con i pezzi non catturati come matrice 8x8 
-    """
+    """Rappresenta lo stato della scacchiera e gestisce le operazioni sui Pezzi."""
 
     def __init__(self, pezzi_vivi: dict[Coordinata, Pezzo]):
+        """Inizializza la scacchiera con i pezzi forniti.
+        
+        Args:
+            pezzi_vivi (dict[Coordinata, Pezzo]): Dizionario contenente i pezzi attivi.
+
+        """
         self.pezzi_vivi = pezzi_vivi
 
     def draw(self):
-        """Disegna la scacchiera con i pezzi vivi."""
+        """Disegna la scacchiera con i pezzi attualmente presenti."""
         griglia = [[" . " for _ in range(8)] for _ in range(8)]
 
         for coord, pezzo in self.pezzi_vivi.items():
@@ -81,13 +113,34 @@ class Scacchiera:
         print(header)
 
     def find_piece(self, final: Coordinata, colore: bool) -> Pezzo:
-        # il primo pezzo che puo fare una determinata mossa la fa, per ora.
+        """Trova il pezzo del colore specificato che puo' muoversi alla coordinata.
+        
+        Args:
+            final (Coordinata): Coordinata di destinazione del pezzo.
+            colore (bool): Colore del pezzo da cercare.
+
+        Returns:
+            Pezzo: Il primo pezzo valido che puo' effettuare la mossa, se trovato.
+        
+        """
         for _, piece in self.pezzi_vivi.items():
-            if piece is not None and piece.check_move(final) and piece.colore == colore:
-                piece.print()
+            if piece is not None and piece.colore == colore and piece.check_move(final):
                 return piece
+        
+        print("Nessun tuo pezzo puo' effettuare quella mossa.")
+        return None
 
     def muovi(self, pezzo: Pezzo, final: Coordinata) -> bool:
+        """Esegue lo spostamento di un pezzo se la destinazione non e' occupata.
+        
+        Args:
+            pezzo (Pezzo): Il pezzo da muovere.
+            final (Coordinata): La destinazione del pezzo.
+
+        Returns:
+            bool: True se la mossa e' stata effettuata con successo, False altrimenti.
+        
+        """
         if not self.is_occupied(final):
             self.pezzi_vivi.pop(pezzo.init)
             pezzo.init = final
@@ -97,4 +150,16 @@ class Scacchiera:
         return False
 
     def is_occupied(self, final: Coordinata) -> bool:
-        return final in self.pezzi_vivi
+        """Verifica se una casella e' occupata da un pezzo.
+
+        Args:
+            final (Coordinata): Coordinata da controllare.
+
+        Returns:
+            bool: True se la casella e' occupata, False altrimenti.
+
+        """ 
+        if final in self.pezzi_vivi:
+            print("Posizione occupata.")
+            return True
+        return False

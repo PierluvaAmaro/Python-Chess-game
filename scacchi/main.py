@@ -14,14 +14,14 @@ def main():
         f"Ciao [bold {ui.get_accent_color()}]{name}[/bold {ui.get_accent_color()}]! "
         "Iniziamo a giocare a [bold]scacchi[/bold]!"
     )
-
-    parser = Parser()
     scacchiera = Scacchiera(leggi_scacchiera())
+    parser = Parser()
     colore = 1
+
     while True:
-        print("Turno Bianco" if colore == 1 else "Turno nero")
         scacchiera.draw()
 
+        print(f"Turno del giocatore {'bianco' if colore else 'nero'}.")
         mossa = parser.leggi_mossa()
         pezzo = scacchiera.find_piece(mossa, colore)
 
