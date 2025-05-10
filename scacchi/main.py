@@ -1,7 +1,8 @@
 from Core.Parser import Parser
-from Core.Scacchiera import Scacchiera, leggi_scacchiera
+from Core.Scacchiera import Scacchiera
 from rich import print
 from UI.UI import UI
+from Utility.Utils import leggi_scacchiera
 
 
 def main():
