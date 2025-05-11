@@ -1,4 +1,4 @@
-from Entity.Coordinata import Coordinata
+from ..Entity.Coordinata import Coordinata
 
 
 class Parser:

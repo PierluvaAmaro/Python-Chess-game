@@ -1,5 +1,5 @@
-from Entity.Coordinata import Coordinata
-from Entity.Pedone import Pedone
+from ..Entity.Coordinata import Coordinata
+from ..Entity.Pedone import Pedone
 
 
 def crea_pezzo(simbolo: str, id: Coordinata, colore: bool):

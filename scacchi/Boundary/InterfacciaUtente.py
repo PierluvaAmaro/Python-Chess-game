@@ -1,8 +1,9 @@
-from Entity.Coordinata import Coordinata
-from Entity.Pezzo import Pezzo
-from Entity.Scacchiera import Scacchiera
 from rich import print
 from rich.console import Console
+
+from ..Entity.Coordinata import Coordinata
+from ..Entity.Pezzo import Pezzo
+from ..Entity.Scacchiera import Scacchiera
 
 
 class InterfacciaUtente:

@@ -1,5 +1,5 @@
-from Entity.Coordinata import Coordinata
-from Entity.Pezzo import Pezzo
+from .Coordinata import Coordinata
+from .Pezzo import Pezzo
 
 
 class Scacchiera:

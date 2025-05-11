@@ -1,6 +1,6 @@
-from Entity.Coordinata import Coordinata
-from Entity.Pezzo import Pezzo
-from Entity.Scacchiera import Scacchiera
+from ..Entity.Coordinata import Coordinata
+from ..Entity.Pezzo import Pezzo
+from ..Entity.Scacchiera import Scacchiera
 
 
 class PieceControl:

@@ -1,8 +1,8 @@
-from Boundary.InputUtente import InputUtente
-from Boundary.InterfacciaUtente import InterfacciaUtente
-from Control.PieceControl import PieceControl
-from Control.Utils import leggi_scacchiera
-from Entity.Scacchiera import Scacchiera
+from .Boundary.InputUtente import InputUtente
+from .Boundary.InterfacciaUtente import InterfacciaUtente
+from .Control.PieceControl import PieceControl
+from .Control.Utils import leggi_scacchiera
+from .Entity.Scacchiera import Scacchiera
 
 
 def main():

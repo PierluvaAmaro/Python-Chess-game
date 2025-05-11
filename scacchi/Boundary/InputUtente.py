@@ -1,5 +1,5 @@
-from Control.Parser import Parser
-from Entity.Coordinata import Coordinata
+from ..Control.Parser import Parser
+from ..Entity.Coordinata import Coordinata
 
 
 class InputUtente:

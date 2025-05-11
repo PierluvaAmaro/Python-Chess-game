@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from Entity.Coordinata import Coordinata
+from ..Entity.Coordinata import Coordinata
 
 
 class Pezzo(ABC):
