@@ -1,7 +1,7 @@
 from ..Entity.Coordinata import Coordinata
 from ..Entity.Pedone import Pedone
 
-
+    
 def crea_pezzo(simbolo: str, id: Coordinata, colore: bool):
     """Crea un oggetto Pezzo corrispondente al simbolo e al colore specificato.
 
@@ -48,15 +48,14 @@ def leggi_scacchiera(file="scacchiera.txt"):
         righe = [line.strip() for line in f.readlines() if line.strip()]
 
     if len(righe) != 8:
-        raise ValueError(f"File non valido: le righe devono essere 8 ma sono: "
-                         f"{len.righe}"
+        raise ValueError(f"File non valido: le righe devono essere 8 ma sono: {len(righe)}"
                         )
     
     for y_riga, riga in enumerate(righe):
         y = 8 - y_riga
 
         if len(riga) != 8:
-            raise ValueError(f"File non valido: le colonne devono essere 8 ma sono"
+            raise ValueError(f"File non valido: le colonne devono essere 8 ma sono: "
                              f"{len(riga)}"
                             )
 

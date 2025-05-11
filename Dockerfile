@@ -28,4 +28,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 ENTRYPOINT []
 
 # Run the application by default
-CMD ["python", "scacchi/main.py"]
+CMD ["python", "-m", "scacchi.main"]

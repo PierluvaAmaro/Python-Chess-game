@@ -17,20 +17,11 @@ class Pedone(Pezzo):
         super().__init__(simbolo, coord, colore)
 
     def check_move(self, final: Coordinata) -> bool:
-        """Verifica se la mossa verso la coordinata specificata e' valida per il pedone.
+        """Verifica se la mossa verso la coordinata specificata è valida per il pedone."""
         
-        Args:
-            final (Coordinata): Coordinata di destinazione.
-
-        Returns:
-            bool: True se la mossa e' valida, False altrimenti.
-
-        Raises:
-            ValueError: Se la coordinata finale e' nulla.
-        
-        """
         if final is None:
             raise ValueError("Coordinata non valida.")
+        
         if self.init.x == final.x and self.init.y == final.y:
             print("La coordinata finale deve essere diversa da quella di partenza.")
             return False
@@ -38,11 +29,10 @@ class Pedone(Pezzo):
         dx = final.x - self.init.x
         dy = final.y - self.init.y
 
-        
         # Il pedone può muoversi solo in verticale (dx deve essere 0)
         if dx != 0:
             return False
-        
+
         direzione = 1 if self.colore else -1  # Bianco: su, Nero: giù
 
         # Il pedone si sposta di una casella in avanti
@@ -54,5 +44,9 @@ class Pedone(Pezzo):
         if dy == 2 * direzione and self.primo:
             self.primo = False
             return True
+
+        # Se la direzione di movimento è negativa per il pedone nero, è una mossa non valida
+        if (not self.colore and dy < 0):
+            return False
 
         return False
