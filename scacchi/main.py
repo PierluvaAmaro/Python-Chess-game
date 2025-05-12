@@ -1,90 +1,30 @@
-from rich import print
-
-
-class UI:
-    """Defines the configuration of the game's UI."""
-
-    def __init__(self):
-        """Initialize the game's UI with default settings."""
-        self._ACCENT_COLOR: str = "red"
-
-    def set_accent_color(self, accent_color: str):
-        """Set the accent color for the game's UI.
-
-        List of valid colors supported by the Rich library:
-            - `black`
-            - `red`
-            - `green`
-            - `yellow`
-            - `blue`
-            - `magenta`
-            - `cyan`
-            - `white`
-            - `bright_black`
-            - `bright_red`
-            - `bright_green`
-            - `bright_yellow`
-            - `bright_blue`
-            - `bright_magenta`
-            - `bright_cyan`
-            - `bright_white`
-
-        Args:
-            accent_color (str): the accent color to be used in the game's UI
-
-        Raises:
-            ValueError: if the accent color is not supported by the Rich library
-
-        """
-        RICH_COLORS: set[str] = {
-            "black",
-            "red",
-            "green",
-            "yellow",
-            "blue",
-            "magenta",
-            "cyan",
-            "white",
-            "bright_black",
-            "bright_red",
-            "bright_green",
-            "bright_yellow",
-            "bright_blue",
-            "bright_magenta",
-            "bright_cyan",
-            "bright_white",
-        }
-
-        # If the user provides an accent color, then use it
-        if accent_color in RICH_COLORS:
-            self._ACCENT_COLOR = accent_color
-        else:
-            raise ValueError(
-                f"Invalid accent color '{self._ACCENT_COLOR}'. "
-                "Please choose a color supported by the Rich library."
-            )
-
-    def get_accent_color(self) -> str:
-        """Get the accent color for the game's UI.
-
-        Returns:
-            accent color
-
-        """
-        return self._ACCENT_COLOR
+from .Boundary.InputUtente import InputUtente
+from .Boundary.InterfacciaUtente import InterfacciaUtente
+from .Control.PieceControl import PieceControl
+from .Control.Utils import leggi_scacchiera
+from .Entity.Scacchiera import Scacchiera
 
 
 def main():
-    """Run the Scacchi game and activate the GH workflows."""
-    ui = UI()
-    ui.set_accent_color("blue")
+    """Avvia il gioco degli scacchi e attiva il workflow GH."""
+    ui = InterfacciaUtente()
+    inputt = InputUtente()
 
-    name = input("Benvenuto in Scacchi! Inserisci il tuo nome: ")
-    print(
-        f"Ciao [bold {ui.get_accent_color()}]{name}[/bold {ui.get_accent_color()}]! "
-        "Iniziamo a giocare a [bold]scacchi[/bold]!"
-    )
+    ui.set_accent("blue")
 
+    name = inputt.leggi("Benvenuto in Scacchi! Inserisci il tuo nome: ")
+    ui.stampa(f"Ciao {name}! Iniziamo a giocare a scacchi!")
+
+    scacchiera = Scacchiera(leggi_scacchiera())
+    pieces = PieceControl()
+
+    colore = 1
+    while True:
+        ui.display_scacchiera(scacchiera)
+        mossa = inputt.leggi_mossa()
+        pezzo = pieces.find_piece(scacchiera, mossa, colore)
+        if pezzo is not None and pieces.muovi(scacchiera, pezzo, mossa):
+            colore = not colore
 
 if __name__ == "__main__":
     main()
