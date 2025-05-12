@@ -205,11 +205,8 @@ Il formato deve essere leggibile e coerente con la notazione standard, per perme
 
 ## Analisi retrospettiva
 ### Sprint 0
-   
-[//]: # (Implementazione dell'AR relativa allo sprint 0)
-
----
-
+L'immagine rappresenta il risultato del team meeting svolto dopo lo Sprint 0, durante il quale abbiamo riflettuto sulle difficoltà incontrate e sulle soluzioni adottate. 
+[Immagine PB sprint 0](./img/PB_Milner_S0.png)
 
 
 
