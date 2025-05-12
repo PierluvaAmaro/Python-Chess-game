@@ -117,16 +117,95 @@ classDiagram
 ---
 
 ## Requisiti specifici
-### Requisiti funzionali
-[//]: # (Implementazione dei requisiti funzionali)
+#### Requisiti funzionali
 
-### Requisiti non funzionali
-[//]: # (Implementazione dei requisiti non funzionali)
+**RF1 – Visualizzazione dell'help**
+
+Il sistema deve mostrare una descrizione concisa dell'applicazione seguita dall’elenco dei comandi disponibili, uno per riga, quando l’utente invoca uno dei seguenti comandi:
+- `/help`
+- `--help`
+- `-h`
+
+**RF2 – Avvio di una nuova partita**
+
+Il sistema deve permettere di iniziare una nuova partita al comando `/gioca`, se non è già in corso una partita.
+
+All’invocazione, l’applicazione deve:
+- mostrare la scacchiera con i pezzi nella posizione iniziale;
+- predisporre l'interfaccia per ricevere la prima mossa del bianco o altri comandi.
+
+
+
+**RF3 – Visualizzazione della scacchiera**
+
+Il sistema deve rispondere al comando `/scacchiera` con due comportamenti distinti:
+- se il gioco **non è iniziato**, suggerisce l’uso del comando `/gioca`;
+- se il gioco **è in corso**, mostra la posizione attuale di tutti i pezzi sulla scacchiera.
+
+
+
+**RF4 – Abbandono della partita**
+
+Il sistema deve permettere al giocatore di abbandonare la partita tramite il comando `/abbandona`.
+
+Il comportamento deve essere il seguente:
+- l’applicazione chiede conferma all’utente;
+- se la conferma è **positiva**, comunica che l’avversario ha vinto per abbandono;
+- se la conferma è **negativa**, resta in attesa di altri comandi o tentativi.
+
+
+
+**RF5 – Proposta di patta**
+
+Il sistema deve permettere al giocatore di proporre la patta tramite il comando `/patta`.
+
+Il comportamento deve essere il seguente:
+- l’app chiede conferma all’avversario;
+- se l’avversario accetta, la partita termina in pareggio;
+- se l’avversario rifiuta, il sistema si predispone a ricevere altri comandi.
+
+
+
+**RF6 – Chiusura dell'applicazione**
+
+Il sistema deve gestire la chiusura dell’applicazione tramite il comando `/esci`.
+
+Il comportamento deve essere il seguente:
+- l’applicazione chiede conferma;
+- se la conferma è **positiva**, si chiude e restituisce il controllo al sistema operativo;
+- se la conferma è **negativa**, si predispone a ricevere nuovi comandi.
+
+
+**RF7 - Visualizzazione delle mosse**
+
+Il sistema deve rispondere al comando `/mosse` mostrando la **cronologia delle mosse** effettuate nella partita in corso, utilizzando la **notazione algebrica abbreviata in italiano**.
+
+Esempio di output atteso:
+e4 c6
+d4 d5
+Cc3 dxe4
+Cxe4 Cd7
+De2 Cgf6
+
+Il formato deve essere leggibile e coerente con la notazione standard, per permettere ai giocatori di consultare facilmente lo storico delle mosse e analizzare l'andamento della partita.
+
+---
+
+#### Requisiti non funzionali
+- **RNF1**: L'applicazione deve essere eseguita all'interno di un container Docker.
+- **RNF2**: L'applicazione deve essere compatibile con i seguenti terminali:
+  - Terminal di Linux
+  - Terminal di macOS
+  - PowerShell di Windows
+  - Git Bash di Windows
+- **RNF3**: L'applicazione deve utilizzare i simboli UTF-8 per la rappresentazione grafica dei pezzi degli scacchi: ♔ ♕ ♖ ♗ ♘ ♙ ♚ ♛ ♜ ♝ ♞ ♟.
+  (Riferimento: [Wikipedia - Scacchi](https://it.wikipedia.org/wiki/Scacchi#Descrizione_e_regolamento))
 
 ---
 
 ## Analisi retrospettiva
 ### Sprint 0
+   
 [//]: # (Implementazione dell'AR relativa allo sprint 0)
 
 ---
