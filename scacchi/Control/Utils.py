@@ -17,10 +17,12 @@ def crea_pezzo(simbolo: str, id: Coordinata, colore: bool):
         ValueError: Se il simbolo non corrisponde a un pezzo riconosciuto.
 
     """
-    match simbolo:
+    match simbolo:      
+        case "♙":
+            return Pedone("♙", id, colore)
+        
         case "♟":
             return Pedone("♟", id, colore)
-
         case _:
             raise ValueError(f"Pezzo non conosciuto: {simbolo}")
 
@@ -44,7 +46,7 @@ def leggi_scacchiera(file="scacchiera.txt"):
     """
     scacchiera = {}
 
-    with open(file) as f:
+    with open(file, encoding="utf-8") as f:
         righe = [line.strip() for line in f.readlines() if line.strip()]
 
     if len(righe) != 8:

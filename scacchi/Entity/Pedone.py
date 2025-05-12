@@ -18,7 +18,6 @@ class Pedone(Pezzo):
 
     def check_move(self, final: Coordinata) -> bool:
         """Verifica se la mossa verso la coordinata specificata è valida per il pedone."""
-        
         if final is None:
             raise ValueError("Coordinata non valida.")
         
