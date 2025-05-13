@@ -4,6 +4,8 @@ from ..Entity.Coordinata import Coordinata
 
 
 class Pezzo(ABC):
+    """CLASSE ENTITY."""
+    
     """Rappresenta un pezzo generico degli scacchi.
     
     Questa e' una classe astratta che funge da base per tutti i pezzi

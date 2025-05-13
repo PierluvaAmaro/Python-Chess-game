@@ -3,6 +3,8 @@ from .Pezzo import Pezzo
 
 
 class Alfiere(Pezzo):
+    """CLASSE ENTITY."""
+    
     """Rappresenta l'alfiere, uno dei pezzi fondamentali negli scacchi."""
 
     def __init__(self, simbolo: str, coord: Coordinata, colore: bool):

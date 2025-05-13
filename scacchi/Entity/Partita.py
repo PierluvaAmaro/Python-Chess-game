@@ -8,10 +8,13 @@ from .Scacchiera import Scacchiera
 
 
 class Partita:
+    """CLASSE ENTITY."""
+
     """Gestisce la logica principale della partita a scacchi."""
 
     def __init__(self):
-        """Inizializza la scacchiera, l'input utente, il controllo dei vari pezzi, l'UI, e indica che la partita è in corso."""
+        """Inizializza: scacchiera, input utente, controllo dei vari pezzi, UI."""
+        """Indica che la partita è in corso."""
         self.scacchiera = Scacchiera(leggi_scacchiera("scacchiera.txt"))
         self.inputUtente = InputUtente()
         self.pieceControl = PieceControl()
@@ -53,7 +56,7 @@ class Partita:
                     continue
             else:
                 coord = self.inputUtente.parser.parse_mossa(stringa)
-                pezzo = self.pieceControl.find_piece(self.scacchiera, coord, colore == "white")
+                pezzo = self.pieceControl.find_piece(self.scacchiera, coord, colore == "white")  # noqa: E501
                 if pezzo:
                     self.pieceControl.muovi(self.scacchiera, pezzo, coord)
                     turno_bianco = not turno_bianco
@@ -75,8 +78,9 @@ class Partita:
     def process(self, risultato):
         """Esegue il comando in input.
 
-            Args:
-            risultato (int): Rappresenta il comando da eseguire.
+        Args:
+        risultato (int): Rappresenta il comando da eseguire.
+
         """
         match risultato:
             case 1: # gioca
@@ -93,9 +97,16 @@ class Partita:
             case 6:
                 print("abbandona")
             case 7:
-                print("esci")
-                exit(0)
-
+                while True:
+                    risposta = input("Vuoi davvero uscire? (s/n): ")
+                    if risposta.lower() == "s":
+                        print("Uscita in corso...")
+                        exit(0)
+                    elif risposta.lower() == "n":
+                        print("Uscita annullata.")
+                        break
+                    else:
+                        print("Inserisci una risposta valida (s/n).")
             case None:
                 print("Input non riconosciuto.")
             case _:
