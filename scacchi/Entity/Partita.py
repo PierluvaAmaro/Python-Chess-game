@@ -24,6 +24,14 @@ class Partita:
         self.nome1 = ""
         self.nome2 = ""
 
+    def reset(self):
+        """Reimposta tutti i dati della partita per una nuova sessione."""
+        self.scacchiera = Scacchiera(leggi_scacchiera("scacchiera.txt"))
+        self.in_gioco = False
+        self.turno_bianco = True
+        self.nome1 = ""
+        self.nome2 = ""
+
         
     def run(self):
         if self.in_gioco:
