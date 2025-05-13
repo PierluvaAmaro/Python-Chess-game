@@ -1,4 +1,6 @@
 class CommandListener:
+    """CLASSE BOUNDARY."""
+    
     """Gestisce l'input dei comandi dell'utente."""
 
     def __init__(self):

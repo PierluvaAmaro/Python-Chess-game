@@ -2,6 +2,8 @@ from ..Entity.Coordinata import Coordinata
 
 
 class Parser:
+    """CLASSE CONTROL."""
+    
     """Classe per la lettura e la conversione di mosse in notazione scacchistica."""
 
     def __init__(self):

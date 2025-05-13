@@ -6,6 +6,8 @@ from ..Entity.Scacchiera import Scacchiera
 
 
 class UI:
+    """CLASSE BOUNDARY."""
+    
     """Gestisce l'interfaccia tra l'utente e il gioco degli scacchi."""
     
     def __init__(self):

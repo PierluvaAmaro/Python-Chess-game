@@ -4,6 +4,8 @@ from ..Entity.Scacchiera import Scacchiera
 
 
 class PieceControl:
+    """CLASSE CONTROL."""
+    
     """Controlla le operazioni sui pezzi durante il gioco degli scacchi."""
 
     def __init__(self):

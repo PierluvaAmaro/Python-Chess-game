@@ -1,4 +1,6 @@
 class Coordinata:
+    """CLASSE ENTITY."""
+    
     """Rappresenta una coppia di coordinate cartesiane (x, y)."""
 
     def __init__(self, x: int, y: int):

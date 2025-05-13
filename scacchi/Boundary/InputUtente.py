@@ -3,6 +3,8 @@ from .CommandListener import CommandListener
 
 
 class InputUtente:
+    """CLASSE BOUNDARY."""
+    
     """Gestisce l'input dell'utente."""
 
     def __init__(self):

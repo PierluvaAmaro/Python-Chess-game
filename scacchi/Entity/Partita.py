@@ -8,6 +8,8 @@ from .Scacchiera import Scacchiera
 
 
 class Partita:
+    """CLASSE ENTITY."""
+    
     """Gestisce la logica principale della partita a scacchi."""
 
     def __init__(self):

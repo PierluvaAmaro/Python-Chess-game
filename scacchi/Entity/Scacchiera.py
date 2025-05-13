@@ -3,6 +3,8 @@ from .Pezzo import Pezzo
 
 
 class Scacchiera:
+    """CLASSE ENTITY."""
+    
     """Rappresenta lo stato della scacchiera e gestisce le operazioni sui Pezzi."""
 
     def __init__(self, pezzi_vivi: dict[Coordinata, Pezzo]):
