@@ -32,12 +32,11 @@ class Partita:
         self.nome1 = ""
         self.nome2 = ""
 
-        
     def run(self):
         if self.in_gioco:
             self.ui.stampa("Una partita è già in corso.", accent="yellow")
             return
-    
+
         self.in_gioco = True
 
         while not self.nome1 or not self.nome2:
@@ -48,7 +47,7 @@ class Partita:
             nome = self.nome1 if self.turno_bianco else self.nome2
             colore = "white" if self.turno_bianco else "black"
 
-            self.ui.set_style('accent', colore)
+            self.ui.set_style("accent", colore)
             messaggio = f"{self.ui.format_text(nome)} - Inserisci mossa (es. e4):"
             self.ui.console.print(messaggio)
 
@@ -65,7 +64,9 @@ class Partita:
                     continue  # altri comandi, si continua
             else:
                 coord = self.inputUtente.parser.parse_mossa(stringa)
-                pezzo = self.pieceControl.find_piece(self.scacchiera, coord, self.turno_bianco)  # noqa: E501
+                pezzo = self.pieceControl.find_piece(
+                    self.scacchiera, coord, self.turno_bianco
+                )  # noqa: E501
                 if pezzo:
                     self.pieceControl.muovi(self.scacchiera, pezzo, coord)
                     self.turno_bianco = not self.turno_bianco
@@ -75,14 +76,11 @@ class Partita:
 
     def check(self):
         """Controlla se l'input inserito è un comando."""
-        # Processa l'input da linea di comando solo una volta
         if len(argv) > 1 and argv[1] in ("--help", "-h"):
-            self.ui.display_help("help.txt")
-
+            with open("help.txt", "r") as file:
+                print(file.read())
         while True:
-            risultato = self.inputUtente.listen(
-                self.inputUtente.leggi("Inserisci: ")
-            )
+            risultato = self.inputUtente.listen(self.inputUtente.leggi("Inserisci: "))
             self.process(risultato)
 
     def process(self, risultato):
@@ -93,9 +91,9 @@ class Partita:
 
         """
         match risultato:
-            case 1: # gioca
+            case 1:  # gioca
                 self.run()
-            case 2: 
+            case 2:
                 while True:
                     if not self.in_gioco:
                         print("Non è in corso nessuna partita.")
@@ -105,7 +103,9 @@ class Partita:
                         self.ui.display_scacchiera(self.scacchiera)
                         return "continua"
             case 3:  # mostra help
-                with open("help.txt",) as file:
+                with open(
+                    "help.txt",
+                ) as file:
                     print(file.read())
             case 4:
                 print("mosse")
@@ -113,7 +113,7 @@ class Partita:
                 print("patta")
             case 6:
                 while True:
-                    if(self.in_gioco):
+                    if self.in_gioco:
                         risposta = input("Vuoi davvero abbandonare? (s/n): ")
                         if risposta.lower() == "s":
                             vincitore = self.nome2 if self.turno_bianco else self.nome1
