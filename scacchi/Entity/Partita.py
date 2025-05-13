@@ -104,7 +104,22 @@ class Partita:
             case 5:
                 print("patta")
             case 6:
-                print("abbandona")
+                while True:
+                    if(self.in_gioco):
+                        risposta = input("Vuoi davvero abbandonare? (s/n): ")
+                        if risposta.lower() == "s":
+                            vincitore = self.nome2 if self.turno_bianco else self.nome1
+                            print(f"{vincitore} ha vinto per abbandono.")
+                            self.reset()  # resetta la partita
+                            return "fine"
+                        elif risposta.lower() == "n":
+                            print("Abbandono annullato.")
+                            return "continua"
+                        else:
+                            print("Inserisci una risposta valida (s/n).")
+                    else:
+                        print("Non puoi abbandonare, non è in corso nessuna partita.")
+                        break
             case 7:
                 while True:
                     risposta = input("Vuoi davvero uscire? (s/n): ")
