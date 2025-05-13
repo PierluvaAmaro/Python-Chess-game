@@ -211,7 +211,18 @@ Il formato deve essere leggibile e coerente con la notazione standard, per perme
 ## Analisi retrospettiva
 ### Sprint 0
 L'immagine rappresenta il risultato del team meeting svolto dopo lo Sprint 0, durante il quale abbiamo riflettuto sulle difficoltà incontrate e sulle soluzioni adottate. 
-[Immagine PB sprint 0](./img/PB_Milner_S0.png)
+![Immagine PB sprint 0](./img/PB_Milner_S0.png)
+
+### Cosa è emerso?
+Alcune difficoltà tecniche, come l'uso di Git Bash, hanno inizialmente rallentato il lavoro.
+Alcune pull request non sono state correttamente mergeate dal loro creatore, causando ritardi.
+La comunicazione interna ha generato alcune incomprensioni nel team.
+### Soluzioni implementate
+- Difficoltà d'uso di Git Bash → Risolta con la pratica e con il supporto tra i membri del team.
+- Merge non effettuato dal creatore della pull request → Errore riconosciuto e discusso, con un processo più chiaro da seguire.
+- Comunicazione errata nel gruppo → Migliorata grazie alla partecipazione a meeting costanti per allineare tutti i membri.
+
+Il confronto è stato utile per identificare le aree di miglioramento e definire soluzioni concrete per gli sprint futuri.
 
 [Torna al menu](#indice)
 
