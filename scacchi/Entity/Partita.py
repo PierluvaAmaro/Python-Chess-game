@@ -20,48 +20,49 @@ class Partita:
         self.pieceControl = PieceControl()
         self.ui = UI()
         self.in_gioco = False
+        self.turno_bianco = True
+        self.nome1 = ""
+        self.nome2 = ""
+
         
     def run(self):
-        """Inizia una nuova partita."""
         if self.in_gioco:
             self.ui.stampa("Una partita è già in corso.", accent="yellow")
             return
-
+    
         self.in_gioco = True
 
-        nome1 = ""
-        nome2 = ""
+        while not self.nome1 or not self.nome2:
+            self.nome1 = input("Inserisci nome giocatore bianco: ")
+            self.nome2 = input("Inserisci nome giocatore nero: ")
 
-        while not nome1 or not nome2:
-            nome1 = input("Inserisci nome giocatore bianco: ")
-            nome2 = input("Inserisci nome giocatore nero: ")
-
-        turno_bianco = True
         while True:
-            nome = nome1 if turno_bianco else nome2
-            colore = "white" if nome == nome1 else "black"
+            nome = self.nome1 if self.turno_bianco else self.nome2
+            colore = "white" if self.turno_bianco else "black"
 
-            self.ui.set_style('accent', f"{colore}")
+            self.ui.set_style('accent', colore)
             messaggio = f"{self.ui.format_text(nome)} - Inserisci mossa (es. e4):"
             self.ui.console.print(messaggio)
 
             stringa = self.inputUtente.leggi()
             if stringa.startswith("/"):
                 risultato = self.inputUtente.listen(stringa)
-                if risultato in [5, 6]:
-                    self.process(risultato)
-                    break
+                esito = self.process(risultato)
+
+                if esito == "fine":
+                    break  # partita finita
+                elif esito == "continua":
+                    continue  # turno non cambiato, stesso giocatore riprova
                 else:
-                    self.process(risultato)
-                    continue
+                    continue  # altri comandi, si continua
             else:
                 coord = self.inputUtente.parser.parse_mossa(stringa)
-                pezzo = self.pieceControl.find_piece(self.scacchiera, coord, colore == "white")  # noqa: E501
+                pezzo = self.pieceControl.find_piece(self.scacchiera, coord, self.turno_bianco)  # noqa: E501
                 if pezzo:
                     self.pieceControl.muovi(self.scacchiera, pezzo, coord)
-                    turno_bianco = not turno_bianco
+                    self.turno_bianco = not self.turno_bianco
 
-        self.in_gioco = False
+            self.in_gioco = False
 
     def check(self):
         """Controlla se l'input inserito è un comando."""
