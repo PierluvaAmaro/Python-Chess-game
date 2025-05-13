@@ -95,8 +95,15 @@ class Partita:
         match risultato:
             case 1: # gioca
                 self.run()
-            case 2: # mostra scacchiera
-                self.ui.display_scacchiera(self.scacchiera)
+            case 2: 
+                while True:
+                    if not self.in_gioco:
+                        print("Non è in corso nessuna partita.")
+                        print("inserisci comando /gioca")
+                        break
+                    else:
+                        self.ui.display_scacchiera(self.scacchiera)
+                        return "continua"
             case 3: # mostra help
                 print("help")
                 pass
