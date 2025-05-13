@@ -11,9 +11,7 @@ class Partita:
     """Gestisce la logica principale della partita a scacchi."""
 
     def __init__(self):
-        """Inizializza la schacchiera, l'input utente, il controllo pezzi, l'UI e viene indicato che la partita è in corso con in.gioco.
-        
-        """
+        """Inizializza la scacchiera, l'input utente, il controllo dei vari pezzi, l'UI, e indica che la partita è in corso."""
         self.scacchiera = Scacchiera(leggi_scacchiera("scacchiera.txt"))
         self.inputUtente = InputUtente()
         self.pieceControl = PieceControl()
@@ -21,9 +19,7 @@ class Partita:
         self.in_gioco = False
         
     def run(self):
-        """Inizia una nuova partita.
-
-        """
+        """Inizia una nuova partita."""
         if self.in_gioco:
             self.ui.stampa("Una partita è già in corso.", accent="yellow")
             return
@@ -65,9 +61,7 @@ class Partita:
         self.in_gioco = False
 
     def check(self):
-        """Controlla i comandi inseriti.
-        
-        """
+        """Controlla se l'input inserito è un comando."""
         # Processa l'input da linea di comando solo una volta
         if len(argv) > 1 and argv[1] in ("--help", "-h"):
             self.ui.display_help("help.txt")
@@ -79,11 +73,10 @@ class Partita:
             self.process(risultato)
 
     def process(self, risultato):
-        """Esegue il comando inserito
-            
+        """Esegue il comando in input.
+
             Args:
-            risultato (int): indica il comando da eseguire.
-        
+            risultato (int): Rappresenta il comando da eseguire.
         """
         match risultato:
             case 1: # gioca
