@@ -1,7 +1,12 @@
+from ..Entity.Alfiere import Alfiere
+from ..Entity.Cavallo import Cavallo
 from ..Entity.Coordinata import Coordinata
 from ..Entity.Pedone import Pedone
+from ..Entity.Re import Re
+from ..Entity.Regina import Regina
+from ..Entity.Torre import Torre
 
-    
+
 def crea_pezzo(simbolo: str, id: Coordinata, colore: bool):
     """Crea un oggetto Pezzo corrispondente al simbolo e al colore specificato.
 
@@ -23,11 +28,45 @@ def crea_pezzo(simbolo: str, id: Coordinata, colore: bool):
         
         case "♟":
             return Pedone("♟", id, colore)
+        
+        case "♖":
+            return Torre("♖", id, colore)
+
+        case "♜":
+            return Torre("♜", id, colore)
+
+        case "♘":
+            return Cavallo("♘", id, colore)
+
+        case "♞":
+            return Cavallo("♞", id, colore)
+
+        case "♔":
+            return Regina("♔", id, colore)
+
+        case "♚":
+            return Regina("♚", id, colore)
+
+        case "♕":
+            return Re("♕", id, colore)
+        
+        case "♛":
+            return Re("♛", id, colore)
+
+        case "♗":
+            return Alfiere("♗", id, colore)
+        
+        case "♝":
+            return Alfiere("♝", id, colore)
+
+
         case _:
             raise ValueError(f"Pezzo non conosciuto: {simbolo}")
+        
+        # qui andra la creazione degli altri pezzi.
 
 def leggi_scacchiera(file="scacchiera.txt"):
-    """Legge la disposizione della tastiera da un file di testo.
+    """Legge la disposizione della scacchiera da un file di testo.
 
     Il file deve contenere 8 righe da 8 caratteri ciascuna, dove ogni simbolo 
     rappresenta un pezzo. I punti (.) indicano caselle vuote. I pezzi vengono associati 
@@ -42,22 +81,26 @@ def leggi_scacchiera(file="scacchiera.txt"):
     Raises:
         ValueError: Se il file non contiene esattamente 8 righe o se una riga non 
         contiene 8 colonne.
-    
+
     """
     scacchiera = {}
 
-    with open(file, encoding="utf-8") as f:
-        righe = [line.strip() for line in f.readlines() if line.strip()]
+    # Usa la funzione leggi_file per leggere il contenuto del file
+    contenuto = leggi_file(file)
+
+    # Suddivide il contenuto in righe e rimuove eventuali righe vuote
+    righe = [line.strip() for line in contenuto.splitlines() if line.strip()]
 
     if len(righe) != 8:
-        raise ValueError(f"File non valido: le righe devono essere 8 ma sono: {len(righe)}"
+        raise ValueError(f"File non valido: le righe devono essere 8 ma sono: "
+                         f"{len(righe)}"
                         )
     
     for y_riga, riga in enumerate(righe):
         y = 8 - y_riga
 
         if len(riga) != 8:
-            raise ValueError(f"File non valido: le colonne devono essere 8 ma sono: "
+            raise ValueError(f"File non valido: le colonne devono essere 8 ma sono: " 
                              f"{len(riga)}"
                             )
 
@@ -65,16 +108,31 @@ def leggi_scacchiera(file="scacchiera.txt"):
             if simbolo != ".":
                 x = x_col + 1
 
-                # determina il colore del pezzo in base alla posizione
+                # Determina il colore del pezzo in base alla posizione
                 if y == 2 or y == 1:
-                    colore = True # colore bianco
+                    colore = True  # colore bianco
                 elif y == 7 or y == 8:
-                    colore = False # colore nero
+                    colore = False  # colore nero
                 else:
-                    continue # nessun pezzo previsto in quella casa.
+                    continue  # nessun pezzo previsto in quella casa.
                 
                 coord = Coordinata(x, y)
                 pezzo = crea_pezzo(simbolo, coord, colore)
                 scacchiera[coord] = pezzo
 
     return scacchiera
+
+def leggi_file(file: str = None):
+    """Legge un file e ne ritorna il contenuto.
+    
+    Args:
+        file (str): percorso del file da leggere.
+
+    """
+    if not file:
+        raise ValueError("Nessun percorso file fornito.")
+    
+    with open(file, encoding="utf-8") as file:
+        contenuto = file.read()
+    
+    return contenuto

@@ -11,13 +11,18 @@ class Pedone(Pezzo):
         Args:
             simbolo (str): Simbolo da mostrare per il pedone.
             coord: (Coordinata): Posizione iniziale del pedone sulla scacchiera.
-            colore (bool): Colore del pedone (True = bianco, False = nero)
+            colore (bool): Colore del Pedone (True = bianco, False = nero)
 
         """
         super().__init__(simbolo, coord, colore)
 
     def check_move(self, final: Coordinata) -> bool:
-        """Verifica se la mossa verso la coordinata specificata è valida per il pedone."""
+        """Verifica se la mossa verso la coordinata specificata è valida per il pedone.
+        
+        Args:
+            final (Coordinata): Coordinata finale del Pedone verso cui si deve muovere
+
+        """
         if final is None:
             raise ValueError("Coordinata non valida.")
         
@@ -44,7 +49,10 @@ class Pedone(Pezzo):
             self.primo = False
             return True
 
-        # Se la direzione di movimento è negativa per il pedone nero, è una mossa non valida
+        """
+        Se la direzione di movimento è negativa per il pedone nero
+        è una mossa non valida
+        """
         if (not self.colore and dy < 0):
             return False
 

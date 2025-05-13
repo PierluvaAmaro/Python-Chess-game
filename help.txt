@@ -1,0 +1,10 @@
++---------------------------------------------------------------+
+|                        COMANDI DISPONIBILI                    |
++---------------------------------------------------------------+
+| /gioca      : inizia una partita                              |
+| /scacchiera : mostra la scacchiera corrente                   |
+| /mosse      : mostra le mosse effettuate fin'ora              |
+| /patta      : richiedi la patta all'avversario                |
+| /abbandona  : abbandona la partita corrente                   |
+| /esci       : esci dal gioco                                  |
++---------------------------------------------------------------+
