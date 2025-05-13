@@ -43,7 +43,7 @@ class Partita:
         while not self.nome1 or not self.nome2:
             self.nome1 = input("Inserisci nome giocatore bianco: ")
             self.nome2 = input("Inserisci nome giocatore nero: ")
-
+            self.ui.display_scacchiera(self.scacchiera)
         while True:
             nome = self.nome1 if self.turno_bianco else self.nome2
             colore = "white" if self.turno_bianco else "black"
@@ -69,6 +69,7 @@ class Partita:
                 if pezzo:
                     self.pieceControl.muovi(self.scacchiera, pezzo, coord)
                     self.turno_bianco = not self.turno_bianco
+                    self.ui.display_scacchiera(self.scacchiera)
 
         self.in_gioco = False
 
