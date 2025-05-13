@@ -128,7 +128,7 @@ class Partita:
                         exit(0)
                     elif risposta.lower() == "n":
                         print("Uscita annullata.")
-                        break
+                        return "continua"
                     else:
                         print("Inserisci una risposta valida (s/n).")
             case None:
