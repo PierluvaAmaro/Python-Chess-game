@@ -1,6 +1,5 @@
 ## RELAZIONE TECNICA DEL PROGETTO SCACCHI
 
-[//]: # (Struttura indice)
 ## Indice
 1. [Introduzione](#introduzione)
 2. [Modello di dominio](#modello-di-dominio)
@@ -11,7 +10,6 @@
    - [Sprint 0](#sprint-0)
 
 ## Introduzione
-[//]: # (Implementazione dell'introduzione)
 Questo progetto implementa una versione testuale del gioco degli **scacchi** utilizzando **Python**, giocabile direttamente da terminale. Due giocatori si alternano in locale, effettuando le loro mosse attraverso comandi testuali, rispettando le regole ufficiali degli scacchi.
 
 L'obiettivo principale è offrire un'esperienza **interattiva**, senza interfaccia grafica, permettendo di sviluppare **competenze di programmazione** e confidenza con gli **ambienti di sviluppo**. Inoltre, il progetto è pensato per introdurre i concetti di **controllo versione** tramite **GitHub**, facilitando la gestione collaborativa del codice.
@@ -42,10 +40,11 @@ Il progetto è realizzato grazie alla collaborazione dei membri del team "Milner
 - [Gesmundo Guglielmo](https://github.com/Ges201)
 - [Amato Lorenzo](https://github.com/loreamat)
 
+[Torna al menu](#indice)
+
 ---
 
 ## Modello di dominio
-[//]: # (Implementazione del modello di dominio)
 #### Che cosa è?
 Un diagramma delle classi è una rappresentazione grafica utilizzata nella programmazione orientata agli oggetti per mostrare la struttura di un sistema.
  È uno strumento fondamentale per modellare il software, facilitando la comprensione del design e supportando la fase di sviluppo.
@@ -113,6 +112,8 @@ classDiagram
 
 
 ```
+
+[Torna al menu](#indice)
 
 ---
 
@@ -189,6 +190,8 @@ De2 Cgf6
 
 Il formato deve essere leggibile e coerente con la notazione standard, per permettere ai giocatori di consultare facilmente lo storico delle mosse e analizzare l'andamento della partita.
 
+[Torna al menu](#indice)
+
 ---
 
 #### Requisiti non funzionali
@@ -201,12 +204,18 @@ Il formato deve essere leggibile e coerente con la notazione standard, per perme
 - **RNF3**: L'applicazione deve utilizzare i simboli UTF-8 per la rappresentazione grafica dei pezzi degli scacchi: ♔ ♕ ♖ ♗ ♘ ♙ ♚ ♛ ♜ ♝ ♞ ♟.
   (Riferimento: [Wikipedia - Scacchi](https://it.wikipedia.org/wiki/Scacchi#Descrizione_e_regolamento))
 
+[Torna al menu](#indice)
+
 ---
 
 ## Analisi retrospettiva
 ### Sprint 0
 L'immagine rappresenta il risultato del team meeting svolto dopo lo Sprint 0, durante il quale abbiamo riflettuto sulle difficoltà incontrate e sulle soluzioni adottate. 
 [Immagine PB sprint 0](./img/PB_Milner_S0.png)
+
+[Torna al menu](#indice)
+
+---
 
 
 
