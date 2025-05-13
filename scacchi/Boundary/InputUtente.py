@@ -1,5 +1,5 @@
 from ..Control.Parser import Parser
-from .CommandListener import CommandListener
+from ..Entity.Coordinata import Coordinata
 
 
 class InputUtente:
@@ -7,9 +7,9 @@ class InputUtente:
 
     def __init__(self):
         """Inizializza un nuovo oggetto InputUtente."""
-        self.parser = Parser()
+        pass
 
-    def leggi_mossa(self, prompt: str = "Inserisci mossa (es. 'e4'): "):
+    def leggi_mossa(self, prompt: str = "Inserisci mossa (es. 'e4'): ") -> Coordinata:
         """Legge una mossa dell'utente da input e la converte in una Coordinata.
         
         Mostra un prompt all'utente e attende un input di mossa (es. 'e4').
@@ -22,29 +22,15 @@ class InputUtente:
             Coordinata: L'oggetto Coordianta risultante dal parsing dell'input.
 
         """
+        parser = Parser()
+
         while True:
             try:
                 mossa = input(prompt).strip()
-                return self.parser.parse_mossa(mossa)
-            
+                return parser.parse_mossa(mossa)
             except ValueError as e:
                 print(f"Errore: {e}. Riprova.")
 
     def leggi(self, prompt: str = "") -> str:
         """Prende in input una stringa dall'utente."""
         return input(prompt)
-    
-    def listen(self, stringa: str):
-        """Verifica se e' stato inserito un comando.
-        
-        Args:
-            stringa (str): stringa da verificare
-
-        """
-        try:
-            if stringa.startswith("/"):
-                commandListener = CommandListener()
-                return commandListener.run_command(stringa)
-            return None
-        except NotImplementedError as e:
-            print(f"Errore: {e}. Riprova")

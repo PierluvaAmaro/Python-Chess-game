@@ -8,11 +8,14 @@ class Parser:
         """Inizializza un nuovo parser."""
         pass
 
-    def parse_mossa(self, notazione: str):
+    def parse_mossa(self, notazione: str) -> Coordinata:
         """Converti una stringa di notazione scacchistica in una coordinata.
         
         Args:
             notazione (str): Stringa in notazione algebrica abbreviata (es. "e4").
+        
+        Returns:
+            Coordinata: La coordinata corrispondente sulla scacchiera.
         
         Raises:
             ValueError: Se la notazione non e' valida o fuori dall'intervallo consentito

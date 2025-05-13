@@ -29,7 +29,7 @@ def test_crea_pezzo_invalid_symbol():
     coord = Coordinata(1, 2)
     
     with pytest.raises(ValueError):
-        crea_pezzo("o", coord, True)  # Il simbolo ♞ non è un pezzo valido
+        crea_pezzo("♞", coord, True)  # Il simbolo ♞ non è un pezzo valido
 
 
 # Faccio un mock per leggere la scacchiera da un file
