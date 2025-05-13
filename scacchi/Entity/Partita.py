@@ -104,9 +104,9 @@ class Partita:
                     else:
                         self.ui.display_scacchiera(self.scacchiera)
                         return "continua"
-            case 3: # mostra help
-                print("help")
-                pass
+            case 3:  # mostra help
+                with open("help.txt",) as file:
+                    print(file.read())
             case 4:
                 print("mosse")
             case 5:
