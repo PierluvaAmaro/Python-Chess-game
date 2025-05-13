@@ -70,7 +70,7 @@ class Partita:
                     self.pieceControl.muovi(self.scacchiera, pezzo, coord)
                     self.turno_bianco = not self.turno_bianco
 
-            self.in_gioco = False
+        self.in_gioco = False
 
     def check(self):
         """Controlla se l'input inserito è un comando."""
