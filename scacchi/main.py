@@ -1,30 +1,15 @@
-from .Boundary.InputUtente import InputUtente
-from .Boundary.InterfacciaUtente import InterfacciaUtente
-from .Control.PieceControl import PieceControl
-from .Control.Utils import leggi_scacchiera
-from .Entity.Scacchiera import Scacchiera
+from .Entity.Partita import Partita
 
 
 def main():
     """Avvia il gioco degli scacchi e attiva il workflow GH."""
-    ui = InterfacciaUtente()
-    inputt = InputUtente()
+    partita = Partita()
 
-    ui.set_accent("blue")
-
-    name = inputt.leggi("Benvenuto in Scacchi! Inserisci il tuo nome: ")
-    ui.stampa(f"Ciao {name}! Iniziamo a giocare a scacchi!")
-
-    scacchiera = Scacchiera(leggi_scacchiera())
-    pieces = PieceControl()
-
-    colore = 1
     while True:
-        ui.display_scacchiera(scacchiera)
-        mossa = inputt.leggi_mossa()
-        pezzo = pieces.find_piece(scacchiera, mossa, colore)
-        if pezzo is not None and pieces.muovi(scacchiera, pezzo, mossa):
-            colore = not colore
-
+        try:
+            partita.check()
+        except Exception as e:
+            print(f"Errore: {e}. Riprova.")
+        
 if __name__ == "__main__":
     main()
