@@ -1,36 +1,38 @@
-"""Tests for the InterfacciaUtente class."""
+import builtins
+import unittest
+from unittest.mock import MagicMock, patch
 
-import os
-import sys
-
-import pytest
-
-# Add the project root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-from scacchi.Boundary.InterfacciaUtente import InterfacciaUtente
+from scacchi.main import main
 
 
-def test_ui_set_valid_accent_color():
-    """Test setting a valid accent color."""
-    ui = InterfacciaUtente()
-    ui.set_accent("blue")
-    assert ui.get_accent() == "blue"
+class TestMain(unittest.TestCase):
 
-    # Test another valid color
-    ui.set_accent("bright_green")
-    assert ui.get_accent() == "bright_green"
+    @patch('scacchi.main.Partita')  # patcha il costruttore Partita
+    def test_main_runs_check_once(self, MockPartita):
+        # Crea un'istanza mock
+        mock_partita_instance = MagicMock()
+        MockPartita.return_value = mock_partita_instance
 
+        # Simula un ciclo che termina subito sollevando SystemExit (come se si uscisse)
+        mock_partita_instance.check.side_effect = [SystemExit]
 
-def test_ui_set_invalid_accent_color():
-    """Test that setting an invalid accent color raises a ValueError."""
-    ui = InterfacciaUtente()
-    with pytest.raises(ValueError):
-        ui.set_accent("invalid_color")
+        with self.assertRaises(SystemExit):
+            main()  # Deve terminare il ciclo
 
+        # Verifica che check sia stato chiamato una sola volta
+        mock_partita_instance.check.assert_called_once()
 
-def test_ui_get_accent_color():
-    """Test that get_accent returns the current accent color."""
-    ui = InterfacciaUtente()
-    ui.set_accent("cyan")
-    assert ui.get_accent() == "cyan"
+    @patch('scacchi.main.Partita')
+    def test_main_handles_exception(self, MockPartita):
+        mock_partita_instance = MagicMock()
+        MockPartita.return_value = mock_partita_instance
+
+        # Simula un'eccezione generica
+        mock_partita_instance.check.side_effect = [Exception("Errore simulato"), SystemExit]
+
+        with patch.object(builtins, 'print') as mock_print:
+            with self.assertRaises(SystemExit):
+                main()
+
+            # Verifica che l'errore sia stato stampato
+            mock_print.assert_any_call("Errore: Errore simulato. Riprova.")
