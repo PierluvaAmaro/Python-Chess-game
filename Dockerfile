@@ -25,6 +25,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 ENV PATH="/app/.venv/bin:$PATH"
 
 # Reset the entrypoint, don't invoke `uv`
-ENTRYPOINT ["python", "-m", "scacchi.main"]
+ENTRYPOINT []
+
 # Run the application by default
-CMD []
+CMD ["python", "-m", "scacchi.main"]
