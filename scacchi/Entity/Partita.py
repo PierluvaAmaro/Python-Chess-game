@@ -76,9 +76,10 @@ class Partita:
 
     def check(self):
         """Controlla se l'input inserito è un comando."""
+        # Processa l'input da linea di comando solo una volta
         if len(argv) > 1 and argv[1] in ("--help", "-h"):
-            with open("help.txt", "r") as file:
-                print(file.read())
+            self.ui.display_help("help.txt")
+
         while True:
             risultato = self.inputUtente.listen(self.inputUtente.leggi("Inserisci: "))
             self.process(risultato)
@@ -103,10 +104,8 @@ class Partita:
                         self.ui.display_scacchiera(self.scacchiera)
                         return "continua"
             case 3:  # mostra help
-                with open(
-                    "help.txt",
-                ) as file:
-                    print(file.read())
+                self.ui.display_help("help.txt")
+                return None if not self.in_gioco else "continua"
             case 4:
                 print("mosse")
             case 5:
