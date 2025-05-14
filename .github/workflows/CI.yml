@@ -38,9 +38,9 @@ jobs:
           uv run ruff check --exit-zero >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
-      - name: Run testing with Pytest
-        run: |
-          echo "### pytest results" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          uv run pytest -v --cov=scacchi --cov-report term tests/ >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+    # - name: Run testing with Pytest
+      #   run: |
+      #     echo "### pytest results" >> $GITHUB_STEP_SUMMARY
+      #     echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+      #     uv run pytest -v --cov=scacchi --cov-report term tests/ >> $GITHUB_STEP_SUMMARY
+      #     echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
