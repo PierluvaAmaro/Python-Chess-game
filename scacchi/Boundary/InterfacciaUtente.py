@@ -7,24 +7,37 @@ from ..Entity.Scacchiera import Scacchiera
 
 class UI:
     """CLASSE BOUNDARY."""
-    
+
     """Gestisce l'interfaccia tra l'utente e il gioco degli scacchi."""
-    
+
     def __init__(self):
         """Crea una nuova interfaccia utente."""
         self.console = Console()
-        
+
         self.valid_colors = {
-            "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white",
-            "bright_black", "bright_red", "bright_green", "bright_yellow",
-            "bright_blue", "bright_magenta", "bright_cyan", "bright_white"
+            "black",
+            "red",
+            "green",
+            "yellow",
+            "blue",
+            "magenta",
+            "cyan",
+            "white",
+            "bright_black",
+            "bright_red",
+            "bright_green",
+            "bright_yellow",
+            "bright_blue",
+            "bright_magenta",
+            "bright_cyan",
+            "bright_white",
         }
 
         self.default = {
             "accent": "cyan",
             "bold": True,
             "underline": False,
-            "italic": True
+            "italic": True,
         }
 
     def set_style(self, key: str, value) -> bool:
@@ -39,20 +52,19 @@ class UI:
 
         Returns:
             bool: True se l'azione e' andata a buon fine, False altrimenti.
-            
+
         """
         if key not in self.default:
             raise ValueError(f"Chiave inesistente: '{key}'")
-        
-        self.default[key] = value
 
+        self.default[key] = value
 
     def get_style(self, key: str = None):
         """Restituisce il valore di uno stile specifico.
 
         Args:
             key (str): chiave dello stile da restituire.
-        
+
         Raises:
             ValueError: se la chiave non esiste.
 
@@ -62,13 +74,13 @@ class UI:
                 raise ValueError("Chiave inesistente.")
         else:
             return self.default[key]
-        
+
     def format_text(self, text: str):
         """Applica gli stili definiti al testo.
-        
+
         Args:
             text (str): testo a cui applicare gli stili specifici.
-        
+
         """
         style = ""
         if self.default["bold"]:
@@ -81,11 +93,10 @@ class UI:
         style += self.default["accent"]
 
         return f"[{style}]{text}[/]"
-                
-        
+
     def stampa(self, prompt: str = "DEFAULT", accent: str = None):
         """Mostra una stringa con il colore e stile specificato.
-        
+
         Args:
             prompt (str): stringa da mostrare a schermo.
             accent (str): colore da impostare al prompt.
@@ -98,16 +109,16 @@ class UI:
 
     def display_coordinata(self, coord: Coordinata):
         """Mostra una coordinata in formato leggibile.
-        
+
         Args:
             coord (Coordinata): coordinata da mostrare a schermo
 
         """
         self.console.print(self.format_text(f"[x: {coord.x}, y: {coord.y}]"))
-    
+
     def display_pezzo(self, pezzo: Pezzo):
         """Mostra tutte le informazioni riguardanti un pezzo specificato.
-        
+
         Args:
             pezzo (Pezzo): Pezzo di cui mostare le informazioni.
 
@@ -115,10 +126,12 @@ class UI:
         self.display_coordinata(self.init)
 
         console = Console()
-        console.print(self.format_text(
-                        f"Primo movimento: {pezzo.primo}"
-                        f"Colore: {'Bianco' if pezzo.colore else 'Nero'}" 
-                    ))
+        console.print(
+            self.format_text(
+                f"Primo movimento: {pezzo.primo}"
+                f"Colore: {'Bianco' if pezzo.colore else 'Nero'}"
+            )
+        )
 
     def display_scacchiera(self, scacchiera: Scacchiera):
         """Mostra a schermo la scacchiera 8x8 senza colori."""
@@ -140,3 +153,23 @@ class UI:
 
         lettere = "".join(f" {chr(97 + i)}  " for i in range(8))
         self.console.print(f"     {lettere}")
+
+    def display_help(self, filename: str):
+        """Mostra il contenuto di un file di aiuto.
+
+        Args:
+            filename (str): Il percorso del file di aiuto.
+
+        """
+        try:
+            with open(filename, encoding="utf-8") as f:
+                help_content = f.read()
+            self.console.print(help_content)
+        except FileNotFoundError:
+            self.ui.stampa(
+                f"Errore: File di aiuto '{filename}' non trovato.", accent="red"
+            )
+        except Exception as e:
+            self.ui.stampa(
+                f"Errore durante la lettura del file di aiuto: {e}", accent="red"
+            )

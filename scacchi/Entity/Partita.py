@@ -36,12 +36,11 @@ class Partita:
         self.mosse_bianco=[]
         self.mosse_nero=[]
 
-        
     def run(self):
         if self.in_gioco:
             self.ui.stampa("Una partita è già in corso.", accent="yellow")
             return
-    
+
         self.in_gioco = True
 
         while not self.nome1 or not self.nome2:
@@ -52,7 +51,7 @@ class Partita:
             nome = self.nome1 if self.turno_bianco else self.nome2
             colore = "white" if self.turno_bianco else "black"
 
-            self.ui.set_style('accent', colore)
+            self.ui.set_style("accent", colore)
             messaggio = f"{self.ui.format_text(nome)} - Inserisci mossa (es. e4):"
             self.ui.console.print(messaggio)
 
@@ -69,7 +68,9 @@ class Partita:
                     continue  # altri comandi, si continua
             else:
                 coord = self.inputUtente.parser.parse_mossa(stringa)
-                pezzo = self.pieceControl.find_piece(self.scacchiera, coord, self.turno_bianco)  # noqa: E501
+                pezzo = self.pieceControl.find_piece(
+                    self.scacchiera, coord, self.turno_bianco
+                )  # noqa: E501
                 if pezzo:
                     self.pieceControl.muovi(self.scacchiera, pezzo, coord)
                     if self.turno_bianco:
@@ -87,9 +88,7 @@ class Partita:
             self.ui.display_help("help.txt")
 
         while True:
-            risultato = self.inputUtente.listen(
-                self.inputUtente.leggi("Inserisci: ")
-            )
+            risultato = self.inputUtente.listen(self.inputUtente.leggi("Inserisci: "))
             self.process(risultato)
 
     def process(self, risultato):
@@ -100,9 +99,9 @@ class Partita:
 
         """
         match risultato:
-            case 1: # gioca
+            case 1:  # gioca
                 self.run()
-            case 2: 
+            case 2:
                 while True:
                     if not self.in_gioco:
                         print("Non è in corso nessuna partita.")
@@ -111,9 +110,9 @@ class Partita:
                     else:
                         self.ui.display_scacchiera(self.scacchiera)
                         return "continua"
-            case 3: # mostra help
-                print("help")
-                pass
+            case 3:  # mostra help
+                self.ui.display_help("help.txt")
+                return None if not self.in_gioco else "continua"
             case 4:
                 print("mosse")
                 if self.in_gioco:
@@ -132,7 +131,7 @@ class Partita:
                 print("patta")
             case 6:
                 while True:
-                    if(self.in_gioco):
+                    if self.in_gioco:
                         risposta = input("Vuoi davvero abbandonare? (s/n): ")
                         if risposta.lower() == "s":
                             vincitore = self.nome2 if self.turno_bianco else self.nome1
