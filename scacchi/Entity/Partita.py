@@ -23,6 +23,8 @@ class Partita:
         self.turno_bianco = True
         self.nome1 = ""
         self.nome2 = ""
+        self.mosse_bianco=[]
+        self.mosse_nero=[]
 
     def reset(self):
         """Reimposta tutti i dati della partita per una nuova sessione."""
@@ -31,6 +33,8 @@ class Partita:
         self.turno_bianco = True
         self.nome1 = ""
         self.nome2 = ""
+        self.mosse_bianco=[]
+        self.mosse_nero=[]
 
         
     def run(self):
@@ -68,9 +72,12 @@ class Partita:
                 pezzo = self.pieceControl.find_piece(self.scacchiera, coord, self.turno_bianco)  # noqa: E501
                 if pezzo:
                     self.pieceControl.muovi(self.scacchiera, pezzo, coord)
-                    self.turno_bianco = not self.turno_bianco
+                    if self.turno_bianco:
+                        self.mosse_bianco.append(stringa)
+                    else:
+                        self.mosse_nero.append(stringa)
                     self.ui.display_scacchiera(self.scacchiera)
-
+                    self.turno_bianco = not self.turno_bianco
         self.in_gioco = False
 
     def check(self):
@@ -109,6 +116,18 @@ class Partita:
                 pass
             case 4:
                 print("mosse")
+                if self.in_gioco:
+                    for i in range(len(self.mosse_bianco)):
+                        mossa_b = self.mosse_bianco[i]
+                        mossa_n = self.mosse_nero[i] if i < len(self.mosse_nero) else ""
+                        
+                        if mossa_n == "":
+                            print(f"{i+1}: {mossa_b}")
+                        else:
+                            print(f"{i+1}: {mossa_b} {mossa_n}")
+                else:
+                    print("Non è in corso nessuna partita.")
+                    print("inserisci comando /gioca")
             case 5:
                 print("patta")
             case 6:
