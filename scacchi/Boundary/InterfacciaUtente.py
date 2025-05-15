@@ -94,7 +94,7 @@ class UI:
 
         return f"[{style}]{text}[/]"
 
-    def stampa(self, prompt: str = "DEFAULT", accent: str = None):
+    def stampa(self, prompt: str = "default", accent: str = None):
         """Mostra una stringa con il colore e stile specificato.
 
         Args:

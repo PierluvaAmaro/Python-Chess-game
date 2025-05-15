@@ -27,8 +27,9 @@ class InputUtente:
         while True:
             try:
                 mossa = input(prompt).strip()
+                
                 return self.parser.parse_mossa(mossa)
-            
+                    
             except ValueError as e:
                 print(f"Errore: {e}. Riprova.")
 

@@ -46,7 +46,9 @@ class Partita:
         while not self.nome1 or not self.nome2:
             self.nome1 = input("Inserisci nome giocatore bianco: ")
             self.nome2 = input("Inserisci nome giocatore nero: ")
+
             self.ui.display_scacchiera(self.scacchiera)
+
         while True:
             nome = self.nome1 if self.turno_bianco else self.nome2
             colore = "white" if self.turno_bianco else "black"
@@ -67,18 +69,23 @@ class Partita:
                 else:
                     continue  # altri comandi, si continua
             else:
-                coord = self.inputUtente.parser.parse_mossa(stringa)
-                pezzo = self.pieceControl.find_piece(
-                    self.scacchiera, coord, self.turno_bianco
-                )  # noqa: E501
-                if pezzo:
-                    self.pieceControl.muovi(self.scacchiera, pezzo, coord)
-                    if self.turno_bianco:
-                        self.mosse_bianco.append(stringa)
-                    else:
-                        self.mosse_nero.append(stringa)
-                    self.ui.display_scacchiera(self.scacchiera)
-                    self.turno_bianco = not self.turno_bianco
+                try:
+                    coord = self.inputUtente.parser.parse_mossa(stringa)
+                    pezzo = self.pieceControl.find_piece(
+                        self.scacchiera, coord, self.turno_bianco
+                    )
+                    if pezzo:
+                        if self.pieceControl.muovi(self.scacchiera, pezzo, coord):
+                            if self.turno_bianco:
+                                self.mosse_bianco.append(stringa)
+                            else:
+                                self.mosse_nero.append(stringa)
+
+                            self.turno_bianco = not self.turno_bianco
+                        self.ui.display_scacchiera(self.scacchiera)
+                except ValueError as e:
+                    print(f"Errore: {e} Riprova.")
+                
         self.in_gioco = False
 
     def check(self):
@@ -86,6 +93,16 @@ class Partita:
         # Processa l'input da linea di comando solo una volta
         if len(argv) > 1 and argv[1] in ("--help", "-h"):
             self.ui.display_help("help.txt")
+        
+        messaggio = (
+        "[bold cyan italic]Benvenuto[/bold cyan italic] nel gioco degli scacchi del "
+        "[bold magenta italic]gruppo Milner[/bold magenta italic]!\n"
+        "[yellow]Inserisci un comando tra quelli disponibili,[/yellow] "
+        "o usa [bold green]/help[/bold green] per vedere la lista dei "
+        "comandi disponibili."
+        )
+
+        self.ui.stampa(messaggio, "white")
 
         while True:
             risultato = self.inputUtente.listen(self.inputUtente.leggi("Inserisci: "))
@@ -165,7 +182,5 @@ class Partita:
                         return "continua"
                     else:
                         print("Inserisci una risposta valida (s/n).")
-            case None:
-                print("Input non riconosciuto.")
             case _:
-                raise NotImplementedError("Stato sconosciuto.")
+                raise NotImplementedError("Inputsconosciuto.")
