@@ -122,17 +122,36 @@ def leggi_scacchiera(file="scacchiera.txt"):
 
     return scacchiera
 
-def leggi_file(file: str = None):
-    """Legge un file e ne ritorna il contenuto.
-    
+
+def leggi_file(percorso: str | None = None) -> str:
+    """Legge il contenuto di un file di testo e lo restituisce come stringa.
+
     Args:
-        file (str): percorso del file da leggere.
+        percorso (str): Percorso del file da leggere.
+
+    Returns:
+        str: Contenuto del file come stringa.
+
+    Raises:
+        ValueError: Se non viene fornito alcun percorso.
+        FileNotFoundError: Se il file non esiste.
+        PermissionError: Se non si hanno i permessi per leggerlo.
+        OSError: Per altri errori legati al file system.
 
     """
-    if not file:
+    if not percorso or not percorso.strip():
         raise ValueError("Nessun percorso file fornito.")
+
+    percorso = percorso.strip()
+
+    try:
+        with open(percorso, encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError as e:
+        raise FileNotFoundError(f"Errore: {e}.") from e
     
-    with open(file, encoding="utf-8") as file:
-        contenuto = file.read()
+    except PermissionError as e:
+        raise PermissionError(f"Errore {e}.") from e
     
-    return contenuto
+    except OSError as e:
+        raise OSError(f"Errore: {e}.") from e
