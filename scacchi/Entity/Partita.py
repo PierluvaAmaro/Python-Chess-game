@@ -124,11 +124,16 @@ class Partita:
 
     def check(self):
         """Controlla se l'input inserito è un comando."""
-        say_hello(self.ui)
-
         # Processa l'input da linea di comando
         if len(argv) > 1 and argv[1] in ("--help", "-h"):
+            say_hello(self.ui)
             self.ui.display_help("help.txt")
+        elif len(argv) > 1 and argv[1] not in ("--help", "-h"):
+            self.ui.set_style('accent', 'red')
+            self.ui.stampa(self.ui.format_text("Comando non valido."))
+            exit()
+        else:
+            say_hello(self.ui)
         
         while True:
             risultato = self.inputUtente.listen(self.inputUtente.leggi("Inserisci"))
