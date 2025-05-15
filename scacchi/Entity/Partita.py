@@ -128,7 +128,15 @@ class Partita:
                     print("Non è in corso nessuna partita.")
                     print("inserisci comando /gioca")
             case 5:
-                print("patta")
+                if(self.in_gioco):
+                    risposta = input("Accetti la patta (s/n): ")
+                    if(risposta.lower() == "s"):
+                        print("Partita finita per patta")
+                        self.reset()  # resetta la partita
+                        return "fine"
+                    elif risposta.lower() == "n":
+                            print("Patta annullata.")
+                            return "continua"
             case 6:
                 while True:
                     if self.in_gioco:
