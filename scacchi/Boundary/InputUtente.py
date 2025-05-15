@@ -1,3 +1,5 @@
+from rich.prompt import Prompt
+
 from ..Control.Parser import Parser
 from .CommandListener import CommandListener
 
@@ -11,7 +13,8 @@ class InputUtente:
         """Inizializza un nuovo oggetto InputUtente."""
         self.parser = Parser()
 
-    def leggi_mossa(self, prompt: str = "Inserisci mossa (es. 'e4'): "):
+    def leggi_mossa(self, prompt: str = "Inserisci mossa (es. 'e4') o comando"''
+                                        "(/...): "):
         """Legge una mossa dell'utente da input e la converte in una Coordinata.
         
         Mostra un prompt all'utente e attende un input di mossa (es. 'e4').
@@ -35,7 +38,7 @@ class InputUtente:
 
     def leggi(self, prompt: str = "") -> str:
         """Prende in input una stringa dall'utente."""
-        return input(prompt)
+        return Prompt.ask(prompt)
     
     def listen(self, stringa: str):
         """Verifica se e' stato inserito un comando.

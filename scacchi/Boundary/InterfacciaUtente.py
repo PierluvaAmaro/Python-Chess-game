@@ -1,5 +1,6 @@
 from rich.console import Console
 
+from ..Control.Utils import leggi_file
 from ..Entity.Coordinata import Coordinata
 from ..Entity.Pezzo import Pezzo
 from ..Entity.Scacchiera import Scacchiera
@@ -161,15 +162,6 @@ class UI:
             filename (str): Il percorso del file di aiuto.
 
         """
-        try:
-            with open(filename, encoding="utf-8") as f:
-                help_content = f.read()
-            self.console.print(help_content)
-        except FileNotFoundError:
-            self.ui.stampa(
-                f"Errore: File di aiuto '{filename}' non trovato.", accent="red"
-            )
-        except Exception as e:
-            self.ui.stampa(
-                f"Errore durante la lettura del file di aiuto: {e}", accent="red"
-            )
+        file = leggi_file(filename)
+
+        print(file)
