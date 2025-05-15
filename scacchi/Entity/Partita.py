@@ -194,6 +194,10 @@ class Partita:
                             self.ui.stampa(self.ui.format_text("Patta annullata."))
                             
                             return "continua"
+                else:
+                    self.ui.set_style('accent', 'red')
+                    self.ui.stampa(self.ui.format_text("Non è in corso nessuna "\
+                                                       "partita."))
             case 6:
                 if self.in_gioco:
                     while True:
