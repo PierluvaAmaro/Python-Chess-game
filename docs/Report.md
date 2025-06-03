@@ -67,6 +67,12 @@ classDiagram
       turno: string
    }
 
+   class Pezzo {
+      colore: string
+      posizione: string
+      simbolo: string
+   }
+
    class Scacchiera {
       griglia: dimensione<><>
    }
@@ -74,12 +80,6 @@ classDiagram
    class Mossa {
       origine: string
       destinazione: string
-   }
-
-   class Pezzo {
-      colore: string
-      posizione: string
-      simbolo: string
    }
 
    class Re
@@ -108,11 +108,10 @@ classDiagram
    Partita "1..*" -- "1..1" Giocatore : Ferma
    Partita "1..1" -- "1..1" Scacchiera : utilizza
    Giocatore "1..*" -- "1..*" Mossa : effettua
-   Scacchiera "1..1" -- "0..*" Pezzo : contiene
-
+   Scacchiera "1..1" o-- "0..*"Pezzo : compone*
 
 ```
-
+*il simbolo di composizione dovrebbe essere posto immediatamente sopra la classe "Pezzo". Tuttavia mermaid non offre un comando specifico per poterlo fare. 
 [Torna al menu](#indice)
 
 ---
