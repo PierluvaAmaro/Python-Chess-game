@@ -37,16 +37,16 @@ class PieceControl:
     def muovi(self, da_mangiare: bool, scacchiera: Scacchiera, pezzo: Pezzo, final: Coordinata) -> bool:
         """Esegue lo spostamento di un pezzo se la destinazione è valida."""
         if scacchiera.is_occupied_by_alliance(pezzo, final):
-            raise ValueError("La coordinata è occupata da un alleato.")
+            raise ValueError("Mossa illegale")
 
         if da_mangiare:
             if not scacchiera.is_occupied_by_enemy(pezzo, final):
-                raise ValueError("Nessun pezzo nemico da catturare.")
+                raise ValueError("Mossa illegale")
             # Cattura il pezzo nemico
             scacchiera.pezzi_vivi.pop(final)
         else:
             if scacchiera.is_occupied_by_enemy(pezzo, final):
-                raise ValueError("Casella occupata da un nemico. Devi catturare.")
+                raise ValueError("Mossa illegale")
 
         # Esegui il movimento
         scacchiera.pezzi_vivi.pop(pezzo.init)
