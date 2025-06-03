@@ -49,69 +49,9 @@ Il progetto è realizzato grazie alla collaborazione dei membri del team "Milner
 Un diagramma delle classi è una rappresentazione grafica utilizzata nella programmazione orientata agli oggetti per mostrare la struttura di un sistema.
  È uno strumento fondamentale per modellare il software, facilitando la comprensione del design e supportando la fase di sviluppo.
 
-Ci sono diversi modi per rappresentare un diagramma delle classi, a seconda dello strumento e dello stile utilizzato. In questo progetto viene utilizzato il linguaggio di markup [Mermaid](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams) per creare diagrammi direttamente in file Markdown.
-
 #### Modello del progetto
 
-```mermaid
-classDiagram
-   class Giocatore {
-      id: int
-      nome: string
-      colore: string
-   }
-
-   class Partita {
-      id: int
-      stato: string
-      turno: string
-   }
-
-   class Scacchiera {
-      griglia: dimensione<><>
-   }
-
-   class Mossa {
-      origine: string
-      destinazione: string
-   }
-
-   class Pezzo {
-      colore: string
-      posizione: string
-      simbolo: string
-   }
-
-   class Re
-   class Regina
-   class Torre
-   class Alfiere
-   class Cavallo
-   class Pedone
-
-   Pezzo <|-- Re
-   Pezzo <|-- Regina
-   Pezzo <|-- Torre
-   Pezzo <|-- Alfiere
-   Pezzo <|-- Cavallo
-   Pezzo <|-- Pedone
-
-   Mossa <|-- Scacco : mette in
-   Mossa <|-- Arrocco : esegue
-   Mossa <|-- Promozione : trasforma
-   Mossa <|-- Mangia : cattura
-
-   Scacco <|-- Matto
-
-   Partita "1..1" -- "1..*" Giocatore : Avvia
-   Partita "1..1" -- "1..*" Giocatore : Patta
-   Partita "1..1" -- "1..*" Giocatore : Ferma
-   Partita "1..1" -- "1..1" Scacchiera : utilizza
-   Giocatore "1..*" -- "1..*" Mossa : effettua
-   Scacchiera "0..*" -- "1..1" Pezzo : contiene
-
-
-```
+![Immagine modello di dominio](./img/Modello%20di%20dominio.jpg)
 
 [Torna al menu](#indice)
 
