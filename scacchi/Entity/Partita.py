@@ -97,9 +97,10 @@ class Partita:
                 continue
 
             try:
-                coord = self.inputUtente.parser.parse_mossa(stringa)
+                simbolo, coord = self.inputUtente.parser.parse_mossa(
+                    stringa, bool(not self.turno_bianco))
                 pezzo = self.pieceControl.find_piece(
-                    self.scacchiera, coord, self.turno_bianco
+                    self.scacchiera, coord, self.turno_bianco, simbolo
                 )
                 
                 # se il pezzo esiste e il movimento va a buon fine

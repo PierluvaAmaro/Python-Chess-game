@@ -22,8 +22,24 @@ class Cavallo(Pezzo):
     def check_move(self, final: Coordinata) -> bool:
         """Verifica se la mossa verso la coordinata specificata è valida per il Cavallo.
         
-        Args:
+        Arg:
             final (Coordinata): Coordinata finale del Cavallo verso cui si deve muovere.
-
+            
+        Raise: 
+            ValueError se la coordinata finale non e' valida.
         """
-        pass
+        if final is None:
+            raise ValueError("Coordinata non valida.")
+        
+        print(f"X: {self.init.x} - {final.x}")
+        print(f"Y: {self.init.y} - {final.y}")
+        
+        dx = abs(final.x - self.init.x)
+        dy = abs(final.y - self.init.y)
+        
+        if (dx == 2 and dy == 1) or (dx == 1 and dy == 2):
+            self.primo = False
+            
+            return True
+        else:
+            return False

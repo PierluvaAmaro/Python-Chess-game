@@ -29,7 +29,7 @@ class Pedone(Pezzo):
             raise ValueError("Coordinata non valida.")
         
         if self.init.x == final.x and self.init.y == final.y:
-            print("La coordinata finale deve essere diversa da quella di partenza.")
+            print("Mossa illegale.")
             return False
 
         dx = final.x - self.init.x
