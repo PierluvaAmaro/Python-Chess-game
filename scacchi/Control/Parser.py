@@ -27,6 +27,9 @@ class Parser:
             ValueError: Se la notazione non e' valida o fuori dall'intervallo consentito
         """
         notazione = notazione.strip()
+        da_mangiare = "x" in notazione
+        notazione = notazione.replace("x", "")  # rimuove la 'x' per analisi
+
         
         if len(notazione) < 2 or len(notazione) > 4:
             raise ValueError("Notazione non valida.")
@@ -52,8 +55,7 @@ class Parser:
         if y < 1 or y > 8:
             raise ValueError(f"Riga fuori intervallo: {notazione}.")
         
-
         simbolo = self.mappa_simboli[lettera_pezzo][colore]
         print(simbolo)
         
-        return simbolo, Coordinata(x, y)
+        return da_mangiare, simbolo, Coordinata(x, y)

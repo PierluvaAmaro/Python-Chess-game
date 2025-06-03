@@ -97,15 +97,16 @@ class Partita:
                 continue
 
             try:
-                simbolo, coord = self.inputUtente.parser.parse_mossa(
+                da_mangiare, simbolo, coord = self.inputUtente.parser.parse_mossa(
                     stringa, bool(not self.turno_bianco))
+                
                 pezzo = self.pieceControl.find_piece(
                     self.scacchiera, coord, self.turno_bianco, simbolo
                 )
                 
                 # se il pezzo esiste e il movimento va a buon fine
                 if pezzo:
-                    if self.pieceControl.muovi(self.scacchiera, pezzo, coord):
+                    if self.pieceControl.muovi(da_mangiare, self.scacchiera, pezzo, coord):
                         # se e' il turno del bianco
                         if self.turno_bianco:
                             # inserisce l'ultima mossa del bianco nel suo array

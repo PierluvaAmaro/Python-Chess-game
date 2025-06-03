@@ -34,24 +34,23 @@ class PieceControl:
         print("Nessun tuo pezzo puo' effettuare quella mossa.")
         return None
 
-    def muovi(self, scacchiera: Scacchiera, pezzo: Pezzo, final: Coordinata
-              ) -> bool:
-        """Esegue lo spostamento di un pezzo se la destinazione non e' occupata.
-        
-        Args:
-            scacchiera (Scacchiera): La scacchiera su cui effettuare il movimento.
-            pezzo (Pezzo): Il pezzo da muovere.
-            final (Coordinata): La destinazione del pezzo.
+    def muovi(self, da_mangiare: bool, scacchiera: Scacchiera, pezzo: Pezzo, final: Coordinata) -> bool:
+        """Esegue lo spostamento di un pezzo se la destinazione è valida."""
+        if scacchiera.is_occupied_by_alliance(pezzo, final):
+            raise ValueError("La coordinata è occupata da un alleato.")
 
-        Returns:
-            bool: True se la mossa e' stata effettuata con successo, False altrimenti.
-        
-        """
-        if not scacchiera.is_occupied(final):
-            scacchiera.pezzi_vivi.pop(pezzo.init)
-            pezzo.init = final
-            scacchiera.pezzi_vivi[final] = pezzo
-            
-            return True
-        
-        return False
+        if da_mangiare:
+            if not scacchiera.is_occupied_by_enemy(pezzo, final):
+                raise ValueError("Nessun pezzo nemico da catturare.")
+            # Cattura il pezzo nemico
+            scacchiera.pezzi_vivi.pop(final)
+        else:
+            if scacchiera.is_occupied_by_enemy(pezzo, final):
+                raise ValueError("Casella occupata da un nemico. Devi catturare.")
+
+        # Esegui il movimento
+        scacchiera.pezzi_vivi.pop(pezzo.init)
+        pezzo.init = final
+        scacchiera.pezzi_vivi[final] = pezzo
+
+        return True
