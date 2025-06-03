@@ -53,65 +53,8 @@ Ci sono diversi modi per rappresentare un diagramma delle classi, a seconda dell
 
 #### Modello del progetto
 
-```mermaid
-classDiagram
-   class Giocatore {
-      id: int
-      nome: string
-      colore: string
-   }
+![Immagine modello di dominio](./img/Modello%20di%20dominio.jpg)
 
-   class Partita {
-      id: int
-      stato: string
-      turno: string
-   }
-
-   class Pezzo {
-      colore: string
-      posizione: string
-      simbolo: string
-   }
-
-   class Scacchiera {
-      griglia: dimensione<><>
-   }
-
-   class Mossa {
-      origine: string
-      destinazione: string
-   }
-
-   class Re
-   class Regina
-   class Torre
-   class Alfiere
-   class Cavallo
-   class Pedone
-
-   Pezzo <|-- Re
-   Pezzo <|-- Regina
-   Pezzo <|-- Torre
-   Pezzo <|-- Alfiere
-   Pezzo <|-- Cavallo
-   Pezzo <|-- Pedone
-
-   Mossa <|-- Scacco : mette in
-   Mossa <|-- Arrocco : esegue
-   Mossa <|-- Promozione : trasforma
-   Mossa <|-- Mangia : cattura
-
-   Scacco <|-- Matto
-
-   Partita "1..*" -- "1..1" Giocatore : Avvia
-   Partita "1..*" -- "1..1" Giocatore : Patta
-   Partita "1..*" -- "1..1" Giocatore : Ferma
-   Partita "1..1" -- "1..1" Scacchiera : utilizza
-   Giocatore "1..*" -- "1..*" Mossa : effettua
-   Scacchiera "1..1" o-- "0..*"Pezzo : compone*
-
-```
-*il simbolo di composizione dovrebbe essere posto immediatamente sopra la classe "Pezzo". Tuttavia mermaid non offre un comando specifico per poterlo fare. 
 [Torna al menu](#indice)
 
 ---
