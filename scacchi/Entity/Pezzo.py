@@ -30,14 +30,12 @@ class Pezzo(ABC):
     def check_move(self, init: Coordinata, final: Coordinata) -> bool:
         """Verifica se una mossa verso una nuova coordinata e' valida per il pezzo.
         
-        Deve essere implementata da tutte le sottoclassi.
-
         Args:
             init (Coordinata): La coordinata di partenza del Pezzo.
             final (Coordinata): La coordinata di destinazione della mossa.
 
         Returns:
             bool: True se la mossa e' valida, False altrimenti.
-
+            
         """
         pass

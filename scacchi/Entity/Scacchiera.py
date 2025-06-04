@@ -16,17 +16,14 @@ class Scacchiera:
         """
         self.pezzi_vivi = pezzi_vivi
 
-    def is_occupied(self, final: Coordinata) -> bool:
-        """Verifica se una casella e' occupata da un pezzo.
-
-        Args:
-            final (Coordinata): Coordinata da controllare.
-
-        Returns:
-            bool: True se la casella e' occupata, False altrimenti.
-
-        """ 
-        if final in self.pezzi_vivi:
-            print("Posizione occupata.")
-            return True
+    def is_occupied_by_alliance(self, mosso: Pezzo, final: Coordinata) -> bool:
+        for coord, pezzo in self.pezzi_vivi.items():
+            if pezzo.colore == mosso.colore and coord == final:
+                return True
+        return False
+    
+    def is_occupied_by_enemy(self, mosso: Pezzo, final: Coordinata) -> bool:
+        for coord, pezzo in self.pezzi_vivi.items():
+            if pezzo.colore != mosso.colore and coord == final:
+                return True
         return False
