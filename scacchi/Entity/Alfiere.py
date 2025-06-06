@@ -18,6 +18,29 @@ class Alfiere(Pezzo):
         """
         super().__init__(simbolo, coord, colore)
 
+    def is_path_clear(self, final: Coordinata, scacchiera) -> bool:
+        """Verifica se il percorso verso la coordinata finale è libero.
+
+        Args:
+            final (Coordinata): Coordinata finale dell'Alfiere verso cui si deve muovere
+            scacchiera: Scacchiera per verificare le posizioni dei pezzi.
+
+        Returns:
+            bool: True se il percorso è libero, False altrimenti.
+        
+        """
+        x_step = 1 if final.x > self.init.x else -1
+        y_step = 1 if final.y > self.init.y else -1
+        x, y = self.init.x + x_step, self.init.y + y_step
+
+        while x != final.x and y!= final.y:
+            coord = Coordinata(x, y)
+            if scacchiera.is_occupied_by_alliance(self, coord) or scacchiera.is_occupied_by_enemy(self, coord):  # noqa: E501
+                return False
+            x += x_step
+            y += y_step
+        return True
+
     def check_move(self, final: Coordinata) -> bool:
         """Verifica se la mossa verso la coordinata specificata è valida per l'Alfiere.
         
