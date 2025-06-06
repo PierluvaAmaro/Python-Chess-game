@@ -41,11 +41,27 @@ class Alfiere(Pezzo):
             y += y_step
         return True
 
-    def check_move(self, final: Coordinata) -> bool:
+    def check_move(self, final: Coordinata, scacchiera) -> bool:
         """Verifica se la mossa verso la coordinata specificata è valida per l'Alfiere.
         
         Args:
             final (Coordinata): Coordinata finale dell'Alfiere verso cui si deve muovere
+            scacchiera: Scacchiera per verificare le posizioni dei pezzi.
+
+        Raise:
+            ValueError: Se la coordinata finale non è valida o il percorso è occupato.
 
         """
-        pass
+        if final is None:
+            raise ValueError("Coordinata non valida.")
+        
+        dx = abs(final.x - self.init.x)
+        dy = abs(final.y - self.init.y)
+
+        if dx == dy and dx != 0:
+            if not self.is_path_clear(final, scacchiera):
+                return False
+            self.primo = False
+            return True
+        else:
+            return False 
