@@ -28,7 +28,7 @@ class PieceControl:
         """
         for _, piece in scacchiera.pezzi_vivi.items():
             if (piece is not None and piece.colore == colore and 
-                piece.simbolo == simbolo and piece.check_move(final)):
+                piece.simbolo == simbolo and piece.check_move(final,scacchiera)):
                     return piece
         
         print("Nessun tuo pezzo puo' effettuare quella mossa.")
