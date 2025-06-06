@@ -34,7 +34,7 @@ class PieceControl:
         print("Nessun tuo pezzo puo' effettuare quella mossa.")
         return None
 
-    def muovi(self, da_mangiare: bool, scacchiera: Scacchiera, pezzo: Pezzo, final: Coordinata) -> bool:
+    def muovi(self, da_mangiare: bool, scacchiera: Scacchiera, pezzo: Pezzo, final: Coordinata) -> bool:  # noqa: E501
         """Esegue lo spostamento di un pezzo se la destinazione è valida."""
         if scacchiera.is_occupied_by_alliance(pezzo, final):
             raise ValueError("Mossa illegale")
