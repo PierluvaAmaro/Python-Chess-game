@@ -164,6 +164,22 @@ La comunicazione interna ha generato alcune incomprensioni nel team.
 
 Il confronto è stato utile per identificare le aree di miglioramento e definire soluzioni concrete per gli sprint futuri.
 
+### Sprint 1
+L'immagine rappresenta il risultato del team meeting svolto dopo lo Sprint 1, durante il quale abbiamo riflettuto sulle difficoltà incontrate e sulle soluzioni adottate.
+![Immagine PB sprint 1](./img/PB_Milner_S1.png)
+
+### Cosa è emerso?
+Nel primo sprint del progetto software per scacchi, il team ha affrontato diverse sfide che hanno rallentato lo sviluppo. Problemi nel testing hanno causato ritardi nella correzione dei bug, mentre incertezze implementative hanno richiesto continue revisioni del codice, generando frustrazione. Disaccordi interni e ritardi nelle pull-request hanno influito negativamente sulla coesione e sulla produttività. Inoltre, la gestione poco equilibrata del carico di lavoro e gli impegni esterni dei membri del team hanno compromesso la concentrazione sugli obiettivi. Infine, la comparsa di nuovi problemi dopo ogni correzione ha creato un ciclo continuo di debugging, aggiungendo ulteriore stress allo sviluppo.
+
+### Soluzioni implementate
+- Ritardi nell’accettazione delle pull-request → Creazione di un documento condiviso con scadenze prefissate.
+- Nuovi problemi dopo ogni correzione → Applicazione di strategie di testing regressivo (selettivo) per verificare che le modifiche non generino ulteriori bug
+- Impegni esterni dei membri del team → Revisione della flessibilità degli obiettivi in base a ciascun membro del team. 
+- Squilibri tra documentazione e logica di gioco → Maggiore attenzione all'assegnazione degli issue tramite sondaggi nei canali di comunicazione del team (per eventuali preferenze). 
+- Disaccordi interni → Meeting di coordinamento in presenza dello scrum-master.
+
+Abbiamo completato il primo sprint con determinazione, affrontando sfide e migliorando il nostro approccio. Ogni difficoltà superata è stata una lezione preziosa, e ogni progresso ci avvicina alla visione finale del progetto.
+
 [Torna al menu](#indice)
 
 ---
