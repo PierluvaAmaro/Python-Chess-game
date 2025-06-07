@@ -35,7 +35,7 @@ Questo progetto mira a:
 Il progetto è realizzato grazie alla collaborazione dei membri del team "Milner": 
 - [Amato Pierluca](https://github.com/PierluvaAmaro)
 - [Catalano Mirco Saverio](https://github.com/catalanomircosav)
-- [Nicola de Bari](https://github.com/nikegyz)
+- [Nicolò de Bari](https://github.com/nikegyz)
 - [Amorosini Antonio](https://github.com/Shadow484)
 - [Gesmundo Guglielmo](https://github.com/Ges201)
 - [Amato Lorenzo](https://github.com/loreamat)
