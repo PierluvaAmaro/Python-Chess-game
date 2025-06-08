@@ -8,6 +8,7 @@
    - [Requisiti non funzionali](#requisiti-non-funzionali)
 4. [Analisi retrospettiva](#analisi-retrospettiva)
    - [Sprint 0](#sprint-0)
+   - [Sprint 1](#sprint-1)
 
 ## Introduzione
 Questo progetto implementa una versione testuale del gioco degli **scacchi** utilizzando **Python**, giocabile direttamente da terminale. Due giocatori si alternano in locale, effettuando le loro mosse attraverso comandi testuali, rispettando le regole ufficiali degli scacchi.
