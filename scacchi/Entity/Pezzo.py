@@ -27,12 +27,13 @@ class Pezzo(ABC):
         self.colore = colore
 
     @abstractmethod
-    def check_move(self, init: Coordinata, final: Coordinata) -> bool:
+    def check_move(self, init: Coordinata, final: Coordinata, scacchiera=None) -> bool:
         """Verifica se una mossa verso una nuova coordinata e' valida per il pezzo.
         
         Args:
             init (Coordinata): La coordinata di partenza del Pezzo.
             final (Coordinata): La coordinata di destinazione della mossa.
+            scacchiera: Scacchiera per verificare le posizioni dei pezzi.
 
         Returns:
             bool: True se la mossa e' valida, False altrimenti.

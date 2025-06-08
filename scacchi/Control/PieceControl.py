@@ -28,13 +28,13 @@ class PieceControl:
         """
         for _, piece in scacchiera.pezzi_vivi.items():
             if (piece is not None and piece.colore == colore and 
-                piece.simbolo == simbolo and piece.check_move(final)):
+                piece.simbolo == simbolo and piece.check_move(final,scacchiera)):
                     return piece
         
         print("Nessun tuo pezzo puo' effettuare quella mossa.")
         return None
 
-    def muovi(self, da_mangiare: bool, scacchiera: Scacchiera, pezzo: Pezzo, final: Coordinata) -> bool:
+    def muovi(self, da_mangiare: bool, scacchiera: Scacchiera, pezzo: Pezzo, final: Coordinata) -> bool:  # noqa: E501
         """Esegue lo spostamento di un pezzo se la destinazione è valida."""
         if scacchiera.is_occupied_by_alliance(pezzo, final):
             raise ValueError("Mossa illegale")

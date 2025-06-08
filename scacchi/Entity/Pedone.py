@@ -18,11 +18,12 @@ class Pedone(Pezzo):
         """
         super().__init__(simbolo, coord, colore)
 
-    def check_move(self, final: Coordinata) -> bool:
+    def check_move(self, final: Coordinata, scacchiera=None) -> bool:
         """Verifica se la mossa verso la coordinata specificata è valida per il pedone.
         
         Args:
             final (Coordinata): Coordinata finale del Pedone verso cui si deve muovere
+            scacchiera: Scacchiera per verificare le posizioni dei pezzi.
 
         """
         if final is None:
