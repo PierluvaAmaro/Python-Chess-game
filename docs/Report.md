@@ -7,6 +7,9 @@
    - [Requisiti funzionali](#requisiti-funzionali)
    - [Requisiti non funzionali](#requisiti-non-funzionali)
 4. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
+   - [Metodologia di sviluppo](#metodologia-di-sviluppo)
+   - [Organizzazione sprint](#organizzazione-sprint)
+   - [Software utilizzati](#software-utilizzati)
 5. [Analisi retrospettiva](#analisi-retrospettiva)
    - [Sprint 0](#sprint-0)
    - [Sprint 1](#sprint-1)
@@ -230,6 +233,11 @@ Strumento di linting per Python, utile per mantenere il codice coerente, leggibi
 
 - **Docker** <img src="https://img.icons8.com/fluency/48/docker.png" height="20"/>
 Utilizzato per eseguire l'applicazione in un ambiente isolato e replicabile, garantendo portabilità e coerenza tra i vari ambienti di sviluppo.
+
+- **Draw-io** <img src="https://raw.githubusercontent.com/jgraph/drawio/master/src/main/webapp/images/drawlogo.svg" height="20"/> 
+Utilizzato per creare diagrammi UML, flussi di processo e schemi architetturali legati al progetto.
+
+[Torna al menu](#indice)
 
 ---
 
