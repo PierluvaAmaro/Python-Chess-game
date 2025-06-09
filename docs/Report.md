@@ -6,7 +6,8 @@
 3. [Requisiti specifici](#requisiti-specifici)
    - [Requisiti funzionali](#requisiti-funzionali)
    - [Requisiti non funzionali](#requisiti-non-funzionali)
-4. [Analisi retrospettiva](#analisi-retrospettiva)
+4. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
+5. [Analisi retrospettiva](#analisi-retrospettiva)
    - [Sprint 0](#sprint-0)
    - [Sprint 1](#sprint-1)
 
@@ -146,6 +147,11 @@ Il formato deve essere leggibile e coerente con la notazione standard, per perme
   (Riferimento: [Wikipedia - Scacchi](https://it.wikipedia.org/wiki/Scacchi#Descrizione_e_regolamento))
 
 [Torna al menu](#indice)
+
+---
+
+## Processo di sviluppo e organizzazione del lavoro
+
 
 ---
 
