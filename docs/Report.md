@@ -179,6 +179,22 @@ Parallelamente, è stato creato un **Product Backlog**, aggiornato progressivame
 ![Immagine Product Backlog](./img/ProductBacklog.png)
 
 ## Organizzazione sprint
+Il lavoro è stato suddiviso in tre Sprint principali, ognuno con una durata prestabilita e un obiettivo chiaro da raggiungere.
+| Sprint   | Periodo                  | Obiettivo principale                                                                                   |
+| -------- | ------------------------ | ------------------------------------------------------------------------------------------------------ |
+| Sprint 0 | 28 Marzo – 10 Aprile     | Familiarizzare con il **processo Agile**, Git e **GitHub Flow**.                                       |
+| Sprint 1 | 28/29 Aprile – 15 Maggio | Sviluppo dell’**MVP** con implementazione della **fase d'apertura** e movimento dei **pedoni**.        |
+| Sprint 2 | 30 Maggio – 15 Giugno    | Completamento delle regole di gioco e implementazione della **condizione di vittoria (scacco matto)**. |
+
+Ogni Sprint ha seguito il ciclo Scrum completo, comprendente:
+
+- Sprint Planning: definizione degli obiettivi e delle User Story da realizzare.
+
+- Daily Scrum: breve riunione quotidiana per condividere stato, ostacoli e piani.
+
+- Sprint Review: presentazione dell'incremento realizzato allo stakeholder e conseguente feedback.
+
+- Sprint Retrospective: riflessione interna sul processo e sulle modalità di lavoro.
 
 
 ---
