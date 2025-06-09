@@ -152,6 +152,34 @@ Il formato deve essere leggibile e coerente con la notazione standard, per perme
 
 ## Processo di sviluppo e organizzazione del lavoro
 
+### Metodologia di sviluppo
+Per la gestione del progetto abbiamo scelto di adottare il framework Scrum, uno dei metodi più diffusi all'interno dell’approccio Agile. Questa scelta è stata motivata dall’esigenza di lavorare in modo collaborativo, iterativo e adattivo, elementi fondamentali per affrontare un progetto dinamico come lo sviluppo di un’applicazione scacchistica.
+
+Scrum si basa su cicli di lavoro brevi e regolari chiamati sprint, ognuno dei quali rappresenta un periodo di tempo fisso (nel nostro caso, circa 2 settimane) in cui il team si concentra sul completamento di un insieme specifico di funzionalità. L’obiettivo è produrre a ogni sprint un incremento di prodotto funzionante, che possa essere presentato allo stakeholder per ricevere un feedback.
+
+| Nome             | Ruolo        | Compiti principali                                     |
+| ---------------- | ------------ | ------------------------------------------------------ |
+| Prof. Lanubile Filippo | Stakeholder  | Requisiti, feedback, validazione del prodotto          |
+| Mirco Catalano   | Scrum Master | Facilitazione, supporto al team, gestione del processo |
+| Pierluca Amato        | Developer    | Sviluppo funzionalità, testing, collaborazione  |
+| Nicolò de Bari        | Developer    | Sviluppo funzionalità, testing, collaborazione               |
+| Lorenzo Amato        | Developer    | Sviluppo funzionalità, testing, collaborazione        |
+| Antonio Amorosini        | Developer    | Sviluppo funzionalità, testing, collaborazione                  |
+| Guglielmo Gesmundo      | Developer    | Sviluppo funzionalità, testing, collaborazione                       |
+
+
+Durante ogni Sprint, sia durante le lezioni in aula che tramite Microsoft Teams, ci sono stati comunicati i requisiti da parte dello stakeholder. Questi requisiti sono stati espressi sotto forma di **User Story**, ciascuna accompagnata da una relativa **Definition of Done**(DoD), ovvero l’insieme dei criteri che ne determinano il completamento accettabile.
+
+A partire dallo Sprint 0, il team ha organizzato il lavoro creando una Board dedicata per ciascuno Sprint, per rappresentare visivamente lo stato di avanzamento delle attività, attraverso colonne come To Do, In Progress, Review, Ready e Done.
+
+![Immagine Project Board](./img/PB.png)
+
+Parallelamente, è stato creato un **Product Backlog**, aggiornato progressivamente, che contiene tutte le User Story previste per gli Sprint successivi. Questo backlog funge da punto di riferimento centrale per la pianificazione e la gestione delle priorità, permettendo al team di avere una visione d'insieme del progetto e di adattarsi rapidamente ai cambiamenti o ai nuovi requisiti che emergono nel corso dello sviluppo.
+
+![Immagine Product Backlog](./img/ProductBacklog.png)
+
+## Organizzazione sprint
+
 
 ---
 
