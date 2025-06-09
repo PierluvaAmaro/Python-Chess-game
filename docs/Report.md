@@ -196,6 +196,40 @@ Ogni Sprint ha seguito il ciclo Scrum completo, comprendente:
 
 - Sprint Retrospective: riflessione interna sul processo e sulle modalità di lavoro.
 
+## Software utilizzati
+Nel corso dello sviluppo del progetto, il team ha fatto uso di diversi strumenti software, scelti in funzione delle esigenze organizzative, comunicative e tecniche del gruppo. Questi strumenti hanno facilitato la collaborazione a distanza, la scrittura del codice in modo condiviso e la gestione efficiente dell’intero flusso di lavoro.
+### Software di organizzazione e comunicazione
+- **Microsoft Teams** <img src="https://img.icons8.com/color/48/microsoft-teams.png" height="20"/>
+Utilizzato per comunicare con lo stakeholder (il professore), ricevere indicazioni sugli Sprint, partecipare a meeting ufficiali e condividere materiali formali.
+![Immagine teams](./img/teams.png)
+
+- **Discord** <img src="https://img.icons8.com/color/48/discord-logo.png" height="20"/>
+Canale principale di comunicazione interna del team. Usato quotidianamente per discutere, organizzare il lavoro e svolgere i Daily Scrum. Ha facilitato lo sviluppo in tempo reale con condivisione schermo e vocali.
+![Immagine DS](./img/discord.png)
+
+- **WhatsApp** <img src="https://img.icons8.com/color/48/whatsapp--v1.png" height="20"/> 
+Utilizzato per comunicazioni rapide e informali, soprattutto fuori dall’orario di lavoro, utile per coordinamenti veloci e promemoria.
+
+![Immagine WH](./img/WH.png)
+
+### Software tecnico
+- **Visual Studio Code** <img src="https://img.icons8.com/color/48/visual-studio-code-2019.png" height="20"/>
+Editor di codice sorgente leggero, open-source e multipiattaforma, sviluppato da Microsoft. È stato lo strumento principale utilizzato dal team per scrivere, modificare e gestire il codice del progetto.
+
+  - **Visual Studio Code (Live Share)** 
+  Estensione di VS Code che ha permesso la programmazione simultanea tra più membri del team, facilitando la collaborazione diretta sul codice.
+
+- **GitHub** <img src="https://img.icons8.com/glyph-neue/48/github.png" height="20"/>
+Piattaforma per la gestione del controllo versione, seguendo il flusso GitHub Flow. Ha ospitato il repository del progetto e gestito i vari branch funzionali.
+
+- **Pytest** <img src="https://img.icons8.com/color/48/python--v1.png" height="20"/> 
+Framework per l'esecuzione dei test automatici sul codice Python, utilizzato per verificare il corretto funzionamento delle funzionalità implementate.
+
+- **Ruff** <img src="https://img.icons8.com/ios-filled/50/code-file.png" height="20"/>
+Strumento di linting per Python, utile per mantenere il codice coerente, leggibile e conforme agli standard stilistici.
+
+- **Docker** <img src="https://img.icons8.com/fluency/48/docker.png" height="20"/>
+Utilizzato per eseguire l'applicazione in un ambiente isolato e replicabile, garantendo portabilità e coerenza tra i vari ambienti di sviluppo.
 
 ---
 
