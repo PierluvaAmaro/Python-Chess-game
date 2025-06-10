@@ -6,7 +6,11 @@
 3. [Requisiti specifici](#requisiti-specifici)
    - [Requisiti funzionali](#requisiti-funzionali)
    - [Requisiti non funzionali](#requisiti-non-funzionali)
-4. [Analisi retrospettiva](#analisi-retrospettiva)
+4. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
+   - [Metodologia di sviluppo](#metodologia-di-sviluppo)
+   - [Organizzazione sprint](#organizzazione-sprint)
+   - [Software utilizzati](#software-utilizzati)
+5. [Analisi retrospettiva](#analisi-retrospettiva)
    - [Sprint 0](#sprint-0)
    - [Sprint 1](#sprint-1)
 
@@ -144,6 +148,94 @@ Il formato deve essere leggibile e coerente con la notazione standard, per perme
   - Git Bash di Windows
 - **RNF3**: L'applicazione deve utilizzare i simboli UTF-8 per la rappresentazione grafica dei pezzi degli scacchi: ♔ ♕ ♖ ♗ ♘ ♙ ♚ ♛ ♜ ♝ ♞ ♟.
   (Riferimento: [Wikipedia - Scacchi](https://it.wikipedia.org/wiki/Scacchi#Descrizione_e_regolamento))
+
+[Torna al menu](#indice)
+
+---
+
+## Processo di sviluppo e organizzazione del lavoro
+
+### Metodologia di sviluppo
+Per la gestione del progetto abbiamo scelto di adottare il framework Scrum, uno dei metodi più diffusi all'interno dell’approccio Agile. Questa scelta è stata motivata dall’esigenza di lavorare in modo collaborativo, iterativo e adattivo, elementi fondamentali per affrontare un progetto dinamico come lo sviluppo di un’applicazione scacchistica.
+
+Scrum si basa su cicli di lavoro brevi e regolari chiamati sprint, ognuno dei quali rappresenta un periodo di tempo fisso (nel nostro caso, circa 2 settimane) in cui il team si concentra sul completamento di un insieme specifico di funzionalità. L’obiettivo è produrre a ogni sprint un incremento di prodotto funzionante, che possa essere presentato allo stakeholder per ricevere un feedback.
+
+| Nome             | Ruolo        | Compiti principali                                     |
+| ---------------- | ------------ | ------------------------------------------------------ |
+| Prof. Lanubile Filippo | Stakeholder  | Requisiti, feedback, validazione del prodotto          |
+| Mirco Catalano   | Scrum Master | Facilitazione, supporto al team, gestione del processo |
+| Pierluca Amato        | Developer    | Sviluppo funzionalità, testing, collaborazione  |
+| Nicolò de Bari        | Developer    | Sviluppo funzionalità, testing, collaborazione               |
+| Lorenzo Amato        | Developer    | Sviluppo funzionalità, testing, collaborazione        |
+| Antonio Amorosini        | Developer    | Sviluppo funzionalità, testing, collaborazione                  |
+| Guglielmo Gesmundo      | Developer    | Sviluppo funzionalità, testing, collaborazione                       |
+
+
+Durante ogni Sprint, sia durante le lezioni in aula che tramite Microsoft Teams, ci sono stati comunicati i requisiti da parte dello stakeholder. Questi requisiti sono stati espressi sotto forma di **User Story**, ciascuna accompagnata da una relativa **Definition of Done**(DoD), ovvero l’insieme dei criteri che ne determinano il completamento accettabile.
+
+A partire dallo Sprint 0, il team ha organizzato il lavoro creando una Board dedicata per ciascuno Sprint, per rappresentare visivamente lo stato di avanzamento delle attività, attraverso colonne come To Do, In Progress, Review, Ready e Done.
+
+![Immagine Project Board](./img/PB.png)
+
+Parallelamente, è stato creato un **Product Backlog**, aggiornato progressivamente, che contiene tutte le User Story previste per gli Sprint successivi. Questo backlog funge da punto di riferimento centrale per la pianificazione e la gestione delle priorità, permettendo al team di avere una visione d'insieme del progetto e di adattarsi rapidamente ai cambiamenti o ai nuovi requisiti che emergono nel corso dello sviluppo.
+
+![Immagine Product Backlog](./img/ProductBacklog.png)
+
+## Organizzazione sprint
+Il lavoro è stato suddiviso in tre Sprint principali, ognuno con una durata prestabilita e un obiettivo chiaro da raggiungere.
+| Sprint   | Periodo                  | Obiettivo principale                                                                                   |
+| -------- | ------------------------ | ------------------------------------------------------------------------------------------------------ |
+| Sprint 0 | 28 Marzo – 10 Aprile     | Familiarizzare con il **processo Agile**, Git e **GitHub Flow**.                                       |
+| Sprint 1 | 28/29 Aprile – 15 Maggio | Sviluppo dell’**MVP** con implementazione della **fase d'apertura** e movimento dei **pedoni**.        |
+| Sprint 2 | 30 Maggio – 15 Giugno    | Completamento delle regole di gioco e implementazione della **condizione di vittoria (scacco matto)**. |
+
+Ogni Sprint ha seguito il ciclo Scrum completo, comprendente:
+
+- Sprint Planning: definizione degli obiettivi e delle User Story da realizzare.
+
+- Daily Scrum: breve riunione quotidiana per condividere stato, ostacoli e piani.
+
+- Sprint Review: presentazione dell'incremento realizzato allo stakeholder e conseguente feedback.
+
+- Sprint Retrospective: riflessione interna sul processo e sulle modalità di lavoro.
+
+## Software utilizzati
+Nel corso dello sviluppo del progetto, il team ha fatto uso di diversi strumenti software, scelti in funzione delle esigenze organizzative, comunicative e tecniche del gruppo. Questi strumenti hanno facilitato la collaborazione a distanza, la scrittura del codice in modo condiviso e la gestione efficiente dell’intero flusso di lavoro.
+### Software di organizzazione e comunicazione
+- **Microsoft Teams** <img src="https://img.icons8.com/color/48/microsoft-teams.png" height="20"/>
+Utilizzato per comunicare con lo stakeholder (il professore), ricevere indicazioni sugli Sprint, partecipare a meeting ufficiali e condividere materiali formali.
+![Immagine teams](./img/teams.png)
+
+- **Discord** <img src="https://img.icons8.com/color/48/discord-logo.png" height="20"/>
+Canale principale di comunicazione interna del team. Usato quotidianamente per discutere, organizzare il lavoro e svolgere i Daily Scrum. Ha facilitato lo sviluppo in tempo reale con condivisione schermo e vocali.
+![Immagine DS](./img/discord.png)
+
+- **WhatsApp** <img src="https://img.icons8.com/color/48/whatsapp--v1.png" height="20"/> 
+Utilizzato per comunicazioni rapide e informali, soprattutto fuori dall’orario di lavoro, utile per coordinamenti veloci e promemoria.
+
+![Immagine WH](./img/WH.png)
+
+### Software tecnico
+- **Visual Studio Code** <img src="https://img.icons8.com/color/48/visual-studio-code-2019.png" height="20"/>
+Editor di codice sorgente leggero, open-source e multipiattaforma, sviluppato da Microsoft. È stato lo strumento principale utilizzato dal team per scrivere, modificare e gestire il codice del progetto.
+
+  - **Visual Studio Code (Live Share)** 
+  Estensione di VS Code che ha permesso la programmazione simultanea tra più membri del team, facilitando la collaborazione diretta sul codice.
+
+- **GitHub** <img src="https://img.icons8.com/glyph-neue/48/github.png" height="20"/>
+Piattaforma per la gestione del controllo versione, seguendo il flusso GitHub Flow. Ha ospitato il repository del progetto e gestito i vari branch funzionali.
+
+- **Pytest** <img src="https://img.icons8.com/color/48/python--v1.png" height="20"/> 
+Framework per l'esecuzione dei test automatici sul codice Python, utilizzato per verificare il corretto funzionamento delle funzionalità implementate.
+
+- **Ruff** <img src="https://img.icons8.com/ios-filled/50/code-file.png" height="20"/>
+Strumento di linting per Python, utile per mantenere il codice coerente, leggibile e conforme agli standard stilistici.
+
+- **Docker** <img src="https://img.icons8.com/fluency/48/docker.png" height="20"/>
+Utilizzato per eseguire l'applicazione in un ambiente isolato e replicabile, garantendo portabilità e coerenza tra i vari ambienti di sviluppo.
+
+- **Draw-io** <img src="https://raw.githubusercontent.com/jgraph/drawio/master/src/main/webapp/images/drawlogo.svg" height="20"/> 
+Utilizzato per creare diagrammi UML, flussi di processo e schemi architetturali legati al progetto.
 
 [Torna al menu](#indice)
 
