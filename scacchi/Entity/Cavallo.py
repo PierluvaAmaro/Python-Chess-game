@@ -30,10 +30,7 @@ class Cavallo(Pezzo):
             ValueError se la coordinata finale non e' valida.
         """
         if final is None:
-            raise ValueError("Coordinata non valida.")
-        
-        print(f"X: {self.init.x} - {final.x}")
-        print(f"Y: {self.init.y} - {final.y}")
+            raise ValueError("Coordinata non valida")
         
         dx = abs(final.x - self.init.x)
         dy = abs(final.y - self.init.y)

@@ -42,28 +42,26 @@ def crea_pezzo(simbolo: str, id: Coordinata, colore: bool):
             return Cavallo("♞", id, colore)
 
         case "♔":
-            return Regina("♔", id, colore)
+            return Re("♔", id, colore)  # Re bianco
 
         case "♚":
-            return Regina("♚", id, colore)
+            return Re("♚", id, colore)  # Re nero
 
         case "♕":
-            return Re("♕", id, colore)
+            return Regina("♕", id, colore)  # Regina bianca
         
         case "♛":
-            return Re("♛", id, colore)
+            return Regina("♛", id, colore)  # Regina nera
 
         case "♗":
             return Alfiere("♗", id, colore)
         
         case "♝":
             return Alfiere("♝", id, colore)
-
-
+        
         case _:
             raise ValueError(f"Pezzo non conosciuto: {simbolo}")
-        
-        # qui andra la creazione degli altri pezzi.
+
 
 def leggi_scacchiera(file="scacchiera.txt"):
     """Legge la disposizione della scacchiera da un file di testo.
