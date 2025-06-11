@@ -27,3 +27,4 @@ class Scacchiera:
             if pezzo.colore != mosso.colore and coord == final:
                 return True
         return False
+    

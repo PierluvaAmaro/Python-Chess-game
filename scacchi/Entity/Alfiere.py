@@ -33,7 +33,7 @@ class Alfiere(Pezzo):
         y_step = 1 if final.y > self.init.y else -1
         x, y = self.init.x + x_step, self.init.y + y_step
 
-        while x != final.x and y!= final.y:
+        while x != final.x and y != final.y:
             coord = Coordinata(x, y)
             if scacchiera.is_occupied_by_alliance(self, coord) or scacchiera.is_occupied_by_enemy(self, coord):  # noqa: E501
                 return False

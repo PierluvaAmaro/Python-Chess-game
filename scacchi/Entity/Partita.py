@@ -106,7 +106,7 @@ class Partita:
                 
                 # se il pezzo esiste e il movimento va a buon fine
                 if pezzo:
-                    if self.pieceControl.muovi(da_mangiare, self.scacchiera, pezzo, coord):
+                    if self.pieceControl.muovi(da_mangiare, self.scacchiera, pezzo.colore, pezzo, coord):
                         # se e' il turno del bianco
                         if self.turno_bianco:
                             # inserisce l'ultima mossa del bianco nel suo array
