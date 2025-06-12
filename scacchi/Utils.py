@@ -1,10 +1,10 @@
-from ..Entity.Alfiere import Alfiere
-from ..Entity.Cavallo import Cavallo
-from ..Entity.Coordinata import Coordinata
-from ..Entity.Pedone import Pedone
-from ..Entity.Re import Re
-from ..Entity.Regina import Regina
-from ..Entity.Torre import Torre
+from .Entity.Alfiere import Alfiere
+from .Entity.Cavallo import Cavallo
+from .Entity.Coordinata import Coordinata
+from .Entity.Pedone import Pedone
+from .Entity.Re import Re
+from .Entity.Regina import Regina
+from .Entity.Torre import Torre
 
 
 def crea_pezzo(simbolo: str, id: Coordinata, colore: bool):
@@ -63,7 +63,7 @@ def crea_pezzo(simbolo: str, id: Coordinata, colore: bool):
             raise ValueError(f"Pezzo non conosciuto: {simbolo}")
 
 
-def leggi_scacchiera(file="scacchiera.txt"):
+def leggi_scacchiera(file="ui/scacchiera.txt"):
     """Legge la disposizione della scacchiera da un file di testo.
 
     Il file deve contenere 8 righe da 8 caratteri ciascuna, dove ogni simbolo 

@@ -19,19 +19,22 @@ class Re(Pezzo):
         super().__init__(simbolo, coord, colore)
         self.arrocco = False
 
-    def check_move(self, final: Coordinata, scacchiera=None) -> bool:
+    def percorso_libero(self, finale: Coordinata, scacchiera) -> bool:
+        return True
+
+    def controlla_mossa(self, finale: Coordinata, scacchiera=None) -> bool:
         """Verifica se la mossa verso la coordinata specificata è valida per il Re.
 
         Args:
-            final (Coordinata): Coordinata finale del Re verso cui si deve muovere.
+            finale (Coordinata): Coordinata finale del Re verso cui si deve muovere.
             scacchiera: Scacchiera per verificare le posizioni dei pezzi.
 
         """
-        if final is None:
+        if finale is None:
             raise ValueError("Coordinata non valida")
         
-        dx = abs(final.x - self.init.x)
-        dy = abs(final.y - self.init.y)
+        dx = abs(finale.x - self.iniziale.x)
+        dy = abs(finale.y - self.iniziale.y)
         
         if dx <= 1 and dy <= 1 and (dx != 0 or dy != 0):
             self.primo = False
@@ -39,5 +42,4 @@ class Re(Pezzo):
         else:
             return False
         
-    def is_path_clear(self, final: Coordinata, scacchiera) -> bool:
-        pass
+    
