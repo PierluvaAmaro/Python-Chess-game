@@ -22,7 +22,7 @@ class Pezzo(ABC):
         
         """
         self.init = init
-        self.primo = True # indica se e' il primo movimento del pezzo.
+        self.primo = 1
         self.simbolo = simbolo
         self.colore = colore
 
@@ -40,3 +40,19 @@ class Pezzo(ABC):
             
         """
         pass
+    
+    @abstractmethod
+    def is_path_clear(self, init: Coordinata, final: Coordinata, scacchiera) -> bool:
+        """Verifica che il percorso tra due coordinate sia libero.
+        
+        Args:
+            init (Coordinata): La coordinata di partenza del Pezzo.
+            final (Coordinata): La coordinata di destinazione della mossa.
+            scacchiera: Scacchiera per verificare le posizioni dei pezzi.
+            
+        Returns:
+            bool: True se il percorso e' libero, False altrimenti.
+            
+        """
+        pass
+        

@@ -38,3 +38,6 @@ class Re(Pezzo):
             return True
         else:
             return False
+        
+    def is_path_clear(self, final: Coordinata, scacchiera) -> bool:
+        pass

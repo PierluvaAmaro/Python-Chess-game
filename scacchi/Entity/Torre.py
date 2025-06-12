@@ -39,7 +39,8 @@ class Torre(Pezzo):
 
         while x != final.x or y!= final.y:
             coord = Coordinata(x, y)
-            if scacchiera.is_occupied_by_alliance(self, coord) or scacchiera.is_occupied_by_enemy(self, coord):  # noqa: E501)
+            if (scacchiera.is_occupied_by_alliance(self, coord) 
+                or scacchiera.is_occupied_by_enemy(self, coord)):
                 return False
             x += x_step
             y += y_step

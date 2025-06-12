@@ -42,16 +42,16 @@ def crea_pezzo(simbolo: str, id: Coordinata, colore: bool):
             return Cavallo("♞", id, colore)
 
         case "♔":
-            return Re("♔", id, colore)  # Re bianco
+            return Re("♔", id, colore)
 
         case "♚":
-            return Re("♚", id, colore)  # Re nero
+            return Re("♚", id, colore)
 
         case "♕":
-            return Regina("♕", id, colore)  # Regina bianca
+            return Regina("♕", id, colore)
         
         case "♛":
-            return Regina("♛", id, colore)  # Regina nera
+            return Regina("♛", id, colore)
 
         case "♗":
             return Alfiere("♗", id, colore)
@@ -108,9 +108,9 @@ def leggi_scacchiera(file="scacchiera.txt"):
 
                 # Determina il colore del pezzo in base alla posizione
                 if y == 2 or y == 1:
-                    colore = True  # colore bianco
+                    colore = True
                 elif y == 7 or y == 8:
-                    colore = False  # colore nero
+                    colore = False
                 else:
                     continue  # nessun pezzo previsto in quella casa.
                 

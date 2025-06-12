@@ -18,42 +18,57 @@ class Parser:
         }
 
     def parse_mossa(self, notazione: str, colore):
-        """Converti una stringa di notazione scacchistica in una coordinata.
+        """Convert una mossa scacchistica in un oggetto di tipo Coordinata.
         
-        Arg:
-            notazione (str): Stringa in notazione algebrica abbreviata (es. "e4").
-        
-        Raise:
-            ValueError: Se la notazione non e' valida o fuori dall'intervallo consentito
+        Args:
+            notazione(str): Notazione scacchistica della mossa.
+            colore(bool): Colore del pezzo che sta effettuando la mossa.
+            
         """
+        # controllo se e' stato dichiarato lo scacco
+        scacco = '+' in notazione
+        if scacco:
+            notazione = notazione.replace('+', '')
+        
+        # controllo se il pezzo deve catturare
+        cattura = 'x' in notazione
+        if cattura:
+            notazione = notazione.replace('x', '')
+        
         notazione = notazione.strip()
-        da_mangiare = "x" in notazione
-        notazione = notazione.replace("x", "")  # rimuove la 'x' per analisi
         
-        if len(notazione) < 2 or len(notazione) > 4:
-            raise ValueError("Notazione non valida.")
-        
-        # pezzo specificato
-        if notazione[0].isalpha() and notazione[1].isalpha():
+        # controllo se il pezzo è stato specificato
+        # almeno 3 caratteri, di cui i primi due sono lettere
+        lettera_pezzo = 'P'
+        if len(notazione) >= 3 and notazione[0].isalpha() and notazione[1].isalpha():
             lettera_pezzo = notazione[0]
-            col = notazione[1].lower()
-            row = notazione[2:]
-            
-        # pezzo non specificato
+            colonna = notazione[1].lower()
+            riga = notazione[2:]
         else:
-            lettera_pezzo = 'P'
-            col = notazione[0].lower()
-            row = notazione[1:]
-            
-        if col < 'a' or col > 'h' or not row.isdigit():
-            raise ValueError(f"Notazione non valida: {notazione}.")
+            colonna = notazione[0].lower()
+            riga = notazione[1:]
         
-        x = ord(col) - ord('a') + 1
-        y = int(row)
+        if colonna < 'a' or colonna > 'h':
+            raise ValueError("Colonna non valida. Deve essere tra 'a' e 'h'.")
+
+        x = ord(colonna) - ord('a') + 1
+        y = int(riga)
         
         if y < 1 or y > 8:
-            raise ValueError(f"Riga fuori intervallo: {notazione}.")
+            raise ValueError("Riga non valida. Deve essere tra 1 e 8.")
         
-        simbolo = self.mappa_simboli[lettera_pezzo][colore]
+        simbolo = self.mappa_simboli.get(lettera_pezzo, {}).get(colore)
+        if simbolo is None:
+            raise ValueError(f"Simbolo non valido per il pezzo: {lettera_pezzo}")
         
-        return da_mangiare, simbolo, Coordinata(x, y)
+        return {
+            "tipo": "mossa",
+            "cattura": cattura if cattura else None,
+            "simbolo": simbolo,
+            "finale": Coordinata(x, y),
+            # TODO: gestire promozione e en_passant
+            "promozione": None, # None se non e' una promozione
+            "en_passant": None, # None se non e' una mossa en passant
+            "scacco": scacco # None se non e' una mossa di scacco
+        }
+    

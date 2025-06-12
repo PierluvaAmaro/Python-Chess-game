@@ -59,3 +59,7 @@ class Coordinata:
             
         """
         return hash((self.x, self.y))
+    
+    def print(self):
+        """Stampa le coordinate in un formato leggibile."""
+        print(f"Coordinata: ({self.x}, {self.y})")
