@@ -18,50 +18,51 @@ class Alfiere(Pezzo):
         """
         super().__init__(simbolo, coord, colore)
 
-    def is_path_clear(self, final: Coordinata, scacchiera) -> bool:
+    def percorso_libero(self, finale: Coordinata, scacchiera) -> bool:
         """Verifica se il percorso verso la coordinata finale è libero.
 
         Args:
-            final (Coordinata): Coordinata finale dell'Alfiere verso cui si deve muovere
-            scacchiera: Scacchiera per verificare le posizioni dei pezzi.
+            finale (Coordinata): Coordinata verso cui l'Alfiere si deve muovere.
+            scacchiera: Scacchiera su cui verificare le posizioni dei pezzi.
 
         Returns:
             bool: True se il percorso è libero, False altrimenti.
         
         """
-        x_step = 1 if final.x > self.init.x else -1
-        y_step = 1 if final.y > self.init.y else -1
-        x, y = self.init.x + x_step, self.init.y + y_step
+        x_step = 1 if finale.x > self.iniziale.x else -1
+        y_step = 1 if finale.y > self.iniziale.y else -1
+        
+        x = self.iniziale.x + x_step
+        y = self.iniziale.y + y_step
 
-        while x != final.x and y != final.y:
+        while x != finale.x and y != finale.y:
             coord = Coordinata(x, y)
-            if scacchiera.is_occupied_by_alliance(self, coord) or scacchiera.is_occupied_by_enemy(self, coord):  # noqa: E501
+            if scacchiera.occupata(coord):
                 return False
+            
             x += x_step
             y += y_step
         return True
 
-    def check_move(self, final: Coordinata, scacchiera) -> bool:
+    def controlla_mossa(self, finale: Coordinata, scacchiera=None) -> bool:
         """Verifica se la mossa verso la coordinata specificata è valida per l'Alfiere.
         
         Args:
-            final (Coordinata): Coordinata finale dell'Alfiere verso cui si deve muovere
+            finale (Coordinata): Coordinata finale dell'Alfiere verso cui deve muoversi.
             scacchiera: Scacchiera per verificare le posizioni dei pezzi.
 
         Raise:
             ValueError: Se la coordinata finale non è valida o il percorso è occupato.
 
         """
-        if final is None:
+        if finale is None:
             raise ValueError("Coordinata non valida.")
         
-        dx = abs(final.x - self.init.x)
-        dy = abs(final.y - self.init.y)
+        dx = abs(finale.x - self.iniziale.x)
+        dy = abs(finale.y - self.iniziale.y)
 
         if dx == dy and dx != 0:
-            if not self.is_path_clear(final, scacchiera):
-                return False
-            self.primo = False
-            return True
+            if self.percorso_libero(finale, scacchiera):
+                return True
         else:
             return False 

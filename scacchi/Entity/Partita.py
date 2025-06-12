@@ -1,31 +1,33 @@
 from sys import argv
 
+from scacchi.Entity.Re import Re
+
 from ..Boundary.InputUtente import InputUtente
-from ..Boundary.InterfacciaUtente import UI
-from ..Control.PieceControl import PieceControl
-from ..Control.Utils import leggi_scacchiera
+from ..Boundary.InterfacciaUtente import InterfacciaUtente
+from ..Control.ControlloPezzi import ControlloPezzi
+from ..Utils import leggi_file, leggi_scacchiera
 from .Scacchiera import Scacchiera
 
 
-def say_hello(ui: UI):
-    """Saluta i giocatori."""
-    ui.set_style("accent", "cyan")
-    benvenuto = ui.format_text("Benvenuto")
-    ui.set_style("accent", "magenta")
+def saluta(ui: InterfacciaUtente):
+    """Saluta i giocatori con un messaggio di benvenuto.
     
-    gruppo = ui.format_text("gruppo Milner")
-    ui.set_style("accent", "yellow")
+    Args:
+        ui (InterfacciaUtente): L'istanza dell'interfaccia per la visualizzazione.
     
-    istruzioni = ui.format_text("Inserisci un comando tra quelli disponibili,")
-    ui.set_style("accent", "green")
-    
-    help_hint = ui.format_text("/help")
-    messaggio = (
-            f"{benvenuto} nel gioco degli scacchi del {gruppo}!\n"
-            f"{istruzioni} o usa {help_hint} per vedere la lista dei comandi."
-    )
-    
-    ui.stampa(messaggio)
+    """
+    lines = leggi_file("ui/welcome.txt").splitlines()
+    half = len(lines) // 2
+
+    # Prima metà in rosso
+    ui.imposta_stile("accent", "bright_white")
+    for line in lines[:half]:
+        ui.stampa(line)
+
+    # Seconda metà in bianco (o nessun colore)
+    ui.imposta_stile("accent", "cyan")
+    for line in lines[half:]:
+        ui.stampa(line)
 
 class Partita:
     """CLASSE ENTITY: Gestisce la logica principale della partita a scacchi."""
@@ -35,14 +37,14 @@ class Partita:
         """Indica che la partita è in corso."""
 
         # scacchiera di base
-        self.scacchiera = Scacchiera(leggi_scacchiera("scacchiera.txt"))
+        self.scacchiera = Scacchiera(leggi_scacchiera("ui/scacchiera.txt"))
         
         # variabili utilizzate per l'interazione con l'utente
         self.inputUtente = InputUtente()
-        self.ui = UI()
+        self.ui = InterfacciaUtente()
 
-        # il pieceControl gestisce tutti i pezzi della scacchiera
-        self.pieceControl = PieceControl()
+        # il controllo_pezzi gestisce tutti i pezzi della scacchiera
+        self.controllo_pezzi = ControlloPezzi()
         
         # specificano se la partita e' gia' iniziata e se e' il turno del bianco.
         self.in_gioco = False
@@ -53,23 +55,23 @@ class Partita:
         self.nome2 = ""
 
         # array di mosse
-        self.mosse_bianco=[]
-        self.mosse_nero=[]
+        self.mosse_bianco = []
+        self.mosse_nero = []
 
     def reset(self):
         """Reimposta tutti i dati della partita per una nuova sessione."""
-        self.scacchiera = Scacchiera(leggi_scacchiera("scacchiera.txt"))
+        self.scacchiera = Scacchiera(leggi_scacchiera("ui/scacchiera.txt"))
         self.in_gioco = False
         self.turno_bianco = True
         self.nome1 = ""
         self.nome2 = ""
-        self.mosse_bianco=[]
-        self.mosse_nero=[]
+        self.mosse_bianco = []
+        self.mosse_nero = []
 
-    def run(self):
+    def avvia(self):
         if self.in_gioco:
-            self.ui.set_style('accent', 'yellow')
-            self.ui.stampa(self.ui.format_text("Una partita è già in corso."))
+            self.ui.imposta_stile('accent', 'yellow')
+            self.ui.stampa(self.ui.formatta_testo("Una partita è già in corso."))
 
             return
 
@@ -78,111 +80,87 @@ class Partita:
         while not self.nome1 or not self.nome2:
             self.nome1 = self.inputUtente.leggi("Inserisci nome giocatore bianco")
             self.nome2 = self.inputUtente.leggi("Inserisci nome giocatore nero")
-            self.ui.display_scacchiera(self.scacchiera)
+            self.ui.stampa_scacchiera(self.scacchiera)
 
         while True:
             nome = self.nome1 if self.turno_bianco else self.nome2
             colore = "white" if self.turno_bianco else "black"
 
-            self.ui.set_style('accent', colore)
-            stringa = self.inputUtente.leggi(f"\n{self.ui.format_text(nome)} - "\
+            self.ui.imposta_stile('accent', colore)
+            stringa = self.inputUtente.leggi(f"\n{self.ui.formatta_testo(nome)} - "\
                                              f"Inserisci mossa (es. 'e4')")
 
             if stringa.startswith("/"):
-                risultato = self.inputUtente.listen(stringa)
-                esito = self.process(risultato)
+                risultato = self.inputUtente.in_ascolto(stringa)
+                esito = self.processa(risultato)
 
                 if esito == "fine":
-                    break  # partita finita
+                    break  # partita iniziale
                 continue
-
+            
             try:
-                mossa = self.inputUtente.parser.parse_mossa(
-                    stringa, bool(self.turno_bianco))
-                
-                if mossa["tipo"] == "mossa":
-                    pezzo = self.pieceControl.find_piece(
-                        self.scacchiera, mossa["finale"], self.turno_bianco,
-                        mossa["simbolo"])
-                    
-                    if pezzo is not None:
-                        if not pezzo.is_path_clear(pezzo.init, mossa["finale"], self.scacchiera):
-                            raise ValueError("Mossa non valida: il percorso non è libero.")
-                        
-                        if (
-                            self.pieceControl.muovi(
-                                mossa["cattura"],
-                                self.scacchiera,
-                                pezzo.colore,
-                                pezzo,
-                                mossa["finale"]
-                            )
-                            and self.pieceControl.scacco(
-                                pezzo,
-                                mossa["finale"],
-                                self.scacchiera
-                            )
-                        ):
-                            raise ValueError("Mossa non valida: il re sarebbe in scacco.")
-                        
-                        if mossa.get("promozione"):
-                            # TODO: GESTIRE LA PROMOZIONE DEL PEZZO
-                            pass
-                        
-                        if self.turno_bianco:
-                            self.mosse_bianco.append(stringa)
-                        else:
-                            self.mosse_nero.append(stringa)
-                            
-                        colore_avv = not self.turno_bianco
-                        if self.pieceControl.is_scacco_matto(self.scacchiera, colore_avv):
-                            nome_vincitore = self.nome2 if self.turno_bianco else self.nome1
-                            self.ui.set_style('accent', 'green')
-                            self.ui.stampa(self.ui.format_text(f"{nome_vincitore} ha vinto per scacco matto!"))
-                            self.in_gioco = False
-                            
-                            break
-                        
-                        if self.pieceControl.is_stallo(self.scacchiera, colore_avv):
-                            self.ui.set_style('accent', 'green')
-                            self.ui.stampa(self.ui.format_text("Partita finita per stallo."))
-                            self.in_gioco = False
-                            
-                            break
-                        
-                        self.turno_bianco = not self.turno_bianco
-                        self.ui.display_scacchiera(self.scacchiera)
-                    else:
-                        raise ValueError("Mossa non valida: pezzo non trovato o non può muoversi in quella posizione.")
+                mossa = self.inputUtente.parser.parse_mossa(stringa, self.turno_bianco)
+                pezzo = self.controllo_pezzi.trova_pezzo(self.scacchiera,
+                    mossa["finale"], self.turno_bianco, mossa["simbolo"])
 
-                    if pezzo.primo:
-                        pezzo.primo = False
-                        
-                    # todo: gestire arrocco, en passant, scacco, scacco matto
-            except ValueError as e:
-                self.ui.set_style("accent", "red")
-                self.ui.stampa(self.ui.format_text(f"Errore: {e}. Riprova."))
-                
+                # 1. Controlla se il proprio re è sotto scacco
+                re = next((p for p in self.scacchiera.pezzi_vivi.values()
+                        if isinstance(p, Re) and p.colore == self.turno_bianco), None)
+                if (
+                    re
+                    and self.controllo_pezzi.scacco(re, re.iniziale, self.scacchiera)
+                    and not self.controllo_pezzi.mossa_elimina_scacco(
+                        self.scacchiera, pezzo, mossa["finale"]
+                    )
+                ):
+                    raise ValueError(
+                        "Il tuo re è sotto scacco: puoi solo fare una mossa che "
+                        "elimina lo scacco!"
+                    )
+
+                # 3. Verifica se la mossa mette il re avversario sotto scacco
+                scacco_avv = self.controllo_pezzi.scacco(pezzo, mossa["finale"],
+                self.scacchiera)
+                if not mossa.get("scacco") and scacco_avv:
+                    raise ValueError("Hai messo il re avversario sotto scacco ma non"\
+                    "hai dichiarato '+'. Devi specificare '+' nella"\
+                    "notazione della mossa.")
+                if mossa.get("scacco") and not scacco_avv:
+                    raise ValueError("Hai dichiarato scacco (+) ma la mossa non mette"\
+                    "il re avversario sotto scacco.")
+
+                # movimento reale
+                if self.controllo_pezzi.muovi(mossa["cattura"], self.scacchiera, pezzo,
+                mossa["finale"]):
+                    self.turno_bianco = not self.turno_bianco
+
+                if pezzo.primo:
+                    pezzo.primo = False
+
+                self.ui.stampa_scacchiera(self.scacchiera)
+            except Exception as e:
+                print(e)
+                    
         self.in_gioco = False
 
-    def check(self):
+    def verifica(self):
         """Controlla se l'input inserito è un comando."""
         # Processa l'input da linea di comando
         if len(argv) > 1 and argv[1] in ("--help", "-h"):
-            say_hello(self.ui)
-            self.ui.display_help("help.txt")
+            saluta(self.ui)
+            self.ui.stampa_file("ui/help.txt")
         elif len(argv) > 1 and argv[1] not in ("--help", "-h"):
-            self.ui.set_style('accent', 'red')
-            self.ui.stampa(self.ui.format_text("Comando non valido."))
+            self.ui.imposta_stile('accent', 'red')
+            self.ui.stampa(self.ui.formatta_testo("Comando non valido."))
             exit()
         else:
-            say_hello(self.ui)
+            saluta(self.ui)
         
         while True:
-            risultato = self.inputUtente.listen(self.inputUtente.leggi("Inserisci"))
-            self.process(risultato)
+            risultato = self.inputUtente.in_ascolto(self.inputUtente.leggi("Inserisci"))
+            self.processa(risultato)
 
-    def process(self, risultato):
+    def processa(self, risultato):
         """Esegue il comando in input.
 
         Args:
@@ -191,22 +169,22 @@ class Partita:
         """
         match risultato:
             case 1:  # gioca
-                self.run()
+                self.avvia()
             case 2:
                 if not self.in_gioco:
-                    self.ui.set_style('accent', 'red')
-                    self.ui.stampa(self.ui.format_text("Non è in corso nessuna"\
+                    self.ui.imposta_stile('accent', 'red')
+                    self.ui.stampa(self.ui.formatta_testo("Non è in corso nessuna "\
                                                        "partita."))
                         
-                    self.ui.set_style('accent', 'white')
-                    self.ui.stampa(self.ui.format_text("Inserisci comando /gioca"))
+                    self.ui.imposta_stile('accent', 'white')
+                    self.ui.stampa(self.ui.formatta_testo("Inserisci comando /gioca"))
                         
                 else:
-                    self.ui.display_scacchiera(self.scacchiera)
+                    self.ui.stampa_scacchiera(self.scacchiera)
                     return "continua"
                     
             case 3:
-                self.ui.display_help("help.txt")
+                self.ui.stampa_file("ui/help.txt")
                 return None if not self.in_gioco else "continua"
             
             case 4:
@@ -216,35 +194,35 @@ class Partita:
                         riga = f"{i+1}: {mossa_b}" if not mossa_n else f"{i+1}:"\
                                f"{mossa_b} {mossa_n}"
                         
-                        self.ui.set_style("accent", "white")
-                        self.ui.stampa(self.ui.format_text(riga))
+                        self.ui.imposta_stile("accent", "white")
+                        self.ui.stampa(self.ui.formatta_testo(riga))
                 else:
-                    self.ui.set_style('accent', 'red')
-                    self.ui.stampa(self.ui.format_text("Non è in corso nessuna" \
+                    self.ui.imposta_stile('accent', 'red')
+                    self.ui.stampa(self.ui.formatta_testo("Non è in corso nessuna" \
                                                        "partita."))
                     
-                    self.ui.set_style('accent', 'white')
-                    self.ui.stampa(self.ui.format_text("Inserisci comando /gioca"))
+                    self.ui.imposta_stile('accent', 'white')
+                    self.ui.stampa(self.ui.formatta_testo("Inserisci comando /gioca"))
             case 5:
                 if self.in_gioco:
                         risposta = self.inputUtente.leggi("Accetti la patta (s/n)")
                         
                         if risposta.lower() == "s":
-                            self.ui.set_style('accent', 'green')
-                            self.ui.stampa(self.ui.format_text("Partita finita per " \
+                            self.ui.imposta_stile('accent', 'green')
+                            self.ui.stampa(self.ui.formatta_testo("Partita finita per "\
                                             "patta"))
                             self.reset()
 
                             return "fine"
                         
                         elif risposta.lower() == "n":
-                            self.ui.set_style('accent', 'yellow')
-                            self.ui.stampa(self.ui.format_text("Patta annullata."))
+                            self.ui.imposta_stile('accent', 'yellow')
+                            self.ui.stampa(self.ui.formatta_testo("Patta annullata."))
                             
                             return "continua"
                 else:
-                    self.ui.set_style('accent', 'red')
-                    self.ui.stampa(self.ui.format_text("Non è in corso nessuna "\
+                    self.ui.imposta_stile('accent', 'red')
+                    self.ui.stampa(self.ui.formatta_testo("Non è in corso nessuna "\
                                                        "partita."))
             case 6:
                 if self.in_gioco:
@@ -254,46 +232,51 @@ class Partita:
                         if risposta.lower() == "s":
                             vincitore = self.nome2 if self.turno_bianco else self.nome1
 
-                            self.ui.set_style('accent', 'green')
-                            self.ui.stampa(self.ui.format_text(f"{vincitore} ha vinto "\
-                                                               "per abbandono."))
+                            self.ui.imposta_stile('accent', 'green')
+                            self.ui.stampa(
+                                self.ui.formatta_testo(f"{vincitore} ha vinto"\
+                                                    "per abbandono."))
                             
                             self.reset()  # resetta la partita
                             return "fine"
                         
                         elif risposta.lower() == "n":
-                            self.ui.set_style('accent', 'red')
-                            self.ui.stampa(self.ui.format_text("Abbandono annullato."))
+                            self.ui.imposta_stile('accent', 'red')
+                            self.ui.stampa(
+                                self.ui.formatta_testo("Abbandono annullato.")
+                            )
                             
                             return "continua"
                         
                         else:
-                            self.ui.set_style('accent', 'white')
-                            self.ui.set_style('italic', True)
-                            self.ui.stampa(self.ui.format_text("Inserisci una risposta"\
-                                                               " valida (s/n)."))
+                            self.ui.imposta_stile('accent', 'white')
+                            self.ui.imposta_stile('italic', True)
+                            self.ui.stampa(
+                                self.ui.formatta_testo("Inserisci una risposta"\
+                                                               " valida (s/n).")
+                            )
                 else:
-                    self.ui.set_style('accent', 'red')
-                    self.ui.stampa(self.ui.format_text("Non puoi abbandonare, non è in"\
-                                                       "corso nessuna partita."))
+                    self.ui.imposta_stile('accent', 'red')
+                    self.ui.stampa(
+                        self.ui.formatta_testo("Non puoi abbandonare, non è in"\
+                                                       " corso nessuna partita.")
+                    )
                         
             case 7:
                 while True:
                     risposta = self.inputUtente.leggi("Vuoi davvero uscire? (s/n)")
                     if risposta.lower() == "s":
-                        self.ui.set_style('accent', 'yellow')
-                        self.ui.stampa(self.ui.format_text("Uscita in corso..."))
+                        self.ui.imposta_stile('accent', 'yellow')
+                        self.ui.stampa(self.ui.formatta_testo("Uscita in corso..."))
                         exit(0)
 
                     elif risposta.lower() == "n":
-                        self.ui.set_style('accent', 'green')
-                        self.ui.stampa(self.ui.format_text("Uscita annullata."))
+                        self.ui.imposta_stile('accent', 'green')
+                        self.ui.stampa(self.ui.formatta_testo("Uscita annullata."))
                         
                         return "continua"
                     else:
-                        self.ui.set_style('accent', 'white')
-                        self.ui.set_style('italic', True)
-                        self.ui.stampa(self.ui.format_text("Inserisci una risposta"\
+                        self.ui.imposta_stile('accent', 'white')
+                        self.ui.imposta_stile('italic', True)
+                        self.ui.stampa(self.ui.formatta_testo("Inserisci una risposta"\
                                                            "valida (s/n)."))
-            case _:
-                raise NotImplementedError("Input sconosciuto.")

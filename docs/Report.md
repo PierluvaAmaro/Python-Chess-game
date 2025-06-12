@@ -171,7 +171,7 @@ Scrum si basa su cicli di lavoro brevi e regolari chiamati sprint, ognuno dei qu
 | Guglielmo Gesmundo      | Developer    | Sviluppo funzionalità, testing, collaborazione                       |
 
 
-Durante ogni Sprint, sia durante le lezioni in aula che tramite Microsoft Teams, ci sono stati comunicati i requisiti da parte dello stakeholder. Questi requisiti sono stati espressi sotto forma di **User Story**, ciascuna accompagnata da una relativa **Definition of Done**(DoD), ovvero l’insieme dei criteri che ne determinano il completamento accettabile.
+Durante ogni Sprint, sia durante le lezioni in aula che tramite Microsoft Teams, ci sono stati comunicati i requisiti da parte dello stakeholder. Questi requisiti sono stati espressi sotto forma di **User Story**, ciascuna accompagnata da una relativa **Definizialeion of Done**(DoD), ovvero l’insieme dei criteri che ne determinano il completamento accettabile.
 
 A partire dallo Sprint 0, il team ha organizzato il lavoro creando una Board dedicata per ciascuno Sprint, per rappresentare visivamente lo stato di avanzamento delle attività, attraverso colonne come To Do, In Progress, Review, Ready e Done.
 

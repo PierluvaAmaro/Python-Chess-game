@@ -54,14 +54,14 @@ Mettersi d'accordo su chi sarà il primo componente del gruppo che accetterà l'
 Il repository che vi è stato assegnato contiene tutto il necessario per cominciare lo sviluppo della vostra applicazione. Oltre a una versione base del codice sorgente, esso presenta la struttura di directory alla quale dovrete attenervi durante lo svolgimento del progetto e i file di configurazione per i principali strumenti inclusi nella pipeline.
 
 In particolare, in `.github/workflows`, trovate due file di configurazione di GitHub Actions, denominati `CI.yml` e `CI-CD.yml`. [Actions](https://github.com/features/actions) è una funzionalità di GitHub che consente la definizione e l'esecuzione automatizzata di pipeline di Continuous Integration / Continuous Deployment (CI/CD). ICI.ymln GitHub Actions, i passaggi di una pipeline vengono specificati in un file `.yml`, detto *workflow*. Generalmente, le pipeline di CI/CD comprendono operazioni di testing, releasing e deployment di un sistema software. Nello specifico,
-per il vostro progetto sono state definite due pipeline.
+per il vostro progetto sono state definizialee due pipeline.
 
-La prima pipeline, definita nel file `CI.yml`, viene innescata da ogni Pull Request e realizza i seguenti passaggi:
+La prima pipeline, definizialea nel file `CI.yml`, viene innescata da ogni Pull Request e realizza i seguenti passaggi:
 
 1. il testing del vostro codice (unit test con [Pytest](https://Pytest.org/))
 2. l'analisi dello stesso con strumenti di quality assurance ([Ruff](https://docs.astral.sh/ruff/));
 
-La seconda pipeline, definita nel file `CI-CD.yml`, viene innescata dalle operazioni di push e merge sul branch `main`; oltre a svolgere gli stessi passaggi effettuati dalla prima, effettua la costruzione di un'immagine Docker con la vostra applicazione e il caricamento della stessa su [GitHub Packages](https://github.com/features/packages).
+La seconda pipeline, definizialea nel file `CI-CD.yml`, viene innescata dalle operazioni di push e merge sul branch `main`; oltre a svolgere gli stessi passaggi effettuati dalla prima, effettua la costruzione di un'immagine Docker con la vostra applicazione e il caricamento della stessa su [GitHub Packages](https://github.com/features/packages).
 
 **N.B.**: entrambi i workflow si attivano soltanto se le modifiche nei commit riguardano file contenuti nelle cartelle `scacchi/` e `tests/` del repository o il file `pyproject.toml`. In questo modo evitiamo che i workflow si attivino anche in caso di modifiche minori che non avrebbero alcun effetto sul funzionamento del vostro programma (ad esempio, modifiche al file `README.md` o alla documentazione).
 

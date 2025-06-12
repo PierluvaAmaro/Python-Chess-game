@@ -1,1 +1,1 @@
-"""Main package for the Scacchi game."""
+"""Pakcage Main per il gioco scacchi."""

@@ -18,7 +18,7 @@ class Parser:
         }
 
     def parse_mossa(self, notazione: str, colore):
-        """Convert una mossa scacchistica in un oggetto di tipo Coordinata.
+        """Converti una mossa scacchistica in un oggetto di tipo Coordinata.
         
         Args:
             notazione(str): Notazione scacchistica della mossa.
@@ -63,12 +63,12 @@ class Parser:
         
         return {
             "tipo": "mossa",
-            "cattura": cattura if cattura else None,
+            "cattura": cattura,
             "simbolo": simbolo,
             "finale": Coordinata(x, y),
             # TODO: gestire promozione e en_passant
             "promozione": None, # None se non e' una promozione
             "en_passant": None, # None se non e' una mossa en passant
-            "scacco": scacco # None se non e' una mossa di scacco
+            "scacco": scacco
         }
     

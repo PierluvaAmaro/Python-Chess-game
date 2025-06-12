@@ -18,22 +18,36 @@ class Pedone(Pezzo):
         """
         super().__init__(simbolo, coord, colore)
 
-    def check_move(self, final: Coordinata, scacchiera=None) -> bool:
+    def percorso_libero(self, finale, scacchiera):
+        if (self.primo and self.iniziale.x == finale.x 
+            and abs(self.iniziale.y - finale.y) == 2):
+            dir = 1 if self.colore else -1
+            y = self.iniziale.y + dir
+            
+            middle = Coordinata(self.iniziale.x, y)
+            
+            return not (scacchiera.occupata(middle) or scacchiera.occupata(finale))
+
+        elif self.iniziale.x == finale.x and abs(self.iniziale.y - finale.y) == 1:
+            return not scacchiera.occupata(finale)
+        return True
+
+    def controlla_mossa(self, finale: Coordinata, scacchiera=None) -> bool:
         """Verifica se la mossa verso la coordinata specificata è valida per il pedone.
         
         Args:
-            final (Coordinata): Coordinata finale del Pedone verso cui si deve muovere
+            finale (Coordinata): Coordinata finale del Pedone verso cui si deve muovere
             scacchiera: Scacchiera per verificare le posizioni dei pezzi.
 
         """
-        if final is None:
+        if finale is None:
             raise ValueError("Coordinata non valida.")
         
-        if self.init.x == final.x and self.init.y == final.y:
+        if self.iniziale.x == finale.x and self.iniziale.y == finale.y:
             return False
 
-        dx = final.x - self.init.x
-        dy = final.y - self.init.y
+        dx = finale.x - self.iniziale.x
+        dy = finale.y - self.iniziale.y
 
         # Il pedone può muoversi solo in verticale (dx deve essere 0)
         if dx != 0:
@@ -54,16 +68,4 @@ class Pedone(Pezzo):
 
         return False
     
-    def is_path_clear(self, init, final, scacchiera):
-        if self.primo and init.x == final.x and abs(init.y - final.y) == 2:
-            dir = 1 if self.colore else -1
-            y = init.y + dir
-            
-            middle = Coordinata(init.x, y)
-            middle.print()
-            
-            return not (scacchiera.is_occupied(middle) or scacchiera.is_occupied(final))
-
-        elif init.x == final.x and abs(init.y - final.y) == 1:
-            return not scacchiera.is_occupied(final)
-        return True
+    

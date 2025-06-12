@@ -14,9 +14,9 @@ class Coordinata:
             ValueError: Se uno dei due valori e' None
 
         """
-        self.change(x, y)
+        self.cambia(x, y)
 
-    def change(self, x: int, y: int):
+    def cambia(self, x: int, y: int):
         """Modifica i valori delle coordinate x e y.
 
         Args:
