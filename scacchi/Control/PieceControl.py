@@ -4,6 +4,7 @@ from ..Entity.Coordinata import Coordinata
 from ..Entity.Pezzo import Pezzo
 from ..Entity.Re import Re
 from ..Entity.Scacchiera import Scacchiera
+from ..Entity.Torre import Torre
 
 
 class PieceControl:
@@ -190,4 +191,55 @@ class PieceControl:
                             and self.simulate(scacchiera, pezzo, final)):
                                 return False
         return True
-        
+
+    def esegui_arrocco(self, scacchiera: Scacchiera, colore: bool, lato: str) -> bool:
+        """Esegue l'arrocco se le condizioni sono valide."""
+        re = next((p for p in scacchiera.pezzi_vivi.values() if isinstance(p, Re) and p.colore == colore), None)
+
+        if re is None or not re.primo:
+            raise ValueError("L'arrocco non è possibile: il re ha già mosso.")
+
+        if self.is_threatened_by_enemy(colore, scacchiera, re.init):
+            raise ValueError("L'arrocco non è possibile mentre il re è sotto scacco.")
+
+        riga = 1 if colore else 8
+        if lato == "corto":
+            torre_coord_iniziale = Coordinata(8, riga)
+            caselle_intermedie = [Coordinata(6, riga), Coordinata(7, riga)]
+            caselle_passaggio_re = [Coordinata(6, riga), Coordinata(7, riga)]
+            coord_finale_re = Coordinata(7, riga)
+            coord_finale_torre = Coordinata(6, riga)
+        elif lato == "lungo":
+            torre_coord_iniziale = Coordinata(1, riga)
+            caselle_intermedie = [Coordinata(2, riga), Coordinata(3, riga), Coordinata(4, riga)]
+            caselle_passaggio_re = [Coordinata(3, riga), Coordinata(4, riga)]
+            coord_finale_re = Coordinata(3, riga)
+            coord_finale_torre = Coordinata(4, riga)
+        else:
+            raise ValueError("Lato dell'arrocco non valido.")
+
+        torre = scacchiera.pezzi_vivi.get(torre_coord_iniziale)
+        if not isinstance(torre, Torre) or not torre.primo:
+            raise ValueError("L'arrocco non è possibile con questa torre.")
+
+        for coord in caselle_intermedie:
+            if scacchiera.is_occupied(coord):
+                raise ValueError("L'arrocco non è possibile: il percorso non è libero.")
+
+        for coord in caselle_passaggio_re:
+            if self.is_threatened_by_enemy(colore, scacchiera, coord):
+                raise ValueError("L'arrocco non è possibile: il re non può passare su una casa minacciata.")
+
+        scacchiera.pezzi_vivi.pop(re.init)
+        scacchiera.pezzi_vivi.pop(torre_coord_iniziale)
+
+        re.init = coord_finale_re
+        re.primo = False
+        re.arrocco = True
+        torre.init = coord_finale_torre
+        torre.primo = False
+
+        scacchiera.pezzi_vivi[coord_finale_re] = re
+        scacchiera.pezzi_vivi[coord_finale_torre] = torre
+
+        return True
