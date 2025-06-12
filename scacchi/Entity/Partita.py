@@ -97,27 +97,68 @@ class Partita:
                 continue
 
             try:
-                da_mangiare, simbolo, coord = self.inputUtente.parser.parse_mossa(
-                    stringa, bool(not self.turno_bianco))
+                mossa = self.inputUtente.parser.parse_mossa(
+                    stringa, bool(self.turno_bianco))
                 
-                pezzo = self.pieceControl.find_piece(
-                    self.scacchiera, coord, self.turno_bianco, simbolo
-                )
-                
-                # se il pezzo esiste e il movimento va a buon fine
-                if pezzo:
-                    if self.pieceControl.muovi(da_mangiare, self.scacchiera, pezzo.colore, pezzo, coord):
-                        # se e' il turno del bianco
+                if mossa["tipo"] == "mossa":
+                    pezzo = self.pieceControl.find_piece(
+                        self.scacchiera, mossa["finale"], self.turno_bianco,
+                        mossa["simbolo"])
+                    
+                    if pezzo is not None:
+                        if not pezzo.is_path_clear(pezzo.init, mossa["finale"], self.scacchiera):
+                            raise ValueError("Mossa non valida: il percorso non è libero.")
+                        
+                        if (
+                            self.pieceControl.muovi(
+                                mossa["cattura"],
+                                self.scacchiera,
+                                pezzo.colore,
+                                pezzo,
+                                mossa["finale"]
+                            )
+                            and self.pieceControl.scacco(
+                                pezzo,
+                                mossa["finale"],
+                                self.scacchiera
+                            )
+                        ):
+                            raise ValueError("Mossa non valida: il re sarebbe in scacco.")
+                        
+                        if mossa.get("promozione"):
+                            # TODO: GESTIRE LA PROMOZIONE DEL PEZZO
+                            pass
+                        
                         if self.turno_bianco:
-                            # inserisce l'ultima mossa del bianco nel suo array
                             self.mosse_bianco.append(stringa)
-                        else: # altrimenti...
-                            # ...
+                        else:
                             self.mosse_nero.append(stringa)
-
-                        # cambio turno e stampa della scacchiera
+                            
+                        colore_avv = not self.turno_bianco
+                        if self.pieceControl.is_scacco_matto(self.scacchiera, colore_avv):
+                            nome_vincitore = self.nome2 if self.turno_bianco else self.nome1
+                            self.ui.set_style('accent', 'green')
+                            self.ui.stampa(self.ui.format_text(f"{nome_vincitore} ha vinto per scacco matto!"))
+                            self.in_gioco = False
+                            
+                            break
+                        
+                        if self.pieceControl.is_stallo(self.scacchiera, colore_avv):
+                            self.ui.set_style('accent', 'green')
+                            self.ui.stampa(self.ui.format_text("Partita finita per stallo."))
+                            self.in_gioco = False
+                            
+                            break
+                        
                         self.turno_bianco = not self.turno_bianco
-                    self.ui.display_scacchiera(self.scacchiera)
+                        self.ui.display_scacchiera(self.scacchiera)
+                    else:
+                        raise ValueError("Mossa non valida: pezzo non trovato o non può muoversi in quella posizione.")
+
+                    if pezzo.primo:
+                        pezzo.primo = False
+                        
+                    # todo: gestire arrocco, en passant, scacco, scacco matto
             except ValueError as e:
                 self.ui.set_style("accent", "red")
                 self.ui.stampa(self.ui.format_text(f"Errore: {e}. Riprova."))
@@ -255,4 +296,4 @@ class Partita:
                         self.ui.stampa(self.ui.format_text("Inserisci una risposta"\
                                                            "valida (s/n)."))
             case _:
-                raise NotImplementedError("Inputsconosciuto.")
+                raise NotImplementedError("Input sconosciuto.")
