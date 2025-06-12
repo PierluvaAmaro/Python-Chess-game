@@ -28,3 +28,14 @@ class Scacchiera:
                 return True
         return False
     
+    def is_occupied(self, final: Coordinata) -> bool:
+        """Verifica se la coordinata finale è occupata da un pezzo.
+        
+        Args:
+            final (Coordinata): Coordinata da verificare.
+        
+        Returns:
+            bool: True se la coordinata è occupata, False altrimenti.
+        
+        """
+        return final in self.pezzi_vivi

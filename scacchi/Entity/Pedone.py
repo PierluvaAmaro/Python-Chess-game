@@ -30,7 +30,6 @@ class Pedone(Pezzo):
             raise ValueError("Coordinata non valida.")
         
         if self.init.x == final.x and self.init.y == final.y:
-            print("Mossa illegale.")
             return False
 
         dx = final.x - self.init.x
@@ -44,19 +43,27 @@ class Pedone(Pezzo):
 
         # Il pedone si sposta di una casella in avanti
         if dy == direzione:
-            self.primo = False
             return True
 
         # Il pedone può spostarsi di due caselle solo al primo movimento
         if dy == 2 * direzione and self.primo:
-            self.primo = False
             return True
 
-        """
-        Se la direzione di movimento è negativa per il pedone nero
-        è una mossa non valida
-        """
         if (not self.colore and dy < 0):
             return False
 
         return False
+    
+    def is_path_clear(self, init, final, scacchiera):
+        if self.primo and init.x == final.x and abs(init.y - final.y) == 2:
+            dir = 1 if self.colore else -1
+            y = init.y + dir
+            
+            middle = Coordinata(init.x, y)
+            middle.print()
+            
+            return not (scacchiera.is_occupied(middle) or scacchiera.is_occupied(final))
+
+        elif init.x == final.x and abs(init.y - final.y) == 1:
+            return not scacchiera.is_occupied(final)
+        return True
