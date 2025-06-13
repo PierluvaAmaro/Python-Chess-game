@@ -167,11 +167,30 @@ Un diagramma dei pacchetti in UML è un tipo di diagramma strutturale usato per:
 (**Diagramma dei pacchetti del software**): 
 ![Package Diagram](./img/PCKDGR.png)
 
+| Package   | Classe/Modulo                | Funzione                                     |
+|-----------|-----------------------------|-----------------------------------------------------------------|
+| Entity    | Coordinata                   | Rappresenta coordinata sulla scacchiera                            |
+|           | Pezzo (astratta)             | Rappresenta un pezzo degli scacchi con tutti i suoi attributi             |
+|           | Pedone                       | Pezzo del pedone            |
+|           | Torre                        | Pezzo della torre           |
+|           | Cavallo                      | Pezzo del cavallo           |
+|           | Alfiere                      | Pezzo dell'alfiere          |
+|           | Regina                       | Pezzo della regina          |
+|           | Re                           | Pezzo del re                |
+|           | Scacchiera                   | Rappresenta la scacchiera di gioco            |
+| Boundary  | InterfacciaUtente            | Stampa la scacchiera e gestisce lo stile degli output         |
+|           | InputUtente                  | Implementa un listener che acquisisce l'input utente                               |
+|           | GestioneComandi              | Capisce in quale sezione ricade il comando utente                                               |
+| Control   | Parser                       | Parser di gioco, interpreta e traduce la mossa utente                                                   |
+|           | ControlloPezzi               | Gestisce la logica dei pezzi |
+|           | Partita                      | Gestisce la logica della partita utente                               |
+| Utility   | Utils (modulo)               | Utilità come gestione file, lettura scacchiera ecc...                     |
+
 ### Principi di progettazione utilizzati
 Nella seguente sezione sono discussi i principi di progettazione alla base del software: 
 
 **Principio di Separazione dei livelli**
-Il sistema è suddiviso in tre livelli principali sfruttando il pattern architetturale ECB:
+Il sistema è suddiviso in tre livelli **principali** (Utility trattato di seguito) sfruttando il pattern architetturale ECB:
 
 | Componente  | Ruolo Principale                                              | Esempi                            |
 |------------ |---------------------------------------------------------------|-----------------------------------|
@@ -205,6 +224,54 @@ Le entità software devono essere aperte all'estensione ma chiuse alla modifica 
 Questo rende una parte fondamentale del sistema aperta all'estensione ma chiusa alle modifiche.
 Se si vuole creare un nuovo pezzo, ad esempio, il resto del codice resta solidamente invariato (Closed - difficile da modificare),
 e basta creare una nuova classe che estenda pezzo (Open - aperto alla modifica) 
+
+### Motivazione delle scelte progettuali
+#### ECB
+Abbiamo scelto di usare **ECB (Entity-Control-Boundary)** perché è un pattern architetturale che offre **chiarezza, separazione dei ruoli e facilità di manutenzione**, soprattutto in progetti con una logica ben distinta tra modello, interazione e regole del dominio.
+
+#### CREAZIONE DEL PACKAGE UTILITY
+Inizialmente la classe utils era posizionata nel package "Control".
+Abbiamo deciso di inserirla in un nuovo package "Utility".
+Le utility non fanno parte della responsabilità principale di control, quindi è più corretto tenerle in un package separato.
+Diciamo più formalmente che: 
+- Control deve contenere solo la logica di controllo del gioco (gestione delle mosse, regole, validazioni specifiche degli scacchi). Tenere la classe in control rende il package meno chiaro e più difficile da mantenere, perché fonde logica di gioco e funzioni di supporto generiche.
+- Le utility sono funzioni generiche, spesso indipendenti dalla logica di controllo, e possono servire anche ad altri package.
+
+#### IMPLEMENTAZIONI IN BASE AI RNF 
+**RNF1 – Utilizzo di Docker**
+
+-   **Decisione**: E' stato deciso di eseguire il codice  all’interno di un **container Docker**.
+
+- **Scelte implementative**
+È stato creato un file `Dockerfile` con l’ambiente configurato, e il comando `docker run` consente di avviare il gioco in modo identico ovunque.
+
+**RNF2 – Compatibilità multi-terminal**
+
+-   **Decisione**: Il gioco è stato sviluppato per essere completamente eseguibile via terminale, e compatibile con:
+    
+    -   Terminal di Linux
+        
+    -   Terminal di macOS
+        
+    -   PowerShell e Git Bash su Windows
+        
+-   **Scelte implementative**:
+    
+    -   Nessuna dipendenza da librerie che usano colori o layout non supportati universalmente.
+        
+    -   Test effettuati su tutti i terminali previsti.
+   
+**RNF3 – Uso di simboli UTF-8**
+
+-   **Decisione**: È stato deciso di rappresentare i pezzi degli scacchi usando i **simboli Unicode UTF-8** standard (es. ♔, ♟, ♘...).
+    
+
+-   **Scelte implementative**:
+    
+    -   È stato verificato che i terminali supportati visualizzino correttamente i simboli.
+        
+    -   La codifica dei file e dell'output è stata mantenuta in UTF-8.
+
 
 
 
