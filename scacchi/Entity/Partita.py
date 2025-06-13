@@ -5,7 +5,7 @@ from scacchi.Entity.Re import Re
 from ..Boundary.InputUtente import InputUtente
 from ..Boundary.InterfacciaUtente import InterfacciaUtente
 from ..Control.ControlloPezzi import ControlloPezzi
-from ..Utils import leggi_file, leggi_scacchiera
+from ..Control.Utils import leggi_file, leggi_scacchiera
 from .Scacchiera import Scacchiera
 
 
@@ -69,20 +69,21 @@ class Partita:
         self.mosse_nero = []
 
     def avvia(self):
+        self.reset()
         if self.in_gioco:
-            self.ui.imposta_stile('accent', 'yellow')
-            self.ui.stampa(self.ui.formatta_testo("Una partita è già in corso."))
-
+            self.ui.imposta_stile("accent", "yellow")
+            self.ui.stampa(self.ui.formatta_testo("Una partita e' gia' in corso!"))
             return
 
-        self.in_gioco = True # la partita inizia ufficialmente
-
+        self.in_gioco = True
+        
         while not self.nome1 or not self.nome2:
             self.nome1 = self.inputUtente.leggi("Inserisci nome giocatore bianco")
             self.nome2 = self.inputUtente.leggi("Inserisci nome giocatore nero")
             self.ui.stampa_scacchiera(self.scacchiera)
 
-        while True:
+        while self.in_gioco:
+                       
             nome = self.nome1 if self.turno_bianco else self.nome2
             colore = "white" if self.turno_bianco else "black"
 
@@ -99,50 +100,68 @@ class Partita:
                 continue
             
             try:
+                # parsing mossa
                 mossa = self.inputUtente.parser.parse_mossa(stringa, self.turno_bianco)
                 pezzo = self.controllo_pezzi.trova_pezzo(self.scacchiera,
-                    mossa["finale"], self.turno_bianco, mossa["simbolo"])
+                        mossa["finale"], self.turno_bianco, mossa["simbolo"])
+                if pezzo is None:
+                    raise ValueError("Nessun pezzo valido per questa mossa")
+                
+                # simula la mossa
+                simulazione = self.controllo_pezzi.simula(self.scacchiera, pezzo, mossa["finale"])
+                if simulazione is None:
+                    raise ValueError("Mossa non valida")
+                
+                colore_re_avversario = not pezzo.colore
+                re_avversario = next((p for p in simulazione.pezzi_vivi.values()
+                                      if isinstance(p, Re) and p.colore == 
+                                      colore_re_avversario), None)
+                if re_avversario is None:
+                    raise ValueError("Re avversario non trovato")
+                
+                # controllo lo scacco e il matto dopo la simulazione
+                is_scacco = self.controllo_pezzi.scacco(simulazione, pezzo)
+                is_matto = self.controllo_pezzi.scacco_matto(self.scacchiera, pezzo, mossa["finale"])
 
-                # 1. Controlla se il proprio re è sotto scacco
-                re = next((p for p in self.scacchiera.pezzi_vivi.values()
-                        if isinstance(p, Re) and p.colore == self.turno_bianco), None)
-                if (
-                    re
-                    and self.controllo_pezzi.scacco(re, re.iniziale, self.scacchiera)
-                    and not self.controllo_pezzi.mossa_elimina_scacco(
-                        self.scacchiera, pezzo, mossa["finale"]
-                    )
-                ):
-                    raise ValueError(
-                        "Il tuo re è sotto scacco: puoi solo fare una mossa che "
-                        "elimina lo scacco!"
-                    )
+                if mossa.get("matto"):
+                    if not is_matto:
+                        raise ValueError("Hai dichiarato scacco matto (#), ma la mossa non mette il re avversario sotto scacco matto.")
+                else:
+                    if is_matto:
+                        raise ValueError("Hai messo il re avversario sotto scacco matto ma non lo hai dichiarato.")
+                    if not mossa.get("scacco") and is_scacco:
+                        raise ValueError("Hai messo il re avversario sotto scacco ma non lo hai dichiarato (+).")
+                    if mossa.get("scacco") and not is_scacco:
+                        raise ValueError("Hai dichiarato scacco (+) ma la mossa non mette il re avversario sotto scacco.")
 
-                # 3. Verifica se la mossa mette il re avversario sotto scacco
-                scacco_avv = self.controllo_pezzi.scacco(pezzo, mossa["finale"],
-                self.scacchiera)
-                if not mossa.get("scacco") and scacco_avv:
-                    raise ValueError("Hai messo il re avversario sotto scacco ma non"\
-                    "hai dichiarato '+'. Devi specificare '+' nella"\
-                    "notazione della mossa.")
-                if mossa.get("scacco") and not scacco_avv:
-                    raise ValueError("Hai dichiarato scacco (+) ma la mossa non mette"\
-                    "il re avversario sotto scacco.")
-
-                # movimento reale
-                if self.controllo_pezzi.muovi(mossa["cattura"], self.scacchiera, pezzo,
-                mossa["finale"]):
-                    self.turno_bianco = not self.turno_bianco
-
+                self.controllo_pezzi.muovi(mossa["cattura"], self.scacchiera, pezzo, mossa["finale"])
                 if pezzo.primo:
                     pezzo.primo = False
-
-                self.ui.stampa_scacchiera(self.scacchiera)
-            except Exception as e:
-                print(e)
                     
-        self.in_gioco = False
+                if is_matto:
+                    vincitore = self.nome1 if self.turno_bianco else self.nome2
 
+                    self.ui.imposta_stile("accent", "bright_green")
+                    self.ui.imposta_stile("bold", False)
+                    self.ui.stampa(f"Scacco Matto! Ha vinto {vincitore}!")
+                    
+                    self.in_gioco = False
+                    break
+
+                if self.turno_bianco:
+                    self.mosse_bianco.append(stringa)
+                else:
+                    self.mosse_nero.append(stringa)
+                    
+                self.turno_bianco = not self.turno_bianco
+                self.ui.stampa_scacchiera(self.scacchiera)
+
+            except Exception as e:
+                print(f"Errore: {e}. Riprova.")
+
+        self.in_gioco = False
+    
+        
     def verifica(self):
         """Controlla se l'input inserito è un comando."""
         # Processa l'input da linea di comando
@@ -174,7 +193,7 @@ class Partita:
                 if not self.in_gioco:
                     self.ui.imposta_stile('accent', 'red')
                     self.ui.stampa(self.ui.formatta_testo("Non è in corso nessuna "\
-                                                       "partita."))
+                                                       " partita."))
                         
                     self.ui.imposta_stile('accent', 'white')
                     self.ui.stampa(self.ui.formatta_testo("Inserisci comando /gioca"))
@@ -199,7 +218,7 @@ class Partita:
                 else:
                     self.ui.imposta_stile('accent', 'red')
                     self.ui.stampa(self.ui.formatta_testo("Non è in corso nessuna" \
-                                                       "partita."))
+                                                       " partita."))
                     
                     self.ui.imposta_stile('accent', 'white')
                     self.ui.stampa(self.ui.formatta_testo("Inserisci comando /gioca"))
@@ -223,7 +242,7 @@ class Partita:
                 else:
                     self.ui.imposta_stile('accent', 'red')
                     self.ui.stampa(self.ui.formatta_testo("Non è in corso nessuna "\
-                                                       "partita."))
+                                                       " partita."))
             case 6:
                 if self.in_gioco:
                     while True:
@@ -235,9 +254,9 @@ class Partita:
                             self.ui.imposta_stile('accent', 'green')
                             self.ui.stampa(
                                 self.ui.formatta_testo(f"{vincitore} ha vinto"\
-                                                    "per abbandono."))
+                                                    " per abbandono."))
                             
-                            self.reset()  # resetta la partita
+                            self.reset()
                             return "fine"
                         
                         elif risposta.lower() == "n":

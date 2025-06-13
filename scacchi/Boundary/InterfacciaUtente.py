@@ -3,7 +3,7 @@ import os
 from rich.console import Console
 
 from ..Entity.Scacchiera import Scacchiera
-from ..Utils import leggi_file
+from ..Control.Utils import leggi_file
 
 
 class InterfacciaUtente:

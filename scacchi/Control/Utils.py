@@ -1,10 +1,10 @@
-from .Entity.Alfiere import Alfiere
-from .Entity.Cavallo import Cavallo
-from .Entity.Coordinata import Coordinata
-from .Entity.Pedone import Pedone
-from .Entity.Re import Re
-from .Entity.Regina import Regina
-from .Entity.Torre import Torre
+from ..Entity.Alfiere import Alfiere
+from ..Entity.Cavallo import Cavallo
+from ..Entity.Coordinata import Coordinata
+from ..Entity.Pedone import Pedone
+from ..Entity.Re import Re
+from ..Entity.Regina import Regina
+from ..Entity.Torre import Torre
 
 
 def crea_pezzo(simbolo: str, id: Coordinata, colore: bool):

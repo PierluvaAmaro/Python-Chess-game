@@ -63,9 +63,9 @@ class Torre(Pezzo):
         dy = abs(finale.y - self.iniziale.y)
 
         if (dy == 0) != (dx == 0):
-            if not self.percorso_libero(finale, scacchiera):
-                return False
-            self.primo = False
-            return True
+            return self.percorso_libero(finale, scacchiera)
         else:
-            return False 
+            return False
+        
+    def mosse_possibili(self, scacchiera):
+        return super().mosse_possibili(scacchiera)

@@ -37,4 +37,11 @@ class Cavallo(Pezzo):
         dx = abs(finale.x - self.iniziale.x)
         dy = abs(finale.y - self.iniziale.y)
         
-        return bool(dx == 2 and dy == 1 or dx == 1 and dy == 2)
+        if (dx == 2 and dy == 1) or (dx == 1 and dy == 2):
+            return not (
+                scacchiera is not None and scacchiera.occupata_da_alleato(self, finale)
+            )
+        return False
+    
+    def mosse_possibili(self, scacchiera):
+        return super().mosse_possibili(scacchiera)

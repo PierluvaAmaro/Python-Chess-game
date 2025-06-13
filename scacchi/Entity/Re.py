@@ -20,26 +20,39 @@ class Re(Pezzo):
         self.arrocco = False
 
     def percorso_libero(self, finale: Coordinata, scacchiera) -> bool:
-        return True
-
-    def controlla_mossa(self, finale: Coordinata, scacchiera=None) -> bool:
-        """Verifica se la mossa verso la coordinata specificata è valida per il Re.
+        """Verifica se il percorso verso la coordinata finale è libero.
 
         Args:
-            finale (Coordinata): Coordinata finale del Re verso cui si deve muovere.
+            finale (Coordinata): Coordinata verso cui il re si deve muovere.
+            scacchiera: Scacchiera su cui verificare le posizioni dei pezzi.
+
+        Returns:
+            bool: True se il percorso è libero, False altrimenti.
+        
+        """
+        return not scacchiera.occupata(finale)
+
+    def controlla_mossa(self, finale: Coordinata, scacchiera=None) -> bool:
+        """Verifica se la mossa verso la coordinata specificata è valida per il re.
+        
+        Args:
+            finale (Coordinata): Coordinata finale del re verso cui deve muoversi.
             scacchiera: Scacchiera per verificare le posizioni dei pezzi.
+
+        Raise:
+            ValueError: Se la coordinata finale non è valida o il percorso è occupato.
 
         """
         if finale is None:
             raise ValueError("Coordinata non valida")
         
+        if not self.percorso_libero(finale, scacchiera):
+            return False
+
         dx = abs(finale.x - self.iniziale.x)
         dy = abs(finale.y - self.iniziale.y)
-        
-        if dx <= 1 and dy <= 1 and (dx != 0 or dy != 0):
-            self.primo = False
-            return True
-        else:
-            return False
-        
+            
+        return (dx <= 1 and dy <= 1) and (dx != 0 or dy != 0)
     
+    def mosse_possibili(self, scacchiera):
+        return super().mosse_possibili(scacchiera)

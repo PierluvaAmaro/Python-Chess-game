@@ -35,6 +35,10 @@ class Parser:
         if cattura:
             notazione = notazione.replace('x', '')
         
+        matto = '#' in notazione
+        if matto:
+            notazione = notazione.replace('#', '')
+            
         notazione = notazione.strip()
         
         # controllo se il pezzo è stato specificato
@@ -67,8 +71,9 @@ class Parser:
             "simbolo": simbolo,
             "finale": Coordinata(x, y),
             # TODO: gestire promozione e en_passant
-            "promozione": None, # None se non e' una promozione
-            "en_passant": None, # None se non e' una mossa en passant
-            "scacco": scacco
+            "promozione": None,
+            "en_passant": None,
+            "scacco": scacco,
+            "matto": matto
         }
     
