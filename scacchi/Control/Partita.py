@@ -10,37 +10,70 @@ from .ControlloPezzi import ControlloPezzi
 
 
 def saluta(ui: InterfacciaUtente):
-    """Saluta i giocatori con un messaggio di benvenuto.
+    """Mostra il messaggio di benvenuto con formattazione a colori.
+    
+    Divide il messaggio di benvenuto in due parti, mostrandole con stili diversi
+    per un effetto visivo accattivante.
     
     Args:
-        ui (InterfacciaUtente): L'istanza dell'interfaccia per la visualizzazione.
+        ui (InterfacciaUtente): Interfaccia utente configurata per la visualizzazione.
     
+    Example:
+        >>> ui = InterfacciaUtente()
+        >>> saluta(ui)
+        [Mostra il messaggio di benvenuto formattato]
+
     """
-    lines = leggi_file("ui/welcome.txt").splitlines()
-    half = len(lines) // 2
-
-    # Prima metà in rosso
-    ui.imposta_stile("accent", "bright_white")
-    for line in lines[:half]:
-        ui.stampa(line)
-
-    # Seconda metà in bianco (o nessun colore)
-    ui.imposta_stile("accent", "cyan")
-    for line in lines[half:]:
-        ui.stampa(line)
+    try:
+        contenuto = leggi_file("ui/welcome.txt")
+        if not contenuto:
+            ui.stampa("Benvenuto al gioco degli scacchi!", "bright_white")
+            return
+        
+        linee = contenuto.splitlines()
+        meta = len(linee) // 2
+        
+        # prima meta'
+        ui.imposta_stile("accent", "bright_white")
+        for linea in linee[:meta]:
+            ui.stampa(linea)
+            
+        # seconda meta'
+        ui.imposta_stile("accent", "cyan")
+        for linea in linee[meta:]:
+            ui.stampa(linea)
+            
+    except FileNotFoundError:
+        ui.stampa("Benvenuto al gioco degli scacchi!", "bright_white")
+        ui.stampa("Versione 2.0 (Sprint 2)", "cyan")
 
 class Partita:
-    """CLASSE ENTITY: Gestisce la logica principale della partita a scacchi."""
+    """Classe Control per gestire lo stato e la logica principale di una partita.
+    
+    Attributes:
+        scacchiera (Scacchiera): Lo stato attuale della scacchiera.
+        input_utente (InputUtente): Gestore dell'input dei giocatori.
+        ui (InterfacciaUtente): Gestore dell'interfaccia grafica.
+        controllo_pezzi (ControlloPezzi): Gestore delle regole dei pezzi.
+        
+        in_gioco (bool): Flag che indica se la partita e' attiva.
+        turno_bianco (bool): Flag che indica il turno corrente (True = bianco)
+        
+        nome1 (str): Nome del giocatore bianco
+        nome2 (str): Nome del giocatore nero
+        
+        mosse_bianco (list): Cronologia delle mosse del giocatore bianco
+        mosse_nero (list): Cronologia delle mosse del giocatore nero
+ 
+    """
 
     def __init__(self):
-        """Inizializza: scacchiera, input utente, controllo dei vari pezzi, UI."""
-        """Indica che la partita è in corso."""
-
+        """Inizializza una nuova partita con stato iniziale."""
         # scacchiera di base
         self.scacchiera = Scacchiera(leggi_scacchiera("ui/scacchiera.txt"))
         
         # variabili utilizzate per l'interazione con l'utente
-        self.inputUtente = InputUtente()
+        self.input_utente = InputUtente()
         self.ui = InterfacciaUtente()
 
         # il controllo_pezzi gestisce tutti i pezzi della scacchiera
@@ -59,7 +92,14 @@ class Partita:
         self.mosse_nero = []
 
     def reset(self):
-        """Reimposta tutti i dati della partita per una nuova sessione."""
+        """Reimposta la partita allo stato iniziale.
+        
+        Ricrea:
+        - Una nuova scacchiera con pezzi nella posizione iniziale
+        - Resetta lo stato del gioco
+        - Pulisce la cronologia delle mosse
+        - Cancella i nomi dei giocatori
+        """
         self.scacchiera = Scacchiera(leggi_scacchiera("ui/scacchiera.txt"))
         self.in_gioco = False
         self.turno_bianco = True
@@ -69,6 +109,7 @@ class Partita:
         self.mosse_nero = []
 
     def avvia(self):
+        """Metodo principale che gestisce tutto il loop del gioco."""
         self.reset()
         if self.in_gioco:
             self.ui.imposta_stile("accent", "yellow")
@@ -78,8 +119,8 @@ class Partita:
         self.in_gioco = True
         
         while not self.nome1 or not self.nome2:
-            self.nome1 = self.inputUtente.leggi("Inserisci nome giocatore bianco")
-            self.nome2 = self.inputUtente.leggi("Inserisci nome giocatore nero")
+            self.nome1 = self.input_utente.leggi("Inserisci nome giocatore bianco")
+            self.nome2 = self.input_utente.leggi("Inserisci nome giocatore nero")
             self.ui.stampa_scacchiera(self.scacchiera)
 
         while self.in_gioco:
@@ -88,11 +129,11 @@ class Partita:
             colore = "white" if self.turno_bianco else "black"
 
             self.ui.imposta_stile('accent', colore)
-            stringa = self.inputUtente.leggi(f"\n{self.ui.formatta_testo(nome)} - "\
+            stringa = self.input_utente.leggi(f"\n{self.ui.formatta_testo(nome)} - "\
                                              f"Inserisci mossa (es. 'e4')")
 
             if stringa.startswith("/"):
-                risultato = self.inputUtente.in_ascolto(stringa)
+                risultato = self.input_utente.in_ascolto(stringa)
                 esito = self.processa(risultato)
 
                 if esito == "fine":
@@ -100,7 +141,7 @@ class Partita:
                 continue
             
             try:
-                mossa = self.inputUtente.parser.parse_mossa(stringa, self.turno_bianco)
+                mossa = self.input_utente.parser.parse_mossa(stringa, self.turno_bianco)
 
                 if mossa.get("tipo") == "arrocco":
                     self.controllo_pezzi.esegui_arrocco(
@@ -206,7 +247,8 @@ class Partita:
             saluta(self.ui)
         
         while True:
-            risultato = self.inputUtente.in_ascolto(self.inputUtente.leggi("Inserisci"))
+            risultato = self.input_utente.in_ascolto(
+                self.input_utente.leggi("Inserisci"))
             self.processa(risultato)
 
     def processa(self, risultato):
@@ -254,7 +296,7 @@ class Partita:
                     self.ui.stampa(self.ui.formatta_testo("Inserisci comando /gioca"))
             case 5:
                 if self.in_gioco:
-                        risposta = self.inputUtente.leggi("Accetti la patta (s/n)")
+                        risposta = self.input_utente.leggi("Accetti la patta (s/n)")
                         
                         if risposta.lower() == "s":
                             self.ui.imposta_stile('accent', 'green')
@@ -276,7 +318,7 @@ class Partita:
             case 6:
                 if self.in_gioco:
                     while True:
-                        risposta = self.inputUtente.leggi("Vuoi davvero abbandonare?" \
+                        risposta = self.input_utente.leggi("Vuoi davvero abbandonare?" \
                                                           "(s/n)")
                         if risposta.lower() == "s":
                             vincitore = self.nome2 if self.turno_bianco else self.nome1
@@ -313,7 +355,7 @@ class Partita:
                         
             case 7:
                 while True:
-                    risposta = self.inputUtente.leggi("Vuoi davvero uscire? (s/n)")
+                    risposta = self.input_utente.leggi("Vuoi davvero uscire? (s/n)")
                     if risposta.lower() == "s":
                         self.ui.imposta_stile('accent', 'yellow')
                         self.ui.stampa(self.ui.formatta_testo("Uscita in corso..."))

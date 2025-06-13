@@ -21,15 +21,16 @@ class Cavallo(Pezzo):
     def percorso_libero(self, finale: Coordinata, scacchiera) -> bool:
         return True
     
-    def controlla_mossa(self, finale: Coordinata, scacchiera=None) -> bool:
+    def controlla_mossa(self, finale: Coordinata, scacchiera) -> bool:
         """Verifica se la mossa verso la coordinata specificata è valida per il Cavallo.
         
-        Arg:
+        Args:
             finale (Coordinata): Coordinata finale del Cavallo verso cui deve muoversi.
-            scacchiera: Scacchiera per verificare le posizioni dei pezzi.
-            
-        Raise: 
-            ValueError se la coordinata finale non e' valida.
+            scacchiera (Scacchiera): Scacchiera per verificare le posizioni dei pezzi.
+        
+        Raises:
+            ValueError: se la coordinata finale non e' valida.
+
         """
         if finale is None:
             raise ValueError("Coordinata non valida")
@@ -44,4 +45,10 @@ class Cavallo(Pezzo):
         return False
     
     def mosse_possibili(self, scacchiera):
+        """Calcola tutte le mosse possibili.
+        
+        Returns:
+            Coordinate (list): Coordinate in cui il pezzo' puo andare.
+        
+        """
         return super().mosse_possibili(scacchiera)
