@@ -129,14 +129,16 @@ class ControlloPezzi:
         return False
 
     
-    def scacco_matto(self, scacchiera: Scacchiera, pezzo: Pezzo, finale: Coordinata) -> bool:
+    def scacco_matto(self, scacchiera: Scacchiera, pezzo: Pezzo,
+                     finale: Coordinata) -> bool:
         scacchiera_sim = self.simula(scacchiera, pezzo, finale)
         if scacchiera_sim is None:
             return False
 
         colore_re_avversario = not pezzo.colore
         re_avversario = next((p for p in scacchiera_sim.pezzi_vivi.values()
-                            if isinstance(p, Re) and p.colore == colore_re_avversario), None)
+                            if isinstance(p, Re) and p.colore == colore_re_avversario),
+                            None)
         if re_avversario is None:
             raise ValueError("Re avversario non trovato")
 
@@ -154,7 +156,8 @@ class ControlloPezzi:
                         return False
         return True
 
-    def mossa_elimina_scacco(self, scacchiera: Scacchiera, pezzo: Pezzo, finale: Coordinata) -> bool:
+    def mossa_elimina_scacco(self, scacchiera: Scacchiera, pezzo: Pezzo, 
+                            finale: Coordinata) -> bool:
         """Verifica se la mossa indicata elimina (o non causa) lo scacco al proprio re.
            
         Simula la mossa e controlla se il re dello stesso colore è sotto scacco.
@@ -165,7 +168,8 @@ class ControlloPezzi:
 
         # Trova il re del colore del pezzo che muove
         colore_re = pezzo.colore
-        re = next((p for p in copia.pezzi_vivi.values() if isinstance(p, Re) and p.colore == colore_re), None)
+        re = next((p for p in copia.pezzi_vivi.values() if isinstance(p, Re) 
+                   and p.colore == colore_re), None)
         if re is None:
             return False
 
@@ -175,7 +179,8 @@ class ControlloPezzi:
                 return False
         return True
         
-    def simula(self, scacchiera: Scacchiera, pezzo: Pezzo, finale: Coordinata) -> Scacchiera:
+    def simula(self, scacchiera: Scacchiera, pezzo: Pezzo, 
+               finale: Coordinata) -> Scacchiera:
         """Simula una mossa su una copia della scacchiera.
         
         Args:

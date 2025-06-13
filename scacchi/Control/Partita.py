@@ -4,9 +4,9 @@ from scacchi.Entity.Re import Re
 
 from ..Boundary.InputUtente import InputUtente
 from ..Boundary.InterfacciaUtente import InterfacciaUtente
-from ..Control.ControlloPezzi import ControlloPezzi
-from ..Control.Utils import leggi_file, leggi_scacchiera
-from .Scacchiera import Scacchiera
+from ..Entity.Scacchiera import Scacchiera
+from ..Utility.Utils import leggi_file, leggi_scacchiera
+from .ControlloPezzi import ControlloPezzi
 
 
 def saluta(ui: InterfacciaUtente):
@@ -108,7 +108,8 @@ class Partita:
                     raise ValueError("Nessun pezzo valido per questa mossa")
                 
                 # simula la mossa
-                simulazione = self.controllo_pezzi.simula(self.scacchiera, pezzo, mossa["finale"])
+                simulazione = self.controllo_pezzi.simula(self.scacchiera, pezzo,
+                                                          mossa["finale"])
                 if simulazione is None:
                     raise ValueError("Mossa non valida")
                 
@@ -121,20 +122,26 @@ class Partita:
                 
                 # controllo lo scacco e il matto dopo la simulazione
                 is_scacco = self.controllo_pezzi.scacco(simulazione, pezzo)
-                is_matto = self.controllo_pezzi.scacco_matto(self.scacchiera, pezzo, mossa["finale"])
+                is_matto = self.controllo_pezzi.scacco_matto(self.scacchiera, pezzo,
+                                                             mossa["finale"])
 
                 if mossa.get("matto"):
                     if not is_matto:
-                        raise ValueError("Hai dichiarato scacco matto (#), ma la mossa non mette il re avversario sotto scacco matto.")
+                        raise ValueError("Hai dichiarato scacco matto (#), ma la mossa"\
+                            "non mette il re avversario sotto scacco matto.")
                 else:
                     if is_matto:
-                        raise ValueError("Hai messo il re avversario sotto scacco matto ma non lo hai dichiarato.")
+                        raise ValueError("Hai messo il re avversario sotto scacco"\
+                                         "matto ma non lo hai dichiarato.")
                     if not mossa.get("scacco") and is_scacco:
-                        raise ValueError("Hai messo il re avversario sotto scacco ma non lo hai dichiarato (+).")
+                        raise ValueError("Hai messo il re avversario sotto scacco ma"\
+                            "non lo hai dichiarato (+).")
                     if mossa.get("scacco") and not is_scacco:
-                        raise ValueError("Hai dichiarato scacco (+) ma la mossa non mette il re avversario sotto scacco.")
+                        raise ValueError("Hai dichiarato scacco (+) ma la mossa non"\
+                            "mette il re avversario sotto scacco.")
 
-                self.controllo_pezzi.muovi(mossa["cattura"], self.scacchiera, pezzo, mossa["finale"])
+                self.controllo_pezzi.muovi(mossa["cattura"], self.scacchiera, pezzo,
+                                           mossa["finale"])
                 if pezzo.primo:
                     pezzo.primo = False
                     

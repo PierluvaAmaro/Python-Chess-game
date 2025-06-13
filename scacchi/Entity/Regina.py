@@ -54,7 +54,7 @@ class Regina(Pezzo):
             y = self.iniziale.y + y_step
             while x != finale.x and y != finale.y:
                 coord = Coordinata(x, y)
-                if scacchiera.occupata(coord)
+                if scacchiera.occupata(coord):
                     return False
                 x += x_step
                 y += y_step
