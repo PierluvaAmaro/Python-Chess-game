@@ -62,7 +62,9 @@ class Alfiere(Pezzo):
         dy = abs(finale.y - self.iniziale.y)
 
         if dx == dy and dx != 0:
-            if self.percorso_libero(finale, scacchiera):
-                return True
+            return self.percorso_libero(finale, scacchiera)
         else:
             return False 
+        
+    def mosse_possibili(self, scacchiera):
+        return super().mosse_possibili(scacchiera)

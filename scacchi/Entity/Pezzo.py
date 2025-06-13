@@ -55,4 +55,15 @@ class Pezzo(ABC):
             
         """
         pass
-        
+            
+    def mosse_possibili(self, scacchiera: ...) -> list['Coordinata']:
+            lista = []
+            for x in range(1, 9):
+                for y in range(1, 9):
+                    coord = Coordinata(x, y)
+                    try:
+                        if self.controlla_mossa(coord, scacchiera):
+                            lista.append(coord)
+                    except Exception:
+                        continue
+            return lista
