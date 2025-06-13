@@ -8,6 +8,7 @@
    - [Requisiti non funzionali](#requisiti-non-funzionali)
 4. [System design](#system-design)
    - [Diagramma dei pacchetti](#diagramma-dei-pacchetti)
+   - [Principi di progettazione](#principi-di-progettazione-utilizzati)
 5. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
    - [Metodologia di sviluppo](#metodologia-di-sviluppo)
    - [Organizzazione sprint](#organizzazione-sprint)
@@ -165,6 +166,46 @@ Un diagramma dei pacchetti in UML è un tipo di diagramma strutturale usato per:
 
 (**Diagramma dei pacchetti del software**): 
 ![Package Diagram](./img/PCKDGR.png)
+
+### Principi di progettazione utilizzati
+Nella seguente sezione sono discussi i principi di progettazione alla base del software: 
+
+**Principio di Separazione dei livelli**
+Il sistema è suddiviso in tre livelli principali sfruttando il pattern architetturale ECB:
+
+| Componente  | Ruolo Principale                                              | Esempi                            |
+|------------ |---------------------------------------------------------------|-----------------------------------|
+| **Entity**  | Rappresenta la logica del dominio e lo stato persistente      | `Scacchiera`, `Pezzo`, `Partita`  |
+| **Control** | Gestisce il flusso dei casi d'uso tra boundary ed entity      | `Parser`, `Utils`                 |
+| **Boundary**| Gestisce l’interazione con l’utente o altri sistemi esterni   | `InputUtente`, `InterfacciaUtente`|
+
+Questo tipo di suddivisione rende sicuramente il sisteama più chiaro, pulito e facilmente manutenibile. 
+
+**Principio di singola responsabilità**
+
+Il Principio di Singola Responsabilità --> è il primo dei cinque principi SOLID della progettazione orientata agli oggetti.
+Ogni classe ha un compito ben preciso:
+
+- CommandListener, InputUtente, InterfacciaUtente → gestione dell’I/O utente.
+
+- Parser, PieceControl, Utils → logica di controllo.
+
+- Pedone, Re, Partita, Scacchiera → modellano concetti del dominio.
+
+Questo rende ogni componente più semplice da comprendere, testare e modificare.
+
+**Principio Open-Closed**
+
+Il Principio Open-Closed --> è il secondo dei cinque principi SOLID della progettazione orientata agli oggetti.
+
+Le entità software devono essere aperte all'estensione ma chiuse alla modifica (ad esempio):
+
+- I pezzi principali del gioco (Re, Torre, Regina, Alfiere...) ereditano da una classe base che è Pezzo.
+ 
+Questo rende una parte fondamentale del sistema aperta all'estensione ma chiusa alle modifiche.
+Se si vuole creare un nuovo pezzo, ad esempio, il resto del codice resta solidamente invariato (Closed - difficile da modificare),
+e basta creare una nuova classe che estenda pezzo (Open - aperto alla modifica) 
+
 
 
 ---
