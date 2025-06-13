@@ -9,6 +9,7 @@
 4. [System design](#system-design)
    - [Diagramma dei pacchetti](#diagramma-dei-pacchetti)
    - [Principi di progettazione](#principi-di-progettazione-utilizzati)
+   - [Motivazione delle scelte progettuali](#motivazione-delle-scelte-progettuali)
 5. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
    - [Metodologia di sviluppo](#metodologia-di-sviluppo)
    - [Organizzazione sprint](#organizzazione-sprint)
@@ -167,24 +168,24 @@ Un diagramma dei pacchetti in UML è un tipo di diagramma strutturale usato per:
 (**Diagramma dei pacchetti del software**): 
 ![Package Diagram](./img/PCKDGR.png)
 
-| Package   | Classe/Modulo                | Funzione                                     |
+| Package   | Classe/Modulo                | Funzione                                                       |
 |-----------|-----------------------------|-----------------------------------------------------------------|
-| Entity    | Coordinata                   | Rappresenta coordinata sulla scacchiera                            |
-|           | Pezzo (astratta)             | Rappresenta un pezzo degli scacchi con tutti i suoi attributi             |
-|           | Pedone                       | Pezzo del pedone            |
-|           | Torre                        | Pezzo della torre           |
-|           | Cavallo                      | Pezzo del cavallo           |
-|           | Alfiere                      | Pezzo dell'alfiere          |
-|           | Regina                       | Pezzo della regina          |
-|           | Re                           | Pezzo del re                |
-|           | Scacchiera                   | Rappresenta la scacchiera di gioco            |
-| Boundary  | InterfacciaUtente            | Stampa la scacchiera e gestisce lo stile degli output         |
-|           | InputUtente                  | Implementa un listener che acquisisce l'input utente                               |
-|           | GestioneComandi              | Capisce in quale sezione ricade il comando utente                                               |
-| Control   | Parser                       | Parser di gioco, interpreta e traduce la mossa utente                                                   |
-|           | ControlloPezzi               | Gestisce la logica dei pezzi |
-|           | Partita                      | Gestisce la logica della partita utente                               |
-| Utility   | Utils (modulo)               | Utilità come gestione file, lettura scacchiera ecc...                     |
+| Entity    | Coordinata                   | Rappresenta coordinata sulla scacchiera|
+|           | Pezzo (astratta)             | Rappresenta un pezzo degli scacchi con tutti i suoi attributi|
+|           | Pedone                       | Pezzo del pedone                                               |
+|           | Torre                        | Pezzo della torre                                              |
+|           | Cavallo                      | Pezzo del cavallo                                              |
+|           | Alfiere                      | Pezzo dell'alfiere                                             |
+|           | Regina                       | Pezzo della regina                                             |
+|           | Re                           | Pezzo del re                                                   |
+|           | Scacchiera                   | Rappresenta la scacchiera di gioco|
+| Boundary  | InterfacciaUtente            | Stampa la scacchiera e gestisce lo stile degli output|
+|           | InputUtente                  | Implementa un listener che acquisisce l'input utente|
+|           | GestioneComandi              | Capisce in quale sezione ricade il comando utente|
+| Control   | Parser                       | Parser di gioco, interpreta e traduce la mossa utente|
+|           | ControlloPezzi               | Gestisce la logica dei pezzi|
+|           | Partita                      | Gestisce la logica della partita utente|
+| Utility   | Utils (modulo)               | Utilità come gestione file, lettura scacchiera ecc...          |
 
 ### Principi di progettazione utilizzati
 Nella seguente sezione sono discussi i principi di progettazione alla base del software: 
@@ -283,15 +284,15 @@ Per la gestione del progetto abbiamo scelto di adottare il framework Scrum, uno 
 
 Scrum si basa su cicli di lavoro brevi e regolari chiamati sprint, ognuno dei quali rappresenta un periodo di tempo fisso (nel nostro caso, circa 2 settimane) in cui il team si concentra sul completamento di un insieme specifico di funzionalità. L’obiettivo è produrre a ogni sprint un incremento di prodotto funzionante, che possa essere presentato allo stakeholder per ricevere un feedback.
 
-| Nome             | Ruolo        | Compiti principali                                     |
-| ---------------- | ------------ | ------------------------------------------------------ |
-| Prof. Lanubile Filippo | Stakeholder  | Requisiti, feedback, validazione del prodotto          |
-| Mirco Catalano   | Scrum Master | Facilitazione, supporto al team, gestione del processo |
-| Pierluca Amato        | Developer    | Sviluppo funzionalità, testing, collaborazione  |
-| Nicolò de Bari        | Developer    | Sviluppo funzionalità, testing, collaborazione               |
-| Lorenzo Amato        | Developer    | Sviluppo funzionalità, testing, collaborazione        |
-| Antonio Amorosini        | Developer    | Sviluppo funzionalità, testing, collaborazione                  |
-| Guglielmo Gesmundo      | Developer    | Sviluppo funzionalità, testing, collaborazione                       |
+| Nome                   | Ruolo              | Compiti principali                                           |
+| ----------------       | ------------       | ------------------------------------------------------       |
+| Prof. Lanubile Filippo | Stakeholder        | Requisiti, feedback, validazione del prodotto                |
+| Mirco Catalano         | Scrum Master       | Facilitazione, supporto al team, gestione del processo       |
+| Pierluca Amato         | Developer          | Sviluppo funzionalità, testing, collaborazione               |
+| Nicolò de Bari         | Developer          | Sviluppo funzionalità, testing, collaborazione               |
+| Lorenzo Amato          | Developer          | Sviluppo funzionalità, testing, collaborazione               |
+| Antonio Amorosini      | Developer          | Sviluppo funzionalità, testing, collaborazione               |
+| Guglielmo Gesmundo     | Developer          | Sviluppo funzionalità, testing, collaborazione               |
 
 
 Durante ogni Sprint, sia durante le lezioni in aula che tramite Microsoft Teams, ci sono stati comunicati i requisiti da parte dello stakeholder. Questi requisiti sono stati espressi sotto forma di **User Story**, ciascuna accompagnata da una relativa **Definizialeion of Done**(DoD), ovvero l’insieme dei criteri che ne determinano il completamento accettabile.
