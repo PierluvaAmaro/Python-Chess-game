@@ -6,11 +6,15 @@
 3. [Requisiti specifici](#requisiti-specifici)
    - [Requisiti funzionali](#requisiti-funzionali)
    - [Requisiti non funzionali](#requisiti-non-funzionali)
-4. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
+4. [System design](#system-design)
+   - [Diagramma dei pacchetti](#diagramma-dei-pacchetti)
+   - [Principi di progettazione](#principi-di-progettazione-utilizzati)
+   - [Motivazione delle scelte progettuali](#motivazione-delle-scelte-progettuali)
+5. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
    - [Metodologia di sviluppo](#metodologia-di-sviluppo)
    - [Organizzazione sprint](#organizzazione-sprint)
    - [Software utilizzati](#software-utilizzati)
-5. [Analisi retrospettiva](#analisi-retrospettiva)
+6. [Analisi retrospettiva](#analisi-retrospettiva)
    - [Sprint 0](#sprint-0)
    - [Sprint 1](#sprint-1)
 
@@ -153,6 +157,126 @@ Il formato deve essere leggibile e coerente con la notazione standard, per perme
 
 ---
 
+## System Design
+### Diagramma dei pacchetti
+Un diagramma dei pacchetti in UML è un tipo di diagramma strutturale usato per:
+
+- Organizzare in modo gerarchico e modulare elementi come classi, componenti,   casi d’uso, pacchetti stessi, ecc. 
+
+- Rappresentare dipendenze tra questi moduli, mediante frecce tratteggiate che simboleggiano relazioni
+
+(**Diagramma dei pacchetti del software**): 
+![Package Diagram](./img/PCKDGR.png)
+
+| Package   | Classe/Modulo                | Funzione                                                       |
+|-----------|-----------------------------|-----------------------------------------------------------------|
+| Entity    | Coordinata                   | Rappresenta coordinata sulla scacchiera|
+|           | Pezzo (astratta)             | Rappresenta un pezzo degli scacchi con tutti i suoi attributi|
+|           | Pedone                       | Pezzo del pedone                                               |
+|           | Torre                        | Pezzo della torre                                              |
+|           | Cavallo                      | Pezzo del cavallo                                              |
+|           | Alfiere                      | Pezzo dell'alfiere                                             |
+|           | Regina                       | Pezzo della regina                                             |
+|           | Re                           | Pezzo del re                                                   |
+|           | Scacchiera                   | Rappresenta la scacchiera di gioco|
+| Boundary  | InterfacciaUtente            | Stampa la scacchiera e gestisce lo stile degli output|
+|           | InputUtente                  | Implementa un listener che acquisisce l'input utente|
+|           | GestioneComandi              | Capisce in quale sezione ricade il comando utente|
+| Control   | Parser                       | Parser di gioco, interpreta e traduce la mossa utente|
+|           | ControlloPezzi               | Gestisce la logica dei pezzi|
+|           | Partita                      | Gestisce la logica della partita utente|
+| Utility   | Utils (modulo)               | Utilità come gestione file, lettura scacchiera ecc...          |
+
+### Principi di progettazione utilizzati
+Nella seguente sezione sono discussi i principi di progettazione alla base del software: 
+
+**Principio di Separazione dei livelli**
+Il sistema è suddiviso in tre livelli **principali** (Utility trattato di seguito) sfruttando il pattern architetturale ECB:
+
+| Componente  | Ruolo Principale                                              | Esempi                            |
+|------------ |---------------------------------------------------------------|-----------------------------------|
+| **Entity**  | Rappresenta la logica del dominio e lo stato persistente      | `Scacchiera`, `Pezzo`, `Partita`  |
+| **Control** | Gestisce il flusso dei casi d'uso tra boundary ed entity      | `Parser`, `Utils`                 |
+| **Boundary**| Gestisce l’interazione con l’utente o altri sistemi esterni   | `InputUtente`, `InterfacciaUtente`|
+
+Questo tipo di suddivisione rende sicuramente il sisteama più chiaro, pulito e facilmente manutenibile. 
+
+**Principio di singola responsabilità**
+
+Il Principio di Singola Responsabilità --> è il primo dei cinque principi SOLID della progettazione orientata agli oggetti.
+Ogni classe ha un compito ben preciso:
+
+- CommandListener, InputUtente, InterfacciaUtente → gestione dell’I/O utente.
+
+- Parser, PieceControl, Utils → logica di controllo.
+
+- Pedone, Re, Partita, Scacchiera → modellano concetti del dominio.
+
+Questo rende ogni componente più semplice da comprendere, testare e modificare.
+
+**Principio Open-Closed**
+
+Il Principio Open-Closed --> è il secondo dei cinque principi SOLID della progettazione orientata agli oggetti.
+
+Le entità software devono essere aperte all'estensione ma chiuse alla modifica (ad esempio):
+
+- I pezzi principali del gioco (Re, Torre, Regina, Alfiere...) ereditano da una classe base che è Pezzo.
+ 
+Questo rende una parte fondamentale del sistema aperta all'estensione ma chiusa alle modifiche.
+Se si vuole creare un nuovo pezzo, ad esempio, il resto del codice resta solidamente invariato (Closed - difficile da modificare),
+e basta creare una nuova classe che estenda pezzo (Open - aperto alla modifica) 
+
+### Motivazione delle scelte progettuali
+#### ECB
+Abbiamo scelto di usare **ECB (Entity-Control-Boundary)** perché è un pattern architetturale che offre **chiarezza, separazione dei ruoli e facilità di manutenzione**, soprattutto in progetti con una logica ben distinta tra modello, interazione e regole del dominio.
+
+#### CREAZIONE DEL PACKAGE UTILITY
+Inizialmente la classe utils era posizionata nel package "Control".
+Abbiamo deciso di inserirla in un nuovo package "Utility".
+Le utility non fanno parte della responsabilità principale di control, quindi è più corretto tenerle in un package separato.
+Diciamo più formalmente che: 
+- Control deve contenere solo la logica di controllo del gioco (gestione delle mosse, regole, validazioni specifiche degli scacchi). Tenere la classe in control rende il package meno chiaro e più difficile da mantenere, perché fonde logica di gioco e funzioni di supporto generiche.
+- Le utility sono funzioni generiche, spesso indipendenti dalla logica di controllo, e possono servire anche ad altri package.
+
+#### IMPLEMENTAZIONI IN BASE AI RNF 
+**RNF1 – Utilizzo di Docker**
+
+-   **Decisione**: E' stato deciso di eseguire il codice  all’interno di un **container Docker**.
+
+- **Scelte implementative**
+È stato creato un file `Dockerfile` con l’ambiente configurato, e il comando `docker run` consente di avviare il gioco in modo identico ovunque.
+
+**RNF2 – Compatibilità multi-terminal**
+
+-   **Decisione**: Il gioco è stato sviluppato per essere completamente eseguibile via terminale, e compatibile con:
+    
+    -   Terminal di Linux
+        
+    -   Terminal di macOS
+        
+    -   PowerShell e Git Bash su Windows
+        
+-   **Scelte implementative**:
+    
+    -   Nessuna dipendenza da librerie che usano colori o layout non supportati universalmente.
+        
+    -   Test effettuati su tutti i terminali previsti.
+   
+**RNF3 – Uso di simboli UTF-8**
+
+-   **Decisione**: È stato deciso di rappresentare i pezzi degli scacchi usando i **simboli Unicode UTF-8** standard (es. ♔, ♟, ♘...).
+    
+
+-   **Scelte implementative**:
+    
+    -   È stato verificato che i terminali supportati visualizzino correttamente i simboli.
+        
+    -   La codifica dei file e dell'output è stata mantenuta in UTF-8.
+
+
+
+
+---
 ## Processo di sviluppo e organizzazione del lavoro
 
 ### Metodologia di sviluppo
@@ -160,15 +284,15 @@ Per la gestione del progetto abbiamo scelto di adottare il framework Scrum, uno 
 
 Scrum si basa su cicli di lavoro brevi e regolari chiamati sprint, ognuno dei quali rappresenta un periodo di tempo fisso (nel nostro caso, circa 2 settimane) in cui il team si concentra sul completamento di un insieme specifico di funzionalità. L’obiettivo è produrre a ogni sprint un incremento di prodotto funzionante, che possa essere presentato allo stakeholder per ricevere un feedback.
 
-| Nome             | Ruolo        | Compiti principali                                     |
-| ---------------- | ------------ | ------------------------------------------------------ |
-| Prof. Lanubile Filippo | Stakeholder  | Requisiti, feedback, validazione del prodotto          |
-| Mirco Catalano   | Scrum Master | Facilitazione, supporto al team, gestione del processo |
-| Pierluca Amato        | Developer    | Sviluppo funzionalità, testing, collaborazione  |
-| Nicolò de Bari        | Developer    | Sviluppo funzionalità, testing, collaborazione               |
-| Lorenzo Amato        | Developer    | Sviluppo funzionalità, testing, collaborazione        |
-| Antonio Amorosini        | Developer    | Sviluppo funzionalità, testing, collaborazione                  |
-| Guglielmo Gesmundo      | Developer    | Sviluppo funzionalità, testing, collaborazione                       |
+| Nome                   | Ruolo              | Compiti principali                                           |
+| ----------------       | ------------       | ------------------------------------------------------       |
+| Prof. Lanubile Filippo | Stakeholder        | Requisiti, feedback, validazione del prodotto                |
+| Mirco Catalano         | Scrum Master       | Facilitazione, supporto al team, gestione del processo       |
+| Pierluca Amato         | Developer          | Sviluppo funzionalità, testing, collaborazione               |
+| Nicolò de Bari         | Developer          | Sviluppo funzionalità, testing, collaborazione               |
+| Lorenzo Amato          | Developer          | Sviluppo funzionalità, testing, collaborazione               |
+| Antonio Amorosini      | Developer          | Sviluppo funzionalità, testing, collaborazione               |
+| Guglielmo Gesmundo     | Developer          | Sviluppo funzionalità, testing, collaborazione               |
 
 
 Durante ogni Sprint, sia durante le lezioni in aula che tramite Microsoft Teams, ci sono stati comunicati i requisiti da parte dello stakeholder. Questi requisiti sono stati espressi sotto forma di **User Story**, ciascuna accompagnata da una relativa **Definizialeion of Done**(DoD), ovvero l’insieme dei criteri che ne determinano il completamento accettabile.
@@ -234,8 +358,8 @@ Strumento di linting per Python, utile per mantenere il codice coerente, leggibi
 - **Docker** <img src="https://img.icons8.com/fluency/48/docker.png" height="20"/>
 Utilizzato per eseguire l'applicazione in un ambiente isolato e replicabile, garantendo portabilità e coerenza tra i vari ambienti di sviluppo.
 
-- **Draw-io** <img src="https://raw.githubusercontent.com/jgraph/drawio/master/src/main/webapp/images/drawlogo.svg" height="20"/> 
-Utilizzato per creare diagrammi UML, flussi di processo e schemi architetturali legati al progetto.
+- **Draw-io e StarUML** <img src="https://raw.githubusercontent.com/jgraph/drawio/master/src/main/webapp/images/drawlogo.svg" height="20"/> 
+Utilizzati per creare diagrammi UML, flussi di processo e schemi architetturali legati al progetto.
 
 [Torna al menu](#indice)
 
