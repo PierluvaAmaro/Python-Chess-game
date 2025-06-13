@@ -23,7 +23,7 @@ class Regina(Pezzo):
         """Verifica se il percorso verso la coordinata finale è libero.
 
         Args:
-            final (Coordinata): Coordinata finale della Regina verso cui si deve muovere
+            finale (Coordinata): Coordinata finale della Regina verso cui si deve muovere
             scacchiera: Scacchiera per verificare le posizioni dei pezzi.
 
         Returns:
@@ -63,7 +63,6 @@ class Regina(Pezzo):
             return False
 
     def controlla_mossa(self, finale: Coordinata, scacchiera=None) -> bool:
-
         """Verifica se la mossa verso la coordinata specificata è valida per la donna.
         
         Args:
