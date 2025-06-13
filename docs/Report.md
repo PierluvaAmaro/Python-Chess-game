@@ -6,11 +6,13 @@
 3. [Requisiti specifici](#requisiti-specifici)
    - [Requisiti funzionali](#requisiti-funzionali)
    - [Requisiti non funzionali](#requisiti-non-funzionali)
-4. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
+4. [System design](#system-design)
+   - [Diagramma dei pacchetti](#diagramma-dei-pacchetti)
+5. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
    - [Metodologia di sviluppo](#metodologia-di-sviluppo)
    - [Organizzazione sprint](#organizzazione-sprint)
    - [Software utilizzati](#software-utilizzati)
-5. [Analisi retrospettiva](#analisi-retrospettiva)
+6. [Analisi retrospettiva](#analisi-retrospettiva)
    - [Sprint 0](#sprint-0)
    - [Sprint 1](#sprint-1)
 
@@ -153,6 +155,19 @@ Il formato deve essere leggibile e coerente con la notazione standard, per perme
 
 ---
 
+## System Design
+### Diagramma dei pacchetti
+Un diagramma dei pacchetti in UML è un tipo di diagramma strutturale usato per:
+
+- Organizzare in modo gerarchico e modulare elementi come classi, componenti,   casi d’uso, pacchetti stessi, ecc. 
+
+- Rappresentare dipendenze tra questi moduli, mediante frecce tratteggiate che simboleggiano relazioni
+
+(**Diagramma dei pacchetti del software**): 
+![Package Diagram](./img/PCKDGR.png)
+
+
+---
 ## Processo di sviluppo e organizzazione del lavoro
 
 ### Metodologia di sviluppo
