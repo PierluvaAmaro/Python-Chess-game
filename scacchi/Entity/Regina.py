@@ -23,7 +23,7 @@ class Regina(Pezzo):
         """Verifica se il percorso verso la coordinata finale è libero.
 
         Args:
-            finale (Coordinata): Coordinata finale della Regina verso cui si deve muovere
+            finale (Coordinata): Coordinata finale della Donna verso cui si deve muovere
             scacchiera: Scacchiera per verificare le posizioni dei pezzi.
 
         Returns:
