@@ -1,4 +1,4 @@
-from .Entity.Partita import Partita
+from .Control.Partita import Partita
 
 
 def main():

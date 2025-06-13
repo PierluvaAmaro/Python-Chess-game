@@ -32,7 +32,7 @@ class Regina(Pezzo):
         dx = final.x - self.iniziale.x
         dy = final.y - self.iniziale.y
 
-        if dx == 0 and dy != 0:  # Movimento verticale
+        if dx == 0 and dy != 0:
             y_step = 1 if dy > 0 else -1
             for y in range(self.iniziale.y + y_step, final.y, y_step):
                 coord = Coordinata(self.iniziale.x, y)
@@ -43,7 +43,7 @@ class Regina(Pezzo):
                     return False
             return True
 
-        elif dy == 0 and dx != 0:  # Movimento orizzontale
+        elif dy == 0 and dx != 0:
             x_step = 1 if dx > 0 else -1
             for x in range(self.iniziale.x + x_step, final.x, x_step):
                 coord = Coordinata(x, self.iniziale.y)
@@ -54,7 +54,7 @@ class Regina(Pezzo):
                     return False
             return True
 
-        elif abs(dx) == abs(dy) and dx != 0:  # Movimento diagonale
+        elif abs(dx) == abs(dy) and dx != 0:
             x_step = 1 if dx > 0 else -1
             y_step = 1 if dy > 0 else -1
             x, y = self.iniziale.x + x_step, self.iniziale.y + y_step
@@ -88,11 +88,10 @@ class Regina(Pezzo):
         dx = abs(finale.x - self.iniziale.x)
         dy = abs(finale.y - self.iniziale.y)
 
-        # Movimento diagonale, orizzontale o verticale
         movimento_valido = (
-            (dx == dy and dx != 0)  # Diagonale
-            or (dx == 0 and dy != 0)  # Verticale
-            or (dy == 0 and dx != 0)  # Orizzontale
+            (dx == dy and dx != 0)
+            or (dx == 0 and dy != 0)
+            or (dy == 0 and dx != 0)
         )
 
         if not movimento_valido:
