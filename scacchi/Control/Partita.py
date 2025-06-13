@@ -100,66 +100,89 @@ class Partita:
                 continue
             
             try:
-                # parsing mossa
                 mossa = self.inputUtente.parser.parse_mossa(stringa, self.turno_bianco)
-                pezzo = self.controllo_pezzi.trova_pezzo(self.scacchiera,
-                        mossa["finale"], self.turno_bianco, mossa["simbolo"])
-                if pezzo is None:
-                    raise ValueError("Nessun pezzo valido per questa mossa")
-                
-                # simula la mossa
-                simulazione = self.controllo_pezzi.simula(self.scacchiera, pezzo,
-                                                          mossa["finale"])
-                if simulazione is None:
-                    raise ValueError("Mossa non valida")
-                
-                colore_re_avversario = not pezzo.colore
-                re_avversario = next((p for p in simulazione.pezzi_vivi.values()
-                                      if isinstance(p, Re) and p.colore == 
-                                      colore_re_avversario), None)
-                if re_avversario is None:
-                    raise ValueError("Re avversario non trovato")
-                
-                # controllo lo scacco e il matto dopo la simulazione
-                is_scacco = self.controllo_pezzi.scacco(simulazione, pezzo)
-                is_matto = self.controllo_pezzi.scacco_matto(self.scacchiera, pezzo,
-                                                             mossa["finale"])
 
-                if mossa.get("matto"):
-                    if not is_matto:
-                        raise ValueError("Hai dichiarato scacco matto (#), ma la mossa"\
-                            "non mette il re avversario sotto scacco matto.")
+                if mossa.get("tipo") == "arrocco":
+                    self.controllo_pezzi.esegui_arrocco(
+                        self.scacchiera, self.turno_bianco, mossa["lato"]
+                    )
                 else:
+                    pezzo = self.controllo_pezzi.trova_pezzo(
+                        self.scacchiera,
+                        mossa["finale"],
+                        self.turno_bianco,
+                        mossa["simbolo"],
+                    )
+                    if pezzo is None:
+                        raise ValueError("Nessun pezzo valido per questa mossa")
+
+                    simulazione = self.controllo_pezzi.simula(
+                        self.scacchiera, pezzo, mossa["finale"]
+                    )
+                    if simulazione is None:
+                        raise ValueError("Mossa non valida")
+
+                    colore_re_avversario = not pezzo.colore
+                    re_avversario = next(
+                        (
+                            p
+                            for p in simulazione.pezzi_vivi.values()
+                            if isinstance(p, Re) and p.colore == colore_re_avversario
+                        ),
+                        None,
+                    )
+                    if re_avversario is None:
+                        raise ValueError("Re avversario non trovato")
+
+                    is_scacco = self.controllo_pezzi.scacco(simulazione, pezzo)
+                    is_matto = self.controllo_pezzi.scacco_matto(
+                        self.scacchiera, pezzo, mossa["finale"]
+                    )
+
+                    if mossa.get("matto"):
+                        if not is_matto:
+                            raise ValueError(
+                                "Hai dichiarato scacco matto (#), ma la mossa"
+                                "non mette il re avversario sotto scacco matto."
+                            )
+                    else:
+                        if is_matto:
+                            raise ValueError(
+                                "Hai messo il re avversario sotto scacco"
+                                "matto ma non lo hai dichiarato."
+                            )
+                        if not mossa.get("scacco") and is_scacco:
+                            raise ValueError(
+                                "Hai messo il re avversario sotto scacco ma"
+                                "non lo hai dichiarato (+)."
+                            )
+                        if mossa.get("scacco") and not is_scacco:
+                            raise ValueError(
+                                "Hai dichiarato scacco (+) ma la mossa non"
+                                "mette il re avversario sotto scacco."
+                            )
+
+                    self.controllo_pezzi.muovi(
+                        mossa["cattura"], self.scacchiera, pezzo, mossa["finale"]
+                    )
+                    if pezzo.primo:
+                        pezzo.primo = False
+
                     if is_matto:
-                        raise ValueError("Hai messo il re avversario sotto scacco"\
-                                         "matto ma non lo hai dichiarato.")
-                    if not mossa.get("scacco") and is_scacco:
-                        raise ValueError("Hai messo il re avversario sotto scacco ma"\
-                            "non lo hai dichiarato (+).")
-                    if mossa.get("scacco") and not is_scacco:
-                        raise ValueError("Hai dichiarato scacco (+) ma la mossa non"\
-                            "mette il re avversario sotto scacco.")
+                        vincitore = self.nome1 if self.turno_bianco else self.nome2
 
-                self.controllo_pezzi.muovi(mossa["cattura"], self.scacchiera, pezzo,
-                                           mossa["finale"])
-                if pezzo.primo:
-                    pezzo.primo = False
-                    
-                if is_matto:
-                    vincitore = self.nome1 if self.turno_bianco else self.nome2
+                        self.ui.imposta_stile("accent", "bright_green")
+                        self.ui.imposta_stile("bold", False)
+                        self.ui.stampa(f"Scacco Matto! Ha vinto {vincitore}!")
 
-                    self.ui.imposta_stile("accent", "bright_green")
-                    self.ui.imposta_stile("bold", False)
-                    self.ui.stampa(f"Scacco Matto! Ha vinto {vincitore}!")
-                    
-                    self.in_gioco = False
-                    break
+                        self.in_gioco = False
+                        break
 
                 if self.turno_bianco:
                     self.mosse_bianco.append(stringa)
                 else:
                     self.mosse_nero.append(stringa)
-                    
+
                 self.turno_bianco = not self.turno_bianco
                 self.ui.stampa_scacchiera(self.scacchiera)
 

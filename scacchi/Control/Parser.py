@@ -25,6 +25,13 @@ class Parser:
             colore(bool): Colore del pezzo che sta effettuando la mossa.
             
         """
+        notazione = notazione.strip()
+
+        if notazione == "0-0":
+            return {"tipo": "arrocco", "lato": "corto"}
+        if notazione == "0-0-0":
+            return {"tipo": "arrocco", "lato": "lungo"}
+        
         # controllo se e' stato dichiarato lo scacco
         scacco = '+' in notazione
         if scacco:
