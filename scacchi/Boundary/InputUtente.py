@@ -1,7 +1,7 @@
 from rich.prompt import Prompt
 
 from ..Control.Parser import Parser
-from .CommandListener import CommandListener
+from .GestioneComandi import GestioneComandi
 
 
 class InputUtente:
@@ -34,13 +34,13 @@ class InputUtente:
                 return self.parser.parse_mossa(mossa)
                     
             except ValueError as e:
-                print(f"Errore: {e}. Riprova.")
+                print(f"Errore: {e} Riprova.")
 
     def leggi(self, prompt: str = "") -> str:
         """Prende in input una stringa dall'utente."""
         return Prompt.ask(prompt)
     
-    def listen(self, stringa: str):
+    def in_ascolto(self, stringa: str):
         """Verifica se e' stato inserito un comando.
         
         Args:
@@ -49,8 +49,8 @@ class InputUtente:
         """
         try:
             if stringa.startswith("/"):
-                commandListener = CommandListener()
-                return commandListener.run_command(stringa)
+                comandi = GestioneComandi()
+                return comandi.esegui_comando(stringa)
             return None
         except NotImplementedError as e:
             print(f"Errore: {e}. Riprova")

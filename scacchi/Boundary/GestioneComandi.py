@@ -1,4 +1,4 @@
-class CommandListener:
+class GestioneComandi:
     """CLASSE BOUNDARY."""
     
     """Gestisce l'input dei comandi dell'utente."""
@@ -7,7 +7,7 @@ class CommandListener:
         """Inizializza un nuovo oggetto ComandoUtente."""
         pass
 
-    def run_command(self, comando: str) -> int:
+    def esegui_comando(self, comando: str) -> int:
         """Rileva ed esegue un comando.
         
         Args:

@@ -12,27 +12,27 @@ class Pezzo(ABC):
     specifici (Pedone, Torre, Cavallo, ecc.).
     """
 
-    def __init__(self, simbolo: str, init: Coordinata, colore: bool):
+    def __init__(self, simbolo: str, iniziale: Coordinata, colore: bool):
         """Inizializza un nuovo pezzo generico.
 
         Args:
             simbolo (str): Il simbolo grafico che rappresenta il Pezzo.
-            init (Coordinata): La coordinata iniziale del pezzo sulla scacchiera.
+            iniziale (Coordinata): La coordinata iniziale del pezzo sulla scacchiera.
             colore (bool): Il colore del pezzo (True = bianco, False = nero)
         
         """
-        self.init = init
+        self.iniziale = iniziale
         self.primo = 1
         self.simbolo = simbolo
         self.colore = colore
 
     @abstractmethod
-    def check_move(self, init: Coordinata, final: Coordinata, scacchiera=None) -> bool:
+    def controlla_mossa(self, finale: Coordinata, scacchiera=None) -> bool:  # noqa: E501
         """Verifica se una mossa verso una nuova coordinata e' valida per il pezzo.
         
         Args:
-            init (Coordinata): La coordinata di partenza del Pezzo.
-            final (Coordinata): La coordinata di destinazione della mossa.
+            iniziale (Coordinata): La coordinata di partenza del Pezzo.
+            finale (Coordinata): La coordinata di destinazione della mossa.
             scacchiera: Scacchiera per verificare le posizioni dei pezzi.
 
         Returns:
@@ -42,12 +42,12 @@ class Pezzo(ABC):
         pass
     
     @abstractmethod
-    def is_path_clear(self, init: Coordinata, final: Coordinata, scacchiera) -> bool:
+    def percorso_libero(self, finale: Coordinata, scacchiera) -> bool:
         """Verifica che il percorso tra due coordinate sia libero.
         
         Args:
-            init (Coordinata): La coordinata di partenza del Pezzo.
-            final (Coordinata): La coordinata di destinazione della mossa.
+            iniziale (Coordinata): La coordinata di partenza del Pezzo.
+            finale (Coordinata): La coordinata di destinazione della mossa.
             scacchiera: Scacchiera per verificare le posizioni dei pezzi.
             
         Returns:
@@ -55,4 +55,15 @@ class Pezzo(ABC):
             
         """
         pass
-        
+            
+    def mosse_possibili(self, scacchiera: ...) -> list['Coordinata']:
+            lista = []
+            for x in range(1, 9):
+                for y in range(1, 9):
+                    coord = Coordinata(x, y)
+                    try:
+                        if self.controlla_mossa(coord, scacchiera):
+                            lista.append(coord)
+                    except Exception:
+                        continue
+            return lista

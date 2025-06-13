@@ -63,7 +63,7 @@ def crea_pezzo(simbolo: str, id: Coordinata, colore: bool):
             raise ValueError(f"Pezzo non conosciuto: {simbolo}")
 
 
-def leggi_scacchiera(file="scacchiera.txt"):
+def leggi_scacchiera(file="ui/scacchiera.txt"):
     """Legge la disposizione della scacchiera da un file di testo.
 
     Il file deve contenere 8 righe da 8 caratteri ciascuna, dove ogni simbolo 

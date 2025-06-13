@@ -1,12 +1,12 @@
+import os
+
 from rich.console import Console
 
-from ..Control.Utils import leggi_file
-from ..Entity.Coordinata import Coordinata
-from ..Entity.Pezzo import Pezzo
 from ..Entity.Scacchiera import Scacchiera
+from ..Utility.Utils import leggi_file
 
 
-class UI:
+class InterfacciaUtente:
     """CLASSE BOUNDARY."""
 
     """Gestisce l'interfaccia tra l'utente e il gioco degli scacchi."""
@@ -15,7 +15,7 @@ class UI:
         """Crea una nuova interfaccia utente."""
         self.console = Console()
 
-        self.valid_colors = {
+        self.colori_validi = {
             "black",
             "red",
             "green",
@@ -41,12 +41,12 @@ class UI:
             "italic": True,
         }
 
-    def set_style(self, key: str, value) -> bool:
+    def imposta_stile(self, chiave: str, valore) -> bool:
         """Imposta un particolare stile dell'interfaccia.
 
         Args:
-            key (str): chiave (nome) dello stile da impostare (es. "accent")
-            value: nuovo valore da assegnare (es. "blue")
+            chiave (str): chiave (nome) dello stile da impostare (es. "accent")
+            valore: nuovo valore da assegnare (es. "blue")
 
         Raises:
             ValueError: se la chiave non esiste
@@ -55,12 +55,12 @@ class UI:
             bool: True se l'azione e' andata a buon fine, False altrimenti.
 
         """
-        if key not in self.default:
-            raise ValueError(f"Chiave inesistente: '{key}'")
+        if chiave not in self.default:
+            raise ValueError(f"Chiave inesistente: '{chiave}'")
 
-        self.default[key] = value
+        self.default[chiave] = valore
 
-    def get_style(self, key: str = None):
+    def get_stile(self, key: str = None):
         """Restituisce il valore di uno stile specifico.
 
         Args:
@@ -76,8 +76,8 @@ class UI:
         else:
             return self.default[key]
 
-    def format_text(self, text: str):
-        """Applica gli stili definiti al testo.
+    def formatta_testo(self, text: str):
+        """Applica gli stili definizialei al testo.
 
         Args:
             text (str): testo a cui applicare gli stili specifici.
@@ -95,73 +95,66 @@ class UI:
 
         return f"[{style}]{text}[/]"
 
-    def stampa(self, prompt: str = "default", accent: str = None):
+    def stampa(self, prompt: str = "default", stile: str = None):
         """Mostra una stringa con il colore e stile specificato.
 
         Args:
             prompt (str): stringa da mostrare a schermo.
-            accent (str): colore da impostare al prompt.
+            stile (str): colore da impostare al prompt.
 
         """
-        if accent is not None:
-            self.set_style("accent", accent)
+        if stile is not None:
+            self.imposta_stile("accent", stile)
 
-        self.console.print(self.format_text(prompt))
+        self.console.print(self.formatta_testo(prompt))
+        
+    def stampa_scacchiera(self, scacchiera: Scacchiera):
+        os.system('cls' if os.name == 'nt' else 'clear')
 
-    def display_coordinata(self, coord: Coordinata):
-        """Mostra una coordinata in formato leggibile.
+        # Offset per spostare la scacchiera
+        offset_x = "      "  # 6 spazi a sinistra
+        offset_y = 2         # 2 righe vuote sopra
 
-        Args:
-            coord (Coordinata): coordinata da mostrare a schermo
+        # Riga vuota per spostare in basso
+        for _ in range(offset_y):
+            self.console.print()
 
-        """
-        self.console.print(self.format_text(f"[x: {coord.x}, y: {coord.y}]"))
+        # Creo una matrice 8x8 di stringhe vuote
+        griglia = [["   " for _ in range(8)] for _ in range(8)]
 
-    def display_pezzo(self, pezzo: Pezzo):
-        """Mostra tutte le informazioni riguardanti un pezzo specificato.
-
-        Args:
-            pezzo (Pezzo): Pezzo di cui mostare le informazioni.
-
-        """
-        self.display_coordinata(self.init)
-
-        console = Console()
-        console.print(
-            self.format_text(
-                f"Primo movimento: {pezzo.primo}"
-                f"Colore: {'Bianco' if pezzo.colore else 'Nero'}"
-            )
-        )
-
-    def display_scacchiera(self, scacchiera: Scacchiera):
-        """Mostra a schermo la scacchiera 8x8 senza colori."""
-        griglia = [[" . " for _ in range(8)] for _ in range(8)]
-
+        # Inserisco i simboli dei pezzi nella griglia
         for coord, pezzo in scacchiera.pezzi_vivi.items():
             if pezzo is not None:
                 x = coord.x - 1
                 y = 8 - coord.y
                 griglia[y][x] = f" {pezzo.simbolo} "
 
-        self.console.print()
-        self.console.print("    +" + "---+" * 8)
+        lettere_colonne = offset_x + "   " + "  ".join(f" {chr(97 + i)}"
+                                                       for i in range(8))
+        self.imposta_stile("accent", "cyan")
+        self.stampa(lettere_colonne)
+
+        self.imposta_stile("accent", "white")
+        self.console.print(offset_x + "  " + "┌" + "───┬" * 7 + "───┐")
 
         for i, riga in enumerate(griglia):
-            numero_riga = f"{8 - i:>2}"
-            print(f" {numero_riga} |" + "|".join(riga) + "|")
-            self.console.print("    +" + "---+" * 8)
+            numero_riga = 8 - i
+            riga_str = "│".join(riga)
+            self.console.print(f"{offset_x}{numero_riga} │{riga_str}│ {numero_riga}")
+            if i < 7:
+                self.console.print(offset_x + "  " + "├" + "───┼" * 7 + "───┤")
+            else:
+                self.console.print(offset_x + "  " + "└" + "───┴" * 7 + "───┘")
 
-        lettere = "".join(f" {chr(97 + i)}  " for i in range(8))
-        self.console.print(f"     {lettere}")
-
-    def display_help(self, filename: str):
+        self.imposta_stile("accent", "cyan")
+        self.stampa(lettere_colonne)
+    
+    def stampa_file(self, filename: str):
         """Mostra il contenuto di un file di aiuto.
-
+ 
         Args:
             filename (str): Il percorso del file di aiuto.
 
         """
-        file = leggi_file(filename)
-
-        print(file)
+        self.imposta_stile("accent", "white")
+        self.stampa(leggi_file(filename))

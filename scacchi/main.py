@@ -1,4 +1,4 @@
-from .Entity.Partita import Partita
+from .Control.Partita import Partita
 
 
 def main():
@@ -7,9 +7,9 @@ def main():
 
     while True:
         try:
-            partita.check()
+            partita.verifica()
         except Exception as e:
-            print(f"Errore: {e}. Riprova.")
+            print(f"Errore: {e} Riprova.")
         
 if __name__ == "__main__":
     main()

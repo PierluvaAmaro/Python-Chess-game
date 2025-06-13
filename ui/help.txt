@@ -1,0 +1,10 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                         COMANDI DISPONIBILI                      ║
+╠═════════════╦════════════════════════════════════════════════════╣
+║ /gioca      ║ Inizia una nuova partita di scacchi                ║
+║ /scacchiera ║ Mostra la scacchiera attuale con tutti i pezzi     ║
+║ /mosse      ║ Visualizza l’elenco delle mosse effettuate         ║
+║ /patta      ║ Proponi una patta all’avversario                   ║
+║ /abbandona  ║ Abbandona la partita in corso                      ║
+║ /esci       ║ Esci dal gioco e chiudi la sessione                ║
+╚═════════════╩════════════════════════════════════════════════════╝
