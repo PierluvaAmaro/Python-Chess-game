@@ -10,11 +10,14 @@
    - [Diagramma dei pacchetti](#diagramma-dei-pacchetti)
    - [Principi di progettazione](#principi-di-progettazione-utilizzati)
    - [Motivazione delle scelte progettuali](#motivazione-delle-scelte-progettuali)
-5. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
+5. [Object Oriented Design](#o-o-d)
+   - [Diagrammi di classi e sequenza](#diagramma-classi-sequenza)
+   - [principi di OO Design](#o-o-design)
+7. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
    - [Metodologia di sviluppo](#metodologia-di-sviluppo)
    - [Organizzazione sprint](#organizzazione-sprint)
    - [Software utilizzati](#software-utilizzati)
-6. [Analisi retrospettiva](#analisi-retrospettiva)
+8. [Analisi retrospettiva](#analisi-retrospettiva)
    - [Sprint 0](#sprint-0)
    - [Sprint 1](#sprint-1)
 
@@ -364,7 +367,50 @@ Utilizzati per creare diagrammi UML, flussi di processo e schemi architetturali 
 [Torna al menu](#indice)
 
 ---
+## Object Oriented Design
+In questo paragrafo sono presenti i diagrammi UML delle classi e di sequenza relativi alle User Story più signficative
+- ##### RF2 Avvio di una nuova partita
+   - Diagramma delle classi
+   ![Immagine diagramma delle classi](./img/ood.png)
+   - Diagramma di sequenza
+   ![Immagine diagramma di sequenza RF2](./img/avvio.png)
+- ##### RF4 Abbandono della partita
+  ##### RF5 Proposta di patta
+  ##### RF6 Chiusura della partita
+   - Diagramma delle classi
+   ![Immagine diagramma delle classi](./img/ood.png)
+   - Diagramma di sequenza
+   ![Immagine diagramma di sequenza RF4-5-6](./img/abbandona-patta-uscita.png)
+- Il Team ha effettuato la scelta progettuale di accomunare i diagrammi di classe e di sequenza per patta , abbandona e chiusura poichè ritenuti molto simili tra loro.
+### Principi dell'object oriented desing
+   Nel progetto realizzato in Python, sono stati rispettati i principi fondamentali della programmazione orientata agli oggetti (OOP) e le linee guida SOLID, al fine di ottenere un codice modulare, estendibile e manutenibile.
+- #### Principi programmazione orientata ad oggetti
+1. Information Hiding
+   - Attributi privati: tutti gli attributi delle classi sono dichiarati private o protected per limitare l’accesso diretto.
+   - Metodi di acccesso: get e set offrono accesso controllato allo stato interno degli oggetti.
+   - Servizi interni: i metodi utilizzati solo internamente alla classe sono dichiarati private, evitando esposizione superflua.
+2. Alta Coesione
+   - Responsabilità univoca: ogni classe è responsabile di un solo compito ben definito.
+   - Tassonomia ECB: l’applicazione è strutturata in Entity, Control e Boundary, con chiara distinzione tra dati, logica e presentazione.
+3. Basso Accoppiamento
+   - Dipendenze minime: grazie all’information hiding e a interfacce pulite, le classi sono debolmente collegate e facilmente riutilizzabili.
+   - Componenti autonomi: ogni classe interagisce tramite metodi ben definiti, evitando riferimenti rigidi ad altre implementazioni.
 
+4. Presentazione Separata
+   - Boundary: le classi responsabili dell’interfaccia utente gestiscono esclusivamente l’interazione con l’utente finale.
+   - Control: gestiscono la logica di dominio, coordinando l’interazione tra le Entity (come Pezzo, Scacchiera ecc.).
+
+- ### Principi SOLID – Applicazione pratica
+
+   | Principio              | Applicazione nel progetto |
+   |------------------------|---------------------------|
+   | **Single Responsibility** | Ogni classe (`Pedone`, `Torre`, `Scacchiera`, ecc.) è responsabile di un solo compito ben definito. |
+   | **Open–Closed**           | Le classi sono aperte all’estensione (tramite ereditarietà) ma chiuse alla modifica, grazie a modularità e astrazione. |
+   | **Liskov Substitution**   | Le sottoclassi di `Pezzo` possono sostituire la superclasse senza alterare il comportamento previsto. |
+   | **Interface Segregation**| Le classi espongono solo i metodi necessari, mantenendo interfacce semplici e focalizzate. |
+   | **Dependency Inversion** | Le classi dipendono dall'astrazione (`Pezzo`) e non dalle implementazioni concrete (`Pedone`, `Torre`, ecc.). |
+
+---
 ## Analisi retrospettiva
 ### Sprint 0
 L'immagine rappresenta il risultato del team meeting svolto dopo lo Sprint 0, durante il quale abbiamo riflettuto sulle difficoltà incontrate e sulle soluzioni adottate. 
