@@ -13,11 +13,16 @@
 5. [Object Oriented Design](#object-oriented-design)
    - [Diagrammi di classi e sequenza](#diagrammi-di-classe-e-di-sequenza)
    - [principi di OO Design](#principi-di-object-oriented-desing)
-6. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
+6. [Riepilogo dei test](#riepilogo-dei-test)
+   - [Introduzione ai test](#introduzione-ai-test)
+   - [Criteri utilizzati](#criteri-utilizzati)
+   - [Struttura](#struttura)
+   - [Esito](#esito)
+7. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
    - [Metodologia di sviluppo](#metodologia-di-sviluppo)
    - [Organizzazione sprint](#organizzazione-sprint)
    - [Software utilizzati](#software-utilizzati)
-7. [Analisi retrospettiva](#analisi-retrospettiva)
+8. [Analisi retrospettiva](#analisi-retrospettiva)
    - [Sprint 0](#sprint-0)
    - [Sprint 1](#sprint-1)
 
@@ -141,10 +146,6 @@ Cxe4 Cd7
 De2 Cgf6
 
 Il formato deve essere leggibile e coerente con la notazione standard, per permettere ai giocatori di consultare facilmente lo storico delle mosse e analizzare l'andamento della partita.
-
-[Torna al menu](#indice)
-
----
 
 #### Requisiti non funzionali
 - **RNF1**: L'applicazione deve essere eseguita all'interno di un container Docker.
@@ -276,8 +277,74 @@ Diciamo più formalmente che:
         
     -   La codifica dei file e dell'output è stata mantenuta in UTF-8.
 
+[Torna al menu](#indice)
+
+---
+
+## Riepilogo dei test
+
+### Introduzione ai test
+Per garantire la qualità e l'affidabilità del nostro codice, abbiamo adottato un approccio strutturato alla fase di testing. In particolare, abbiamo utilizzato Pytest, uno dei framework più diffusi e versatili per il testing in Python. Esso ci ha permesso di scrivere test in modo semplice, leggibile e modulare, facilitando sia l'esecuzione automatica che l'analisi dei risultati.
+
+### Criteri utilizzati 
+Per la definizione e l'esecuzione dei test è stato adottato un approccio di tipo **black-box** che si concentra solo sugli input forniti e sugli output prodotti, valutando se il software si comporta come previsto rispetto alle specifiche. I test sono stati progettati per verificare che il comportamento osservabile delle varie componenti fosse conforme ai requisiti, senza conoscere l’implementazione sottostante.
+
+In particolare, sono stati applicati i seguenti criteri di testing:
+- **Variazione dei parametri**: alcuni test sono stati ripetuti con parametri o oggetti diversi, per verificare il comportamento del sistema in presenza di variabili come:
+
+   - Colore del giocatore (bianco/nero)
+
+   - Simboli dei pezzi
+
+   - Coordinate d’origine parziali o complete
+
+   - Tipi di mossa (standard, promozione, cattura, arrocco...)
+
+- **Suddivisione in Classi di Equivalenza**
+I casi di test sono stati selezionati rappresentando tutte le principali classi di input ammissibili e non ammissibili.
+
+- **State-based testing**
+Per ogni input fornito al sistema, è stato verificato che l’output restituito (tipicamente un dizionario con informazioni sulla mossa) rappresentasse uno stato coerente con l’azione richiesta. In questo modo si è potuto testare che il sistema transiti correttamente da uno stato iniziale a uno stato finale in risposta a ogni comando valido.
+
+### Struttura
+Per agevolare il testing unitario e isolato delle funzionalità dei pezzi, sono state create delle classi **dummy** (mocche) che simulano il comportamento minimo necessario delle classi. Queste versioni semplificate permettono di testare i singoli pezzi e comandi in assenza di una logica di gioco completa, garantendo velocità e indipendenza dei test.
+In particolare, i test relativi alle classi Scacchiera e Pezzo risultano essere i più numerosi, poiché costituiscono la base architetturale su cui si fondano le interazioni tra i vari oggetti del gioco. La loro frequente presenza nel codice richiede un maggior numero di verifiche funzionali e di regressione, specialmente in scenari dinamici come mosse, catture ed eccezioni legate alle regole del gioco.
+
+Per garantire una copertura efficace del codice e facilitare la manutenzione del progetto, è stata realizzata una cartella denominata Test, contenente tutti i moduli di test automatici. All’interno di essa sono presenti classi di test suddivise in base ai package principali del progetto:
+- entity
+- control
+- utility
+
+Ogni file di test è prefissato con test_ (es. test_Pedone.py, test_Parser.py) per distinguerlo chiaramente dalle classi originali e per agevolare l'identificazione automatica da parte di pytest. Questa convenzione permette una rapida individuazione dei test e una perfetta separazione tra codice applicativo e codice di verifica.
+
+**Esclusione del package boundary**
+Le classi contenute nel package boundary non sono state oggetto di test automatici, in quanto rappresentano componenti legate all'interfaccia utente (UI) e alla presentazione. Queste classi svolgono un ruolo di collegamento tra logica applicativa e interazione esterna, e sono tipicamente testate attraverso prove manuali, test end-to-end o test d'integrazione.
+Tale scelta consente di concentrare l’attività di verifica automatica sulla logica funzionale e computazionale del progetto, dove l’efficacia dei test unitari è massima e più facilmente automatizzabile.
 
 
+
+## Esito 
+![Test](./img/test.png)
+Come si evince, sono stati eseguiti 125 casi di test, tutti superati con successo in meno di un secondo. 
+
+I test sono riferiti alle seguenti classi: 
+| Classe Testata         | Funzione Test                                           |
+|------------------------|------------------------------------------------------|
+| test_ControlloPezzi.py | Controlla la validità dei pezzi e le loro condizioni |
+| test_Parser.py         | Verifica il corretto parsing di dati o comandi       |
+| test_Partita.py        | Gestisce lo svolgimento della partita                |
+| test_Alfiere.py        | Logica del pezzo Alfiere                             |
+| test_Cavallo.py        | Movimento e regole del Cavallo                       |
+| test_Coordinata.py     | Manipolazione e validazione delle coordinate         |
+| test_Pedone.py         | Comportamento del Pedone                             |
+| test_Pezzo.py          | Funzionalità della classe base dei pezzi             |
+| test_Re.py             | Logica specifica del Re                              |
+| test_Regina.py         | Movimento e regole della Regina                      |
+| test_Scacchiera.py     | Gestione e stato della scacchiera                    |
+| test_Torre.py          | Movimento e comportamenti della Torre                |
+| test_Utility.py        | Funzioni di supporto utilizzate nel progetto         |
+
+[Torna al menu](#indice)
 
 ---
 ## Processo di sviluppo e organizzazione del lavoro
