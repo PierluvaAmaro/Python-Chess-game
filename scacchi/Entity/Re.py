@@ -31,8 +31,8 @@ class Re(Pezzo):
         
         """
         return (
-        not scacchiera.occupata(finale)
-        or scacchiera.occupata_da_nemico(self, finale)
+            not scacchiera.occupata(finale)
+            or scacchiera.occupata_da_nemico(self, finale)
         )
 
 

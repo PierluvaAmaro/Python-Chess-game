@@ -44,10 +44,7 @@ class Pedone(Pezzo):
         return True
 
     def controlla_mossa(
-        self,
-        finale: Coordinata,
-        scacchiera=None,
-        en_passant=False
+        self, finale: Coordinata, scacchiera=None, en_passant=False
     ) -> bool:
         # ...existing code...
         dx = finale.x - self.iniziale.x
@@ -68,9 +65,11 @@ class Pedone(Pezzo):
             
 
         # Cattura in diagonale normale
-        if abs(dx) == 1 and dy == direzione and scacchiera.occupata_da_nemico(
-            self, finale
-            ):
+        if (
+            abs(dx) == 1
+            and dy == direzione
+            and scacchiera.occupata_da_nemico(self, finale)
+        ):
             return True
 
         # --- EN PASSANT ---
