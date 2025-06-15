@@ -71,4 +71,13 @@ class Torre(Pezzo):
             return False
         
     def mosse_possibili(self, scacchiera):
+        """Restituisce le mosse possibili per la Torre sulla scacchiera.
+
+        Args:
+            scacchiera: Scacchiera su cui calcolare le mosse possibili.
+
+        Returns:
+            list: Lista di coordinate delle mosse possibili.
+            
+        """
         return super().mosse_possibili(scacchiera)

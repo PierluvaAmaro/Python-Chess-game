@@ -17,12 +17,34 @@ class Scacchiera:
         self.pezzi_vivi = pezzi_vivi
 
     def occupata_da_alleato(self, mosso: Pezzo, finale: Coordinata) -> bool:
+        """Verifica se la coordinata finale è occupata da un pezzo alleato.
+
+        Args:
+            mosso (Pezzo): Il pezzo che si sta muovendo.
+            finale (Coordinata): Coordinata da verificare.
+
+        Returns:
+            bool: True se la coordinata è occupata da un pezzo alleato, 
+            False altrimenti.
+
+        """
         for coord, pezzo in self.pezzi_vivi.items():
             if pezzo.colore == mosso.colore and coord == finale:
                 return True
         return False
     
     def occupata_da_nemico(self, mosso: Pezzo, finale: Coordinata) -> bool:
+        """Verifica se la coordinata finale è occupata da un pezzo nemico.
+
+        Args:
+            mosso (Pezzo): Il pezzo che si sta muovendo.
+            finale (Coordinata): Coordinata da verificare.
+
+        Returns:
+            bool: True se la coordinata è occupata da un pezzo nemico, 
+            False altrimenti.
+        
+        """
         for coord, pezzo in self.pezzi_vivi.items():
             if pezzo.colore != mosso.colore and coord == finale:
                 return True

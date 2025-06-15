@@ -164,8 +164,11 @@ class Partita:
                             raise ValueError("Nessun pezzo valido per questa mossa")
                         if isinstance(pezzi, list):
                             if len(pezzi) > 1:
-                                self.ui.stampa("Mossa ambigua: specifica anche la colonna di partenza (es: Cbe2 o exd5).")
-                                break  # Esce dal ciclo simulando il comportamento do-while
+                                self.ui.stampa(
+                                    "Mossa ambigua: specifica anche la colonna di "
+                                    "partenza (es: Cbe2 o exd5)."
+                                )
+                                break
                             pezzo = pezzi[0]
                             #Se il pedone arriva in promozione senza che sia 
                             #specicata la promozione
@@ -180,13 +183,19 @@ class Partita:
                                 )
                         else:
                             pezzo = pezzi
-                        if self.controllo_pezzi.re_in_scacco(self.scacchiera, self.turno_bianco):
-                            if not self.controllo_pezzi.mossa_elimina_scacco(
+                        if (
+                            self.controllo_pezzi.re_in_scacco(
+                                self.scacchiera, self.turno_bianco
+                            )
+                            and not self.controllo_pezzi.mossa_elimina_scacco(
                                 self.scacchiera, pezzo, mossa["finale"]
-                            ):
-                                raise ValueError(
-                                    "Mossa non valida: il re sarebbe in scacco dopo la mossa!"
-                                )
+                            )
+                        ):
+                            raise ValueError(
+                                "Mossa non valida: il re sarebbe "
+                                "in scacco dopo la mossa!"
+                            )
+
                         break
                 
                     simulazione = self.controllo_pezzi.simula(
@@ -240,15 +249,23 @@ class Partita:
                             )
 
                     self.controllo_pezzi.muovi(
-                        mossa["cattura"], self.scacchiera, pezzo, mossa["finale"], mossa.get("en_passant", False)
+                        mossa["cattura"],
+                        self.scacchiera,
+                        pezzo,
+                        mossa["finale"],
+                        mossa.get("en_passant", False)
                     )
+
                     if pezzo.primo:
                         pezzo.primo = False
 
                     if mossa.get("en_passant"):
                         x_catturato = mossa["finale"].x
                         y_catturato = mossa["finale"].y
-                        coord_catturato = Coordinata(x_catturato, y_catturato - 1 if self.turno_bianco else y_catturato + 1)
+                        coord_catturato = Coordinata(
+                            x_catturato,
+                            y_catturato - 1 if self.turno_bianco else y_catturato + 1
+                        )
                         if coord_catturato in self.scacchiera.pezzi_vivi:
                             self.scacchiera.pezzi_vivi.pop(coord_catturato)
                             
@@ -274,7 +291,11 @@ class Partita:
                     self.mosse_nero.append(stringa)
 
                 for p in self.scacchiera.pezzi_vivi.values():
-                    if hasattr(p, "en_passant") and isinstance(p, type(pezzo)) and p.colore != pezzo.colore:
+                    if (
+                        hasattr(p, "en_passant")
+                        and isinstance(p, type(pezzo))
+                        and p.colore != pezzo.colore
+                    ):
                         p.en_passant = False
                         
                 self.turno_bianco = not self.turno_bianco

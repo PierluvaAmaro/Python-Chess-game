@@ -14,10 +14,31 @@ class ControlloPezzi:
         """Inizializza un nuovo controller per le operazioni sui pezzi."""
         pass
     
-    def trova_pezzo(self, scacchiera: Scacchiera, iniziale: Coordinata, finale: Coordinata, colore: bool, simbolo: str, en_passant: bool = False):
+    def trova_pezzo(self, scacchiera: Scacchiera, 
+                    iniziale: Coordinata, finale: Coordinata, 
+                    colore: bool, simbolo: str, en_passant: bool = False):
+        """Trova i pezzi che possono muoversi da una coordinata iniziale a una finale.
+
+        Args:
+            scacchiera (Scacchiera): Scacchiera corrente di gioco.
+            iniziale (Coordinata): Coordinata iniziale del pezzo.
+            finale (Coordinata): Coordinata finale del pezzo.
+            colore (bool): Colore del pezzo (True = bianco).
+            simbolo (str): Simbolo del pezzo da cercare.
+            en_passant (bool): Se True, considera la mossa en passant.
+
+        Returns:
+            list: Lista di pezzi che possono muoversi dalla coordinata iniziale
+            a quella finale.
+        
+        """
         candidati = []
         for _, piece in scacchiera.pezzi_vivi.items():
-            if piece is not None and piece.colore == colore and piece.simbolo == simbolo:
+            if (
+                piece is not None
+                and piece.colore == colore
+                and piece.simbolo == simbolo
+            ):
                 # Se iniziale è specificata, controlla solo i campi valorizzati
                 if iniziale is not None:
                     if iniziale.x is not None and piece.iniziale.x != iniziale.x:
@@ -29,7 +50,9 @@ class ControlloPezzi:
                     dy = finale.y - piece.iniziale.y
                     direzione = 1 if colore else -1
                     if dx == 1 and dy == direzione:
-                        pedone_vicino = scacchiera.pezzi_vivi.get(Coordinata(finale.x, piece.iniziale.y))
+                        pedone_vicino = scacchiera.pezzi_vivi.get(
+                            Coordinata(finale.x, piece.iniziale.y)
+                        )
                         if (
                             pedone_vicino is not None
                             and pedone_vicino.simbolo in ("♙", "♟")
@@ -47,21 +70,18 @@ class ControlloPezzi:
         """Esegue lo spostamento di un pezzo sulla scacchiera.
         
         Args:
-            da_mangiare (bool): Se True, indica che la mossa è una cattura.
-            scacchiera (Scacchiera): Scacchiera di gioco.
+            da_mangiare (bool): Se True, la mossa è una cattura.
+            scacchiera (Scacchiera): Scacchiera corrente di gioco.
             pezzo (Pezzo): Pezzo da muovere.
-            finale (Coordinata): Coordinata di destinazione.
-
-        Raises:
-            ValueError: Se la mossa non è valida per uno dei seguenti motivi:
-                - La casella di destinazione è minacciata (per il Re)
-                - La casella è occupata da un alleato
-                - Mossa di cattura senza pezzo nemico
-                - Mossa normale con pezzo nemico presente
+            finale (Coordinata): Coordinata di destinazione del pezzo.
+            en_passant (bool): Se True, la mossa è una cattura en passant.
 
         Returns:
-            bool: True se la mossa è stata eseguita con successo.
-        
+            bool: True se la mossa è stata eseguita con successo, False altrimenti.
+
+        Raises:
+            ValueError: Se la mossa non è valida o se il pezzo non può essere mosso.
+
         """
         if (self.minacciato_da_nemico(pezzo.colore, scacchiera, finale)
         and isinstance(pezzo, Re)):
@@ -311,16 +331,24 @@ class ControlloPezzi:
         match(simbolo):
             case "D":
                 from ..Entity.Regina import Regina
-                nuovo_pezzo = Regina('♕' if pezzo.colore else '♛', nuova_coordinata, colore)
+                nuovo_pezzo = Regina(
+                    '♕' if pezzo.colore else '♛',
+                    nuova_coordinata,
+                    colore
+                )
             case "A":
                 from ..Entity.Alfiere import Alfiere
-                nuovo_pezzo = Alfiere('♗' if pezzo.colore else '♝', nuova_coordinata, colore)
+                nuovo_pezzo = Alfiere(
+                    '♗' if pezzo.colore else '♝', nuova_coordinata, colore
+                )
             case "T":
                 from ..Entity.Torre import Torre
-                nuovo_pezzo = Torre('♖' if pezzo.colore else '♜', nuova_coordinata, colore)
+                simbolo_torre = '♖' if pezzo.colore else '♜'
+                nuovo_pezzo = Torre(simbolo_torre, nuova_coordinata, colore)
             case "C":
                 from ..Entity.Cavallo import Cavallo
-                nuovo_pezzo = Cavallo('♘' if pezzo.colore else '♞', nuova_coordinata, colore)
+                simbolo_cavallo = '♘' if pezzo.colore else '♞'
+                nuovo_pezzo = Cavallo(simbolo_cavallo, nuova_coordinata, colore)
             case _:
                 raise ValueError("Simbolo di promozione non valido")
             

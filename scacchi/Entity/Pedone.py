@@ -43,7 +43,12 @@ class Pedone(Pezzo):
             return not scacchiera.occupata(finale)
         return True
 
-    def controlla_mossa(self, finale: Coordinata, scacchiera=None, en_passant=False) -> bool:
+    def controlla_mossa(
+        self,
+        finale: Coordinata,
+        scacchiera=None,
+        en_passant=False
+    ) -> bool:
         # ...existing code...
         dx = finale.x - self.iniziale.x
         dy = finale.y - self.iniziale.y
@@ -63,14 +68,19 @@ class Pedone(Pezzo):
             
 
         # Cattura in diagonale normale
-        if abs(dx) == 1 and dy == direzione and scacchiera.occupata_da_nemico(self, finale):
+        if abs(dx) == 1 and dy == direzione and scacchiera.occupata_da_nemico(
+            self, finale
+            ):
             return True
 
         # --- EN PASSANT ---
         # Verifica se la cattura en passant è possibile
         if abs(dx) == 1 and dy == direzione and not scacchiera.occupata(finale):
             # La casa finale è vuota, ma potrebbe essere en passant
-            pedone_vicino = scacchiera.pezzi_vivi.get(Coordinata(finale.x, self.iniziale.y))
+            pedone_vicino = scacchiera.pezzi_vivi.get(
+                Coordinata(finale.x, self.iniziale.y)
+            )
+
             if (
                 pedone_vicino is not None
                 and pedone_vicino.simbolo in ("♙", "♟")
