@@ -10,14 +10,14 @@
    - [Diagramma dei pacchetti](#diagramma-dei-pacchetti)
    - [Principi di progettazione](#principi-di-progettazione-utilizzati)
    - [Motivazione delle scelte progettuali](#motivazione-delle-scelte-progettuali)
-5. [Object Oriented Design](#o-o-d)
-   - [Diagrammi di classi e sequenza](#diagramma-classi-sequenza)
-   - [principi di OO Design](#o-o-design)
-7. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
+5. [Object Oriented Design](#object-oriented-design)
+   - [Diagrammi di classi e sequenza](#diagrammi-di-classe-e-di-sequenza)
+   - [principi di OO Design](#principi-di-object-oriented-desing)
+6. [Processo di sviluppo e organizzazione del lavoro](#processo-di-sviluppo-e-organizzazione-del-lavoro)
    - [Metodologia di sviluppo](#metodologia-di-sviluppo)
    - [Organizzazione sprint](#organizzazione-sprint)
    - [Software utilizzati](#software-utilizzati)
-8. [Analisi retrospettiva](#analisi-retrospettiva)
+7. [Analisi retrospettiva](#analisi-retrospettiva)
    - [Sprint 0](#sprint-0)
    - [Sprint 1](#sprint-1)
 
@@ -367,8 +367,10 @@ Utilizzati per creare diagrammi UML, flussi di processo e schemi architetturali 
 [Torna al menu](#indice)
 
 ---
+
 ## Object Oriented Design
 In questo paragrafo sono presenti i diagrammi UML delle classi e di sequenza relativi alle User Story più signficative
+### Diagrammi di classe e di sequenza
 - ##### RF2 Avvio di una nuova partita
    - Diagramma delle classi
    ![Immagine diagramma delle classi](./img/ood.png)
@@ -382,12 +384,23 @@ In questo paragrafo sono presenti i diagrammi UML delle classi e di sequenza rel
    - Diagramma di sequenza
    ![Immagine diagramma di sequenza RF4-5-6](./img/abbandona-patta-uscita.png)
 - Il Team ha effettuato la scelta progettuale di accomunare i diagrammi di classe e di sequenza per patta , abbandona e chiusura poichè ritenuti molto simili tra loro.
-### Principi dell'object oriented desing
+- ##### RF7 Visualizzazione delle mosse
+   - Diagramma delle classi
+   ![Immagine diagramma delle classi](./img/mosse.png)
+   - Diagramma di sequenza
+   ![Immagine diagramma di mostra mosse](./img/mostra_mosse.png)
+- ##### Movimento del pedone
+   - Diagramma delle classi
+   ![Immagine diagramma delle classi](./img/pedone.png)
+   - Diagramma di sequenza
+   ![Immagine diagramma di movimento pedone](./img/movimento_pedone.png)
+- In fase di progettazione, si è deciso di modellare un unico scenario rappresentativo per l'esecuzione di una mossa: il movimento del pedone. Questa scelta è motivata dal fatto che l'architettura del sistema prevede un pattern di interazione standardizzato per la gestione di tutte le mosse
+### Principi di object oriented desing
    Nel progetto realizzato in Python, sono stati rispettati i principi fondamentali della programmazione orientata agli oggetti (OOP) e le linee guida SOLID, al fine di ottenere un codice modulare, estendibile e manutenibile.
 - #### Principi programmazione orientata ad oggetti
 1. Information Hiding
    - Attributi privati: tutti gli attributi delle classi sono dichiarati private o protected per limitare l’accesso diretto.
-   - Metodi di acccesso: get e set offrono accesso controllato allo stato interno degli oggetti.
+   - Metodi di accesso: get e set offrono accesso controllato allo stato interno degli oggetti.
    - Servizi interni: i metodi utilizzati solo internamente alla classe sono dichiarati private, evitando esposizione superflua.
 2. Alta Coesione
    - Responsabilità univoca: ogni classe è responsabile di un solo compito ben definito.
@@ -409,6 +422,8 @@ In questo paragrafo sono presenti i diagrammi UML delle classi e di sequenza rel
    | **Liskov Substitution**   | Le sottoclassi di `Pezzo` possono sostituire la superclasse senza alterare il comportamento previsto. |
    | **Interface Segregation**| Le classi espongono solo i metodi necessari, mantenendo interfacce semplici e focalizzate. |
    | **Dependency Inversion** | Le classi dipendono dall'astrazione (`Pezzo`) e non dalle implementazioni concrete (`Pedone`, `Torre`, ecc.). |
+ 
+[Torna al menu](#indice)
 
 ---
 ## Analisi retrospettiva
