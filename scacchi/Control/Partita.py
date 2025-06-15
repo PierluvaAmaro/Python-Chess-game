@@ -412,7 +412,8 @@ class Partita:
                     if risposta.lower() == "s":
                         self.ui.imposta_stile('accent', 'yellow')
                         self.ui.stampa(self.ui.formatta_testo("Uscita in corso..."))
-                        exit(0)
+                        self.in_gioco = False
+                        return None
 
                     elif risposta.lower() == "n":
                         self.ui.imposta_stile('accent', 'green')

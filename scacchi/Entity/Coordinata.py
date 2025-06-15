@@ -1,58 +1,12 @@
 class Coordinata:
-    """CLASSE ENTITY."""
-    
-    """Rappresenta una coppia di coordinate cartesiane (x, y)."""
-
-    def __init__(self, x: int, y: int):
-        """Inizializza una nuova coordinata con i valori specificati.
-        
-        Args:
-            x (int): La coordinata orizzontale.
-            y (int): La coordinata verticale.
-
-        Raises:
-            ValueError: Se uno dei due valori e' None
-
-        """
-        self.cambia(x, y)
-
-    def cambia(self, x: int, y: int):
-        """Modifica i valori delle coordinate x e y.
-
-        Args:
-            x (int): Il nuovo valore per la coordinata x.
-            y (int): Il nuovo valore per la coordinata y.
-
-        Raises:
-            ValueError: Se x o y sono None.
-
-        """
+    def __init__(self, x, y):
         self.x = x
         self.y = y
 
     def __eq__(self, other):
-        """Confronta due coordinate per uguaglianza.
-
-        Args:
-            other (Coordinata): L'altra coordinata da confrontare.
-
-        Returns:
-            bool: True se le coordinate sono uguali, False altrimenti.
-
-        """
-        if isinstance(other, Coordinata):
-            return self.x == other.x and self.y == other.y
-        return False
+        if not isinstance(other, Coordinata):
+            return False
+        return self.x == other.x and self.y == other.y
 
     def __hash__(self):
-        """Restituisce un hash della coordinata.
-
-        Returns:
-            int: L'hash basato su x e y.
-            
-        """
         return hash((self.x, self.y))
-    
-    def print(self):
-        """Stampa le coordinate in un formato leggibile."""
-        print(f"Coordinata: ({self.x}, {self.y})")
