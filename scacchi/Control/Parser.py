@@ -14,7 +14,7 @@ class Parser:
             'C': {True: '♘', False: '♞'},     # Cavallo
             'A': {True: '♗', False: '♝'},     # Alfiere
             'D': {True: '♕', False: '♛'},     # Regine
-            'K': {True: '♔', False: '♚'},     # Re
+            'R': {True: '♔', False: '♚'},     # Re
         }
         
         self.espressione = re.compile(r"""^(?:O-O(-O)?|0-0(-0)?)$|^(?P<pezzo>[RDTAC])?(?P<origine>[a-h]?[1-8]?)[x:]?(?P<colonna>[a-h])(?P<riga>[1-8])(?:=(?P<promo>[RDTAC]))?(?P<scacco>[+#]?)(?:\s*(?:ep|e\.p\.))?$""")
