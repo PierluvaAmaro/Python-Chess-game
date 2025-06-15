@@ -167,8 +167,26 @@ class Partita:
                                 self.ui.stampa("Mossa ambigua: specifica anche la colonna di partenza (es: Cbe2 o exd5).")
                                 break  # Esce dal ciclo simulando il comportamento do-while
                             pezzo = pezzi[0]
+                            #Se il pedone arriva in promozione senza che sia 
+                            #specicata la promozione
+                            if(
+                                isinstance(pezzo, Pedone)
+                                and mossa["finale"].y in (1,8)
+                                and not mossa.get("promozione")
+                            ):
+                                raise ValueError(
+                                    "Devi specificare la promozione per il pedone"
+                                    "(es: e8=D)"
+                                )
                         else:
                             pezzo = pezzi
+                        if self.controllo_pezzi.re_in_scacco(self.scacchiera, self.turno_bianco):
+                            if not self.controllo_pezzi.mossa_elimina_scacco(
+                                self.scacchiera, pezzo, mossa["finale"]
+                            ):
+                                raise ValueError(
+                                    "Mossa non valida: il re sarebbe in scacco dopo la mossa!"
+                                )
                         break
                 
                     simulazione = self.controllo_pezzi.simula(
