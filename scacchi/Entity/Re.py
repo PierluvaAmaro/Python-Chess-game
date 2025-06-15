@@ -30,7 +30,7 @@ class Re(Pezzo):
             bool: True se il percorso è libero, False altrimenti.
         
         """
-        return not scacchiera.occupata(finale)
+        return (not scacchiera.occupata(finale)) or scacchiera.occupata_da_nemico(self, finale)
 
     def controlla_mossa(self, finale: Coordinata, scacchiera=None) -> bool:
         """Verifica se la mossa verso la coordinata specificata è valida per il re.
