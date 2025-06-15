@@ -1,86 +1,115 @@
+import re
+
 from ..Entity.Coordinata import Coordinata
 
 
 class Parser:
-    """CLASSE CONTROL."""
+    """Classe control per la conversione di notazioni scacchistiche in mosse."""
     
-    """Classe per la lettura e la conversione di mosse in notazione scacchistica."""
-
     def __init__(self):
-        """Inizializza un nuovo parser."""
+        """Inizializza il parser con la mappa dei simboli Unicode per i pezzi."""
         self.mappa_simboli = {
-            'P': {True: '♙', False: '♟'},
-            'T': {True: '♖', False: '♜'},
-            'C': {True: '♘', False: '♞'},
-            'A': {True: '♗', False: '♝'},
-            'D': {True: '♕', False: '♛'},
-            'K': {True: '♔', False: '♚'},
+            'P': {True: '♙', False: '♟'},     # Pedone
+            'T': {True: '♖', False: '♜'},     # Torre
+            'C': {True: '♘', False: '♞'},     # Cavallo
+            'A': {True: '♗', False: '♝'},     # Alfiere
+            'D': {True: '♕', False: '♛'},     # Regine
+            'K': {True: '♔', False: '♚'},     # Re
         }
+        
+        self.espressione = re.compile(r"""^(?:O-O(-O)?|0-0(-0)?)$|^(?P<pezzo>[RDTAC])?(?P<origine>[a-h]?[1-8]?)[x:]?(?P<colonna>[a-h])(?P<riga>[1-8])(?:=(?P<promo>[RDTAC]))?(?P<scacco>[+#]?)(?:\s*(?:ep|e\.p\.))?$""")
 
     def parse_mossa(self, notazione: str, colore):
-        """Converti una mossa scacchistica in un oggetto di tipo Coordinata.
+        """Converti una notazione scacchistica in una mossa strutturata.
         
         Args:
-            notazione(str): Notazione scacchistica della mossa.
-            colore(bool): Colore del pezzo che sta effettuando la mossa.
-            
+            notazione: Stringa nella notazione scacchistica (es. 'e4', 'Nxf6+').
+            colore: Colore del pezzo che muove (True = bianco, False = nero).
+
+        Returns:
+            Dizionario con la struttura:
+            {
+                "tipo": str ("mossa"|"arrocco"),
+                "cattura": bool,
+                "simbolo": str (simbolo Unicode),
+                "finale": Coordinata,
+                "promozione": str | None,
+                "en_passant": bool | None,
+                "scacco": bool,
+                "matto": bool,
+                "lato": str | None (solo per arrocco)
+            }
+
+        Raises:
+            ValueError: Se la notazione è malformata o contiene valori non validi.
+        
         """
         notazione = notazione.strip()
 
-        if notazione == "0-0":
-            return {"tipo": "arrocco", "lato": "corto"}
-        if notazione == "0-0-0":
-            return {"tipo": "arrocco", "lato": "lungo"}
+        if notazione in ("0-0", "O-O"):
+            return {"tipo": "arrocco", "lato": "corto", "cattura": False, "iniziale": None, "finale": None, "simbolo": None, "promozione": None, "en_passant": False, "scacco": False, "matto": False   }
+    
+        if notazione in ("0-0-0", "O-O-O"):
+            return {"tipo": "arrocco", "lato": "lungo", "cattura": False, "iniziale": None, "finale": None, "simbolo": None, "promozione": None, "en_passant": False, "scacco": False, "matto": False   }
         
-        # controllo se e' stato dichiarato lo scacco
-        scacco = '+' in notazione
-        if scacco:
-            notazione = notazione.replace('+', '')
         
-        # controllo se il pezzo deve catturare
-        cattura = 'x' in notazione
-        if cattura:
-            notazione = notazione.replace('x', '')
+        match = self.espressione.match(notazione)
+        if not match:
+            raise ValueError(f"Notazione '{notazione}' non valida.")
         
-        matto = '#' in notazione
-        if matto:
-            notazione = notazione.replace('#', '')
-            
-        notazione = notazione.strip()
+        pezzo = match.group('pezzo') or 'P'
+        origine = match.group('origine') or '' 
         
-        # controllo se il pezzo è stato specificato
-        # almeno 3 caratteri, di cui i primi due sono lettere
-        lettera_pezzo = 'P'
-        if len(notazione) >= 3 and notazione[0].isalpha() and notazione[1].isalpha():
-            lettera_pezzo = notazione[0]
-            colonna = notazione[1].lower()
-            riga = notazione[2:]
-        else:
-            colonna = notazione[0].lower()
-            riga = notazione[1:]
+        colonna = match.group('colonna')
+        riga = match.group('riga')
         
-        if colonna < 'a' or colonna > 'h':
-            raise ValueError("Colonna non valida. Deve essere tra 'a' e 'h'.")
+        promozione = match.group('promo')
+        scacco_matto = match.group('scacco') or ''
 
-        x = ord(colonna) - ord('a') + 1
-        y = int(riga)
         
-        if y < 1 or y > 8:
-            raise ValueError("Riga non valida. Deve essere tra 1 e 8.")
+        cattura = 'x' in notazione
+        finale = Coordinata(ord(colonna) - ord('a') + 1, int(riga))
         
-        simbolo = self.mappa_simboli.get(lettera_pezzo, {}).get(colore)
-        if simbolo is None:
-            raise ValueError(f"Simbolo non valido per il pezzo: {lettera_pezzo}")
+        if origine:
+            if len(origine) == 2:
+                x = ord(origine[0]) - ord('a') + 1
+                y = int(origine[1])
+                iniziale = Coordinata(x, y)
+            elif origine and origine[0].isalpha():
+                x = ord(origine[0]) - ord('a') + 1
+                iniziale = Coordinata(x, None)
+            elif origine and origine[0].isdigit():
+                y = int(origine[0])
+                iniziale = Coordinata(None, y)
+            else:
+                iniziale = None
+        else:
+            iniziale = None
+        
+        simbolo = self.mappa_simboli.get(pezzo.upper(), {}).get(colore)
+        if not simbolo:
+            raise ValueError(f"Pezzo non riconosciuto o colore non valido: {pezzo}")
         
         return {
             "tipo": "mossa",
             "cattura": cattura,
             "simbolo": simbolo,
-            "finale": Coordinata(x, y),
-            # TODO: gestire promozione e en_passant
-            "promozione": None,
-            "en_passant": None,
-            "scacco": scacco,
-            "matto": matto
+            "iniziale": iniziale,
+            "finale": finale,
+            "promozione": self._parse_promozione(promozione, colore),
+            "en_passant": self._parse_en_passant(notazione, pezzo),
+            "scacco": scacco_matto == '+',
+            "matto": scacco_matto == '#'
         }
-    
+
+    def _parse_promozione(self, promo: str | None, colore: bool) -> str | None:
+        """Ritorna la lettera del pezzo in promozione se valido."""
+        if promo and promo.upper() in self.mappa_simboli:
+            return promo.upper()
+        return None
+
+    def _parse_en_passant(self, notazione: str, pezzo: str) -> bool:
+        """Determina se si tratta di un en passant (solo per pedoni)."""
+        return pezzo.upper() == 'P' and (
+            'ep' in notazione.lower() or 'e.p.' in notazione.lower()
+        )

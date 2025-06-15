@@ -1,20 +1,25 @@
 class GestioneComandi:
-    """CLASSE BOUNDARY."""
+    """Classe boundary per la gestione dei comandi utente."""
     
-    """Gestisce l'input dei comandi dell'utente."""
-
     def __init__(self):
-        """Inizializza un nuovo oggetto ComandoUtente."""
+        """Inizializza un nuovo oggetto per la gestione dei comandi."""
         pass
 
     def esegui_comando(self, comando: str) -> int:
-        """Rileva ed esegue un comando.
+        """Rileva ed esegue un comando specificato.
         
         Args:
-            comando (str): comando da eseguire.
-
+            comando (str): Comando da eseguire (es. "/gioca", "/help").
+        
         Returns:
-            int: stato che rappresenta il tipo di comando inserito.
+            int: Codice di stato che rappresenta il tipo di comando:
+                - 1: /gioca
+                - 2: /scacchiera
+                - 3: /help
+                - 4: /mosse
+                - 5: /patta
+                - 6: /abbandona
+                - 7: /esci
 
         Raises:
             NotImplementedError: se il comando e' sconosciuto.

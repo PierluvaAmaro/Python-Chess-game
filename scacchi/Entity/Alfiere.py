@@ -3,10 +3,8 @@ from .Pezzo import Pezzo
 
 
 class Alfiere(Pezzo):
-    """CLASSE ENTITY."""
+    """Classe Entity che rappresenta un'Alfiere, uno dei pezzi fondamentali."""
     
-    """Rappresenta l'alfiere, uno dei pezzi fondamentali negli scacchi."""
-
     def __init__(self, simbolo: str, coord: Coordinata, colore: bool):
         """Crea un Alfiere derivante dalla classe Pezzo.
         
@@ -23,7 +21,7 @@ class Alfiere(Pezzo):
 
         Args:
             finale (Coordinata): Coordinata verso cui l'Alfiere si deve muovere.
-            scacchiera: Scacchiera su cui verificare le posizioni dei pezzi.
+            scacchiera (Scacchiera): Scacchiera su cui verificare le posizioni dei pezzi
 
         Returns:
             bool: True se il percorso è libero, False altrimenti.
@@ -44,12 +42,12 @@ class Alfiere(Pezzo):
             y += y_step
         return True
 
-    def controlla_mossa(self, finale: Coordinata, scacchiera=None) -> bool:
+    def controlla_mossa(self, finale: Coordinata, scacchiera) -> bool:
         """Verifica se la mossa verso la coordinata specificata è valida per l'Alfiere.
         
         Args:
             finale (Coordinata): Coordinata finale dell'Alfiere verso cui deve muoversi.
-            scacchiera: Scacchiera per verificare le posizioni dei pezzi.
+            scacchiera (Scacchiera): Scacchiera per verificare le posizioni dei pezzi.
 
         Raise:
             ValueError: Se la coordinata finale non è valida o il percorso è occupato.
@@ -67,4 +65,10 @@ class Alfiere(Pezzo):
             return False 
         
     def mosse_possibili(self, scacchiera):
+        """Calcola tutte le mosse possibili.
+        
+        Returns:
+            Coordinate (list): Coordinate in cui il pezzo' puo andare.
+        
+        """
         return super().mosse_possibili(scacchiera)

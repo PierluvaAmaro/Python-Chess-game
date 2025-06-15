@@ -36,14 +36,16 @@ class Torre(Pezzo):
         y_step = (dy > 0) - (dy < 0)
         
         x, y = self.iniziale.x + x_step, self.iniziale.y + y_step
-
+        lista = []
         while x != finale.x or y!= finale.y:
             coord = Coordinata(x, y)
             if (scacchiera.occupata(coord)):
                 return False
             x += x_step
             y += y_step
-        return True
+            
+            lista.append(coord)
+        return True, lista
        
     def controlla_mossa(self, finale: Coordinata, scacchiera) -> bool:
         """Verifica se la mossa verso la coordinata specificata è valida per la Torre.
@@ -64,6 +66,7 @@ class Torre(Pezzo):
 
         if (dy == 0) != (dx == 0):
             return self.percorso_libero(finale, scacchiera)
+
         else:
             return False
         

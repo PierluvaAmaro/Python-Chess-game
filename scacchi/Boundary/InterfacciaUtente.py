@@ -7,33 +7,16 @@ from ..Utility.Utils import leggi_file
 
 
 class InterfacciaUtente:
-    """CLASSE BOUNDARY."""
-
-    """Gestisce l'interfaccia tra l'utente e il gioco degli scacchi."""
-
+    """Classe boundary per la gestione dell'interfaccia utente degli scacchi."""
+    
     def __init__(self):
-        """Crea una nuova interfaccia utente."""
+        """Inizializza una nuova interfaccia utente con stili predefiniti."""
         self.console = Console()
-
         self.colori_validi = {
-            "black",
-            "red",
-            "green",
-            "yellow",
-            "blue",
-            "magenta",
-            "cyan",
-            "white",
-            "bright_black",
-            "bright_red",
-            "bright_green",
-            "bright_yellow",
-            "bright_blue",
-            "bright_magenta",
-            "bright_cyan",
-            "bright_white",
+            "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white",
+            "bright_black", "bright_red", "bright_green", "bright_yellow",
+            "bright_blue", "bright_magenta", "bright_cyan", "bright_white"
         }
-
         self.default = {
             "accent": "cyan",
             "bold": True,
@@ -42,45 +25,56 @@ class InterfacciaUtente:
         }
 
     def imposta_stile(self, chiave: str, valore) -> bool:
-        """Imposta un particolare stile dell'interfaccia.
-
+        """Modifica uno stile dell'interfaccia.
+        
         Args:
-            chiave (str): chiave (nome) dello stile da impostare (es. "accent")
-            valore: nuovo valore da assegnare (es. "blue")
+            chiave: Nome dello stile da modificare (es. "accent").
+            valore: Nuovo valore dello stile (deve essere un colore valido per 
+                    gli stili accent).
+            
+        Returns:
+            bool: True se la modifica è avvenuta con successo, False altrimenti.
 
         Raises:
-            ValueError: se la chiave non esiste
-
-        Returns:
-            bool: True se l'azione e' andata a buon fine, False altrimenti.
-
+            ValueError: Se la chiave non esiste o il valore non è valido.
+        
         """
         if chiave not in self.default:
-            raise ValueError(f"Chiave inesistente: '{chiave}'")
+            raise ValueError(f"Chiave di stile inesistente: '{chiave}'")
+        if chiave == "accent" and valore not in self.colori_validi:
+            raise ValueError(f"Colore non valido: '{valore}'")
 
         self.default[chiave] = valore
+        return True
 
-    def get_stile(self, key: str = None):
-        """Restituisce il valore di uno stile specifico.
+    def get_stile(self, chiave: str = None):
+        """Restituisce uno stile specifico o tutti gli stili.
 
         Args:
-            key (str): chiave dello stile da restituire.
+            chiave: Nome dello stile da ottenere. Se None, restituisce tutti gli stili.
+
+        Returns:
+            Il valore dello stile richiesto o il dizionario completo se chiave è None.
 
         Raises:
-            ValueError: se la chiave non esiste.
+            ValueError: Se la chiave non esiste.
 
         """
-        if key is not None:
-            if key not in self.default:
-                raise ValueError("Chiave inesistente.")
-        else:
-            return self.default[key]
+        if chiave is None:
+            return self.default.copy()
+        if chiave not in self.default:
+            raise ValueError(f"Chiave di stile inesistente: '{chiave}'")
+        
+        return self.default[chiave]
 
-    def formatta_testo(self, text: str):
-        """Applica gli stili definizialei al testo.
+    def formatta_testo(self, testo: str):
+        """Applica gli stili correnti al testo.
 
         Args:
-            text (str): testo a cui applicare gli stili specifici.
+            testo (str): Testo da formattare.
+        
+        Returns:
+            str: Stringa formattata con i tag Rich
 
         """
         style = ""
@@ -93,23 +87,32 @@ class InterfacciaUtente:
 
         style += self.default["accent"]
 
-        return f"[{style}]{text}[/]"
+        return f"[{style}]{testo}[/]"
 
-    def stampa(self, prompt: str = "default", stile: str = None):
-        """Mostra una stringa con il colore e stile specificato.
-
+    def stampa(self, messaggio: str = "default", stile: str = None):
+        """Stampa un messaggio formattato.
+        
         Args:
-            prompt (str): stringa da mostrare a schermo.
-            stile (str): colore da impostare al prompt.
-
+            messaggio: Testo da stampare.
+            stile: Colore temporaneo da applicare (opzionale).
+            
         """
         if stile is not None:
+            stile_originale = self.default["accent"]
             self.imposta_stile("accent", stile)
-
-        self.console.print(self.formatta_testo(prompt))
+            self.console.print(self.formatta_testo(messaggio))
+            self.imposta_stile("accent", stile_originale)
+        else:
+            self.console.print(self.formatta_testo(messaggio))
         
     def stampa_scacchiera(self, scacchiera: Scacchiera):
-        os.system('cls' if os.name == 'nt' else 'clear')
+        """Stampa una rappresentazione grafica della scacchiera.
+        
+        Args:
+            scacchiera: Oggetto Scacchiera da visualizzare.
+            
+        """
+        # os.system('cls' if os.name == 'nt' else 'clear')
 
         # Offset per spostare la scacchiera
         offset_x = "      "  # 6 spazi a sinistra
@@ -149,12 +152,17 @@ class InterfacciaUtente:
         self.imposta_stile("accent", "cyan")
         self.stampa(lettere_colonne)
     
-    def stampa_file(self, filename: str):
-        """Mostra il contenuto di un file di aiuto.
- 
+    def stampa_file(self, filename: str, colore: str = None):
+        """Stampa il contenuto di un file con formattazione.
+        
         Args:
-            filename (str): Il percorso del file di aiuto.
-
+            filename: Percorso del file da stampare.
+            colore: Colore del testo (opzionale).
+            
         """
-        self.imposta_stile("accent", "white")
+        if colore is None:
+            self.imposta_stile("accent", "white")
+        else:
+            self.imposta_stile("accent", colore)
+            
         self.stampa(leggi_file(filename))

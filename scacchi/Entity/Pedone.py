@@ -17,6 +17,7 @@ class Pedone(Pezzo):
 
         """
         super().__init__(simbolo, coord, colore)
+        self.en_passant = False
 
     def percorso_libero(self, finale, scacchiera):
         """Verifica se il percorso verso la coordinata finale è libero.
@@ -42,40 +43,40 @@ class Pedone(Pezzo):
             return not scacchiera.occupata(finale)
         return True
 
-    def controlla_mossa(self, finale: Coordinata, scacchiera=None) -> bool:
-        """Verifica se la mossa verso la coordinata specificata è valida per il pedone.
-        
-        Args:
-            finale (Coordinata): Coordinata finale del pedone verso cui deve muoversi.
-            scacchiera: Scacchiera per verificare le posizioni dei pezzi.
-
-        Raise:
-            ValueError: Se la coordinata finale non è valida o il percorso è occupato.
-
-        """
-        if finale is None:
-            raise ValueError("Coordinata non valida.")
-
+    def controlla_mossa(self, finale: Coordinata, scacchiera=None, en_passant=False) -> bool:
+        # ...existing code...
         dx = finale.x - self.iniziale.x
         dy = finale.y - self.iniziale.y
         direzione = 1 if self.colore else -1  # Bianco: su, Nero: giù
 
         # Movimento in avanti di una casella
         if dx == 0 and dy == direzione and not scacchiera.occupata(finale):
+            self.en_passant = False
             return True
 
         # Movimento in avanti di due caselle solo al primo movimento
         if dx == 0 and dy == 2 * direzione and self.primo:
             middle = Coordinata(self.iniziale.x, self.iniziale.y + direzione)
             if not scacchiera.occupata(middle) and not scacchiera.occupata(finale):
+                self.en_passant = True
+                return True
+            
+
+        # Cattura in diagonale normale
+        if abs(dx) == 1 and dy == direzione and scacchiera.occupata_da_nemico(self, finale):
+            return True
+
+        # --- EN PASSANT ---
+        # Verifica se la cattura en passant è possibile
+        if abs(dx) == 1 and dy == direzione and not scacchiera.occupata(finale):
+            # La casa finale è vuota, ma potrebbe essere en passant
+            pedone_vicino = scacchiera.pezzi_vivi.get(Coordinata(finale.x, self.iniziale.y))
+            if (
+                pedone_vicino is not None
+                and pedone_vicino.simbolo in ("♙", "♟")
+                and pedone_vicino.colore != self.colore
+                and getattr(pedone_vicino, "en_passant", False)
+            ):
                 return True
 
-        # Cattura in diagonale
-        return bool(
-            abs(dx) == 1 
-            and dy == direzione 
-            and scacchiera.occupata_da_nemico(self, finale)
-        )
-        
-    def mosse_possibili(self, scacchiera):
-        return super().mosse_possibili(scacchiera)
+        return False

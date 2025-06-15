@@ -27,15 +27,8 @@ class Coordinata:
             ValueError: Se x o y sono None.
 
         """
-        if x is not None:
-            self.x = x
-        else: 
-            raise ValueError("Valore X non valido.")
-        
-        if y is not None:
-            self.y = y
-        else:
-            raise ValueError("Valore Y non valido.")
+        self.x = x
+        self.y = y
 
     def __eq__(self, other):
         """Confronta due coordinate per uguaglianza.
