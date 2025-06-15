@@ -152,10 +152,12 @@ Il re si sposta di 2 case verso una torre, e la torre salta il re posizionandosi
 Quando un pedone avversario avanza di 2 case dalla sua posizione iniziale e si posiziona accanto a un tuo pedone, puoi catturarlo come se avesse fatto solo 1 passo.
 
 Valido solo al turno immediatamente successivo.
+
 <img src=./img/EnPassant.gif width="350" alt="Descrizione dell'immagine">
 
 #### Promozione
 Quando un pedone raggiunge l’ultima traversa (8ª riga per i bianchi, 1ª per i neri), viene promosso a un altro pezzo (regina, torre, alfiere, cavallo) a scelta del giocatore — quasi sempre regina.
+
 <img src=./img/Promozione.gif width="350" alt="Descrizione dell'immagine">
 
 #### Scacco e scacco matto
@@ -171,6 +173,7 @@ Non è scacco matto, ma il giocatore non ha mosse legali e non è sotto scacco. 
 
 #### Mossa ambigua
 A volte potrebbe capitare che due pezzi uguali del giocatore possano mangiare nella stessa casa. Per risolvere l'ambiguità, basta specificare la casa di partenza del pezzo (individuata da colonna) del pezzo che si vuole muovere, e continuare normalmente la cattura in notazione algebrica.
+
 <img src=./img/MossaAmbigua.gif width="350" alt="Descrizione dell'immagine">
 
 [Torna al menu](#indice)
@@ -229,6 +232,7 @@ A volte potrebbe capitare che due pezzi uguali del giocatore possano mangiare ne
 ### FIDE
 
 La Federazione internazionale degli scacchi, nota con l'acronimo francese [FIDE](https://it.wikipedia.org/wiki/Federazione_Internazionale_degli_Scacchi) (Fédération internationale des échecs), è un'organizzazione internazionale che regolamenta e controlla l'attività scacchistica a livello mondiale.
+
 ![Fide](./img/Fide.jpg)
 
 [Torna al menu](#indice)
