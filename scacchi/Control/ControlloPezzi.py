@@ -4,6 +4,7 @@ from ..Entity.Coordinata import Coordinata
 from ..Entity.Pezzo import Pezzo
 from ..Entity.Re import Re
 from ..Entity.Scacchiera import Scacchiera
+from ..Entity.Torre import Torre
 
 
 class ControlloPezzi:
@@ -12,31 +13,37 @@ class ControlloPezzi:
     def __init__(self):
         """Inizializza un nuovo controller per le operazioni sui pezzi."""
         pass
-
-    def trova_pezzo(self, scacchiera: Scacchiera, finale: Coordinata, colore: bool,
-    simbolo: str) -> Pezzo:
-        """Cerca un pezzo che può muoversi alla coordinata specificata.
-        
-        Args:
-            scacchiera (Scacchiera): Scacchiera di gioco contenente i pezzi.
-            finale (Coordinata): Coordinata di destinazione del movimento.
-            colore (bool): Colore del pezzo da cercare (True = bianco, False = nero).
-            simbolo (str): Simbolo del pezzo da cercare.
-
-        Returns:
-            pezzo (Pezzo): Il primo pezzo valido trovato che può effettuare la mossa, 
-            o None se nessun pezzo soddisfa i criteri.
-        
-        """
-        for _, piece in scacchiera.pezzi_vivi.items():            
-            if (piece is not None and piece.colore == colore 
-                and piece.simbolo == simbolo and 
-                piece.controlla_mossa(finale, scacchiera)):
-                return piece
-        return None
+    
+    def trova_pezzo(self, scacchiera: Scacchiera, iniziale: Coordinata, finale: Coordinata, colore: bool, simbolo: str, en_passant: bool = False):
+        candidati = []
+        for _, piece in scacchiera.pezzi_vivi.items():
+            if piece is not None and piece.colore == colore and piece.simbolo == simbolo:
+                # Se iniziale è specificata, controlla solo i campi valorizzati
+                if iniziale is not None:
+                    if iniziale.x is not None and piece.iniziale.x != iniziale.x:
+                        continue
+                    if iniziale.y is not None and piece.iniziale.y != iniziale.y:
+                        continue
+                if en_passant:
+                    dx = abs(finale.x - piece.iniziale.x)
+                    dy = finale.y - piece.iniziale.y
+                    direzione = 1 if colore else -1
+                    if dx == 1 and dy == direzione:
+                        pedone_vicino = scacchiera.pezzi_vivi.get(Coordinata(finale.x, piece.iniziale.y))
+                        if (
+                            pedone_vicino is not None
+                            and pedone_vicino.simbolo in ("♙", "♟")
+                            and pedone_vicino.colore != colore
+                            and getattr(pedone_vicino, "en_passant", False)
+                        ):
+                            candidati.append(piece)
+                else:
+                    if piece.controlla_mossa(finale, scacchiera):
+                        candidati.append(piece)
+        return candidati
       
     def muovi(self, da_mangiare: bool, scacchiera: Scacchiera, pezzo: Pezzo,
-    finale: Coordinata) -> bool:
+    finale: Coordinata, en_passant: bool = False) -> bool:
         """Esegue lo spostamento di un pezzo sulla scacchiera.
         
         Args:
@@ -64,14 +71,18 @@ class ControlloPezzi:
             raise ValueError("Mossa illegale")
 
         if da_mangiare:
-            if not scacchiera.occupata_da_nemico(pezzo, finale):
-                raise ValueError("Mossa illegale")
+            if en_passant:
+                # Non controllare la casa di arrivo, ma quella del pedone catturato
+                pass  # la rimozione avviene dopo, in Partita.py
             else:
-                scacchiera.pezzi_vivi.pop(finale)
+                if not scacchiera.occupata_da_nemico(pezzo, finale):
+                    raise ValueError("Mossa illegale")
+                else:
+                    scacchiera.pezzi_vivi.pop(finale)
         else:
             if scacchiera.occupata_da_nemico(pezzo, finale):
                 raise ValueError("Mossa illegale")
-        
+                
         scacchiera.pezzi_vivi.pop(pezzo.iniziale)
         pezzo.iniziale = finale
         scacchiera.pezzi_vivi[finale] = pezzo
@@ -285,3 +296,84 @@ class ControlloPezzi:
                             self.simula(scacchiera, pezzo, finale) is not None):
                             return False
         return True
+
+    def esegui_promozione(self, scacchiera, pezzo: Pezzo, simbolo: str):
+        if not isinstance(pezzo, Pezzo):
+            raise ValueError("Il pezzo da promuovere non è valido")
+        
+        if pezzo.iniziale.y not in (1, 8):
+            raise ValueError("Il pezzo non si trova sulla riga di promozione")
+        
+        scacchiera.pezzi_vivi.pop(pezzo.iniziale)
+        nuova_coordinata = pezzo.iniziale
+        colore = pezzo.colore
+        
+        match(simbolo):
+            case "D":
+                from ..Entity.Regina import Regina
+                nuovo_pezzo = Regina('♕' if pezzo.colore else '♛', nuova_coordinata, colore)
+            case "A":
+                from ..Entity.Alfiere import Alfiere
+                nuovo_pezzo = Alfiere('♗' if pezzo.colore else '♝', nuova_coordinata, colore)
+            case "T":
+                from ..Entity.Torre import Torre
+                nuovo_pezzo = Torre('♖' if pezzo.colore else '♜', nuova_coordinata, colore)
+            case "C":
+                from ..Entity.Cavallo import Cavallo
+                nuovo_pezzo = Cavallo('♘' if pezzo.colore else '♞', nuova_coordinata, colore)
+            case _:
+                raise ValueError("Simbolo di promozione non valido")
+            
+        scacchiera.pezzi_vivi[nuova_coordinata] = nuovo_pezzo        
+    def esegui_arrocco(self, scacchiera: Scacchiera, colore: bool, arrocco: str):
+        y = 1 if colore else 8
+        re = next(p for p in scacchiera.pezzi_vivi.values()
+                  if isinstance(p, Re) and p.colore == colore)
+        
+        if re.primo: 
+            if arrocco == "corto":
+                coordinata_torre = Coordinata(8, y)
+                torre = next(p for p in scacchiera.pezzi_vivi.values() 
+                            if isinstance(p, Torre) and p.iniziale == coordinata_torre
+                            and p.colore == colore and p.primo)
+                if not Torre:
+                    raise ValueError("Impossibile eseguire l'arrocco, hai mosso uno"\
+                        "dei due pezzi")
+                
+                arrocco_possibile, coord = torre.percorso_libero(re.iniziale, 
+                                                                 scacchiera)
+                for cord in coord:
+                    if self.minacciato_da_nemico(colore, scacchiera, cord):
+                        arrocco_possibile = False
+                        
+                if arrocco_possibile:
+                    self.muovi(False, scacchiera, torre, Coordinata(6, y))
+                    self.muovi(False, scacchiera, re, Coordinata(7, y))
+                else:
+                    raise ValueError("Arrocco non possibile")
+            elif arrocco == "lungo":
+                coordinata_torre = Coordinata(1, y)
+                torre = next(p for p in scacchiera.pezzi_vivi.values()
+                            if isinstance(p, Torre) and p.iniziale == coordinata_torre
+                            and p.colore == colore and p.primo)
+                if not Torre:
+                    raise ValueError("Impossibile eseguire l'arrocco, hai mosso uno"\
+                        "dei due pezzi")
+                
+                arrocco_possibile, coord = torre.percorso_libero(re.iniziale,
+                                                                 scacchiera)
+                for cord in coord:
+                    if self.minacciato_da_nemico(colore, scacchiera, cord):
+                        arrocco_possibile = False
+                        
+                if arrocco_possibile:
+                    self.muovi(False, scacchiera, torre, Coordinata(4, y))
+                    self.muovi(False, scacchiera, re, Coordinata(3, y))
+                else:
+                    raise ValueError("Arrocco non possibile")
+
+            return True
+                
+        else:
+            raise ValueError("Impossibile eseguire l'arrocco, hai mosso uno"\
+                "dei due pezzi")

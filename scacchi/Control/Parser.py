@@ -1,3 +1,5 @@
+import re
+
 from ..Entity.Coordinata import Coordinata
 
 
@@ -14,6 +16,8 @@ class Parser:
             'D': {True: '♕', False: '♛'},     # Regine
             'K': {True: '♔', False: '♚'},     # Re
         }
+        
+        self.espressione = re.compile(r"""^(?:O-O(-O)?|0-0(-0)?)$|^(?P<pezzo>[RDTAC])?(?P<origine>[a-h]?[1-8]?)[x:]?(?P<colonna>[a-h])(?P<riga>[1-8])(?:=(?P<promo>[RDTAC]))?(?P<scacco>[+#]?)(?:\s*(?:ep|e\.p\.))?$""")
 
     def parse_mossa(self, notazione: str, colore):
         """Converti una notazione scacchistica in una mossa strutturata.
@@ -43,80 +47,69 @@ class Parser:
         notazione = notazione.strip()
 
         if notazione in ("0-0", "O-O"):
-            return {"tipo": "arrocco", "lato": "corto", "cattura": False}
+            return {"tipo": "arrocco", "lato": "corto", "cattura": False, "iniziale": None, "finale": None, "simbolo": None, "promozione": None, "en_passant": False, "scacco": False, "matto": False   }
+    
         if notazione in ("0-0-0", "O-O-O"):
-            return {"tipo": "arrocco", "lato": "lungo", "cattura": False}
+            return {"tipo": "arrocco", "lato": "lungo", "cattura": False, "iniziale": None, "finale": None, "simbolo": None, "promozione": None, "en_passant": False, "scacco": False, "matto": False   }
         
-        # modificatori
-        modificatori = {
-            'scacco': '+' in notazione,
-            'matto': '#' in notazione,
-            'cattura': 'x' in notazione
-        }
-        notazione = notazione.replace('+', '').replace('#', '').replace('x', '').strip()
         
-        # estrazione informazioni pezzo
-        lettera_pezzo = 'P'
-        if len(notazione) >= 3 and notazione[0].isalpha() and notazione[1].isalpha():
-            lettera_pezzo, colonna = notazione[0].upper(), notazione[1].lower()
-            riga = notazione[2:]
+        match = self.espressione.match(notazione)
+        if not match:
+            raise ValueError(f"Notazione '{notazione}' non valida.")
+        
+        pezzo = match.group('pezzo') or 'P'
+        origine = match.group('origine') or '' 
+        
+        colonna = match.group('colonna')
+        riga = match.group('riga')
+        
+        promozione = match.group('promo')
+        scacco_matto = match.group('scacco') or ''
+
+        
+        cattura = 'x' in notazione
+        finale = Coordinata(ord(colonna) - ord('a') + 1, int(riga))
+        
+        if origine:
+            if len(origine) == 2:
+                x = ord(origine[0]) - ord('a') + 1
+                y = int(origine[1])
+                iniziale = Coordinata(x, y)
+            elif origine and origine[0].isalpha():
+                x = ord(origine[0]) - ord('a') + 1
+                iniziale = Coordinata(x, None)
+            elif origine and origine[0].isdigit():
+                y = int(origine[0])
+                iniziale = Coordinata(None, y)
+            else:
+                iniziale = None
         else:
-            colonna = notazione[0].lower()
-            riga = notazione[1:]
+            iniziale = None
         
-        if not ('a' <= colonna <= 'h'):
-            raise ValueError(f"Colonna '{colonna}' non valida. Usa lettere a-h.")
-        
-        try:
-            y = int(riga)
-            if not (1 <= y <= 8):
-                raise ValueError
-        except ValueError as err:
-            raise ValueError(f"Riga '{riga} non valida. Usa numeri 1-8") from err
-        
-        x = ord(colonna) - ord('a') + 1
-        simbolo = self.mappa_simboli.get(lettera_pezzo, {}).get(colore)
-        if simbolo is None:
-            raise ValueError(f"Pezzo '{lettera_pezzo}' non riconosciuto o colore"\
-                " non valido")
+        simbolo = self.mappa_simboli.get(pezzo.upper(), {}).get(colore)
+        if not simbolo:
+            raise ValueError(f"Pezzo non riconosciuto o colore non valido: {pezzo}")
         
         return {
             "tipo": "mossa",
-            "cattura": modificatori['cattura'],
+            "cattura": cattura,
             "simbolo": simbolo,
-            "finale": Coordinata(x, y),
-            "promozione": self._parse_promozione(notazione),
-            "en_passant": self._parse_en_passant(notazione, lettera_pezzo),
-            "scacco": modificatori['scacco'],
-            "matto": modificatori['matto']
+            "iniziale": iniziale,
+            "finale": finale,
+            "promozione": self._parse_promozione(promozione, colore),
+            "en_passant": self._parse_en_passant(notazione, pezzo),
+            "scacco": scacco_matto == '+',
+            "matto": scacco_matto == '#'
         }
-        
-    def _parse_promozione(self, notazione: str) -> str | None:
-        """Estrae l'informazione di promozione dalla notazione.
-        
-        Args:
-            notazione (str): notazione da cui estrarre le informazioni sulla promozione.
-        
-        Returns:
-            str: Se il pezzo in promozione e' accettato, None altrimenti.
-            
-        """
-        if "=" in notazione:
-            pezzo = notazione.split('=')[1][0].upper()
-            if pezzo in ('D','T','A','C'):
-                return self.mappa_simboli.get(pezzo, {}).get(True)
 
+    def _parse_promozione(self, promo: str | None, colore: bool) -> str | None:
+        """Ritorna la lettera del pezzo in promozione se valido."""
+        if promo and promo.upper() in self.mappa_simboli:
+            return promo.upper()
         return None
-    
-    def _parse_en_passant(self, notazione: str, lettera: str) -> bool:
-        """Determina se la mossa e' un en passant.
-        
-        Args:
-            notazione (str): notazione da cui estrarre l'informazione sull'en-passant.
-            lettera (str): lettera del pezzo.
-        
-        Returns:
-            bool: True se e' stato specificato l'en-passant, False altrimenti.    
-        
-        """
-        return lettera == 'P' and 'e.p.' in notazione
+
+    def _parse_en_passant(self, notazione: str, pezzo: str) -> bool:
+        """Determina se si tratta di un en passant (solo per pedoni)."""
+        return pezzo.upper() == 'P' and (
+            'ep' in notazione.lower() or 'e.p.' in notazione.lower()
+        )

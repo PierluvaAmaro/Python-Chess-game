@@ -1,5 +1,7 @@
 from sys import argv
 
+from scacchi.Entity.Coordinata import Coordinata
+from scacchi.Entity.Pedone import Pedone
 from scacchi.Entity.Re import Re
 
 from ..Boundary.InputUtente import InputUtente
@@ -141,6 +143,7 @@ class Partita:
                 continue
             
             try:
+                pezzi = []
                 mossa = self.input_utente.parser.parse_mossa(stringa, self.turno_bianco)
 
                 if mossa.get("tipo") == "arrocco":
@@ -148,21 +151,36 @@ class Partita:
                         self.scacchiera, self.turno_bianco, mossa["lato"]
                     )
                 else:
-                    pezzo = self.controllo_pezzi.trova_pezzo(
-                        self.scacchiera,
-                        mossa["finale"],
-                        self.turno_bianco,
-                        mossa["simbolo"],
-                    )
-                    if pezzo is None:
-                        raise ValueError("Nessun pezzo valido per questa mossa")
-
+                    while True:
+                        pezzi = self.controllo_pezzi.trova_pezzo(
+                            self.scacchiera,
+                            mossa["iniziale"],
+                            mossa["finale"],
+                            self.turno_bianco,
+                            mossa["simbolo"],
+                            mossa.get("en_passant", False)
+                        )
+                        if not pezzi:
+                            raise ValueError("Nessun pezzo valido per questa mossa")
+                        if isinstance(pezzi, list):
+                            if len(pezzi) > 1:
+                                self.ui.stampa("Mossa ambigua: specifica anche la colonna di partenza (es: Cbe2 o exd5).")
+                                break  # Esce dal ciclo simulando il comportamento do-while
+                            pezzo = pezzi[0]
+                        else:
+                            pezzo = pezzi
+                        break
+                
                     simulazione = self.controllo_pezzi.simula(
                         self.scacchiera, pezzo, mossa["finale"]
                     )
                     if simulazione is None:
                         raise ValueError("Mossa non valida")
 
+                    pedone_sim = simulazione.pezzi_vivi.get(mossa["finale"])
+                    if pedone_sim is None:
+                        raise ValueError("Pedone non trovato nella simulazione")
+                        
                     colore_re_avversario = not pezzo.colore
                     re_avversario = next(
                         (
@@ -204,11 +222,24 @@ class Partita:
                             )
 
                     self.controllo_pezzi.muovi(
-                        mossa["cattura"], self.scacchiera, pezzo, mossa["finale"]
+                        mossa["cattura"], self.scacchiera, pezzo, mossa["finale"], mossa.get("en_passant", False)
                     )
                     if pezzo.primo:
                         pezzo.primo = False
 
+                    if mossa.get("en_passant"):
+                        x_catturato = mossa["finale"].x
+                        y_catturato = mossa["finale"].y
+                        coord_catturato = Coordinata(x_catturato, y_catturato - 1 if self.turno_bianco else y_catturato + 1)
+                        if coord_catturato in self.scacchiera.pezzi_vivi:
+                            self.scacchiera.pezzi_vivi.pop(coord_catturato)
+                            
+                    if mossa.get("promozione"):
+                        pedone = self.scacchiera.pezzi_vivi.get(mossa["finale"])
+                        self.controllo_pezzi.esegui_promozione(
+                            self.scacchiera, pedone, mossa["promozione"]
+                        )
+                    
                     if is_matto:
                         vincitore = self.nome1 if self.turno_bianco else self.nome2
 
@@ -224,6 +255,10 @@ class Partita:
                 else:
                     self.mosse_nero.append(stringa)
 
+                for p in self.scacchiera.pezzi_vivi.values():
+                    if hasattr(p, "en_passant") and isinstance(p, type(pezzo)) and p.colore != pezzo.colore:
+                        p.en_passant = False
+                        
                 self.turno_bianco = not self.turno_bianco
                 self.ui.stampa_scacchiera(self.scacchiera)
 

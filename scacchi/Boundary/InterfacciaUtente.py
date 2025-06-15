@@ -112,7 +112,7 @@ class InterfacciaUtente:
             scacchiera: Oggetto Scacchiera da visualizzare.
             
         """
-        os.system('cls' if os.name == 'nt' else 'clear')
+        # os.system('cls' if os.name == 'nt' else 'clear')
 
         # Offset per spostare la scacchiera
         offset_x = "      "  # 6 spazi a sinistra
