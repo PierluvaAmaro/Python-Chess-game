@@ -1,10 +1,13 @@
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
 
 from scacchi.Control.Partita import Partita, saluta
 
+
 # --- Test saluta ---
 def test_saluta_file_non_trovato():
+    """Testa che il metodo saluta gestisca l'assenza del file senza errori."""
     ui = MagicMock()
     with patch("scacchi.Control.Partita.leggi_file", side_effect=FileNotFoundError):
         saluta(ui)
@@ -12,12 +15,14 @@ def test_saluta_file_non_trovato():
     ui.stampa.assert_any_call("Versione 2.0 (Sprint 2)", "cyan")
 
 def test_saluta_file_vuoto():
+    """Testa che il metodo saluta gestisca un file vuoto senza errori."""
     ui = MagicMock()
     with patch("scacchi.Control.Partita.leggi_file", return_value=""):
         saluta(ui)
     ui.stampa.assert_called_with("Benvenuto al gioco degli scacchi!", "bright_white")
 
 def test_saluta_file_contenuto():
+    """Testa che il metodo saluta legga correttamente un file con contenuto."""
     ui = MagicMock()
     contenuto = "Linea1\nLinea2\nLinea3\nLinea4"
     with patch("scacchi.Control.Partita.leggi_file", return_value=contenuto):
@@ -27,6 +32,8 @@ def test_saluta_file_contenuto():
 
 # --- Test Partita.reset ---
 def test_reset_resetta_stato():
+    """Testa che il metodo reset resetti lo stato della partita."""
+    # Crea un'istanza di Partita e imposta alcuni valori
     partita = Partita()
     partita.nome1 = "A"
     partita.nome2 = "B"
@@ -53,6 +60,7 @@ def test_reset_resetta_stato():
     (7, None),
 ])
 def test_processa_comandi(risultato, expected):
+    """Testa il metodo processa con vari comandi."""
     partita = Partita()
     partita.ui = MagicMock()
     partita.input_utente = MagicMock()
@@ -88,6 +96,7 @@ def test_processa_comandi(risultato, expected):
         assert ret in (None, "continua", "fine")
         
 def test_processa_comando_non_valido():
+    """Testa il comportamento quando viene inserito un comando non valido."""
     partita = Partita()
     partita.ui = MagicMock()
     partita.input_utente = MagicMock()

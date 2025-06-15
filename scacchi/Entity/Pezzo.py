@@ -57,6 +57,15 @@ class Pezzo(ABC):
         pass
             
     def mosse_possibili(self, scacchiera: ...):
+        """Restituisce una lista di mosse possibili per il pezzo sulla scacchiera.
+
+        Args:
+            scacchiera: Scacchiera su cui verificare le posizioni dei pezzi.
+
+        Returns:
+            list[Coordinata]: Lista di coordinate valide per le mosse del pezzo.
+            
+        """
         lista = []
         for x in range(1, 9):
             for y in range(1, 9):

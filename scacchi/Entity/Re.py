@@ -30,7 +30,11 @@ class Re(Pezzo):
             bool: True se il percorso è libero, False altrimenti.
         
         """
-        return (not scacchiera.occupata(finale)) or scacchiera.occupata_da_nemico(self, finale)
+        return (
+            not scacchiera.occupata(finale)
+            or scacchiera.occupata_da_nemico(self, finale)
+        )
+
 
     def controlla_mossa(self, finale: Coordinata, scacchiera=None) -> bool:
         """Verifica se la mossa verso la coordinata specificata è valida per il re.
@@ -55,4 +59,13 @@ class Re(Pezzo):
         return (dx <= 1 and dy <= 1) and (dx != 0 or dy != 0)
     
     def mosse_possibili(self, scacchiera):
+        """Restituisce le mosse possibili per il re sulla scacchiera.
+
+        Args:
+            scacchiera: Scacchiera su cui verificare le posizioni dei pezzi.
+
+        Returns:
+            list: Lista di coordinate delle mosse possibili per il re.
+
+        """
         return super().mosse_possibili(scacchiera)

@@ -95,4 +95,13 @@ class Regina(Pezzo):
         return not scacchiera.occupata_da_alleato(self, finale) 
 
     def mosse_possibili(self, scacchiera):
+        """Restituisce le mosse possibili per la regina sulla scacchiera.
+
+        Args:
+            scacchiera: Scacchiera su cui calcolare le mosse possibili.
+
+        Returns:
+            list[Coordinata]: Lista delle coordinate delle mosse possibili.
+            
+        """
         return super().mosse_possibili(scacchiera)

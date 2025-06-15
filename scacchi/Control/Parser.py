@@ -17,7 +17,17 @@ class Parser:
             'R': {True: '♔', False: '♚'},     # Re
         }
         
-        self.espressione = re.compile(r"""^(?:O-O(-O)?|0-0(-0)?)$|^(?P<pezzo>[RDTAC])?(?P<origine>[a-h]?[1-8]?)[x:]?(?P<colonna>[a-h])(?P<riga>[1-8])(?:=(?P<promo>[RDTAC]))?(?P<scacco>[+#]?)(?:\s*(?:ep|e\.p\.))?$""")
+        self.espressione = re.compile(
+            r"""^(?:O-O(-O)?|0-0(-0)?)$|^"""
+            r"""(?P<pezzo>[RDTAC])?"""
+            r"""(?P<origine>[a-h]?[1-8]?)"""
+            r"""[x:]?"""
+            r"""(?P<colonna>[a-h])"""
+            r"""(?P<riga>[1-8])"""
+            r"""(?:=(?P<promo>[RDTAC]))?"""
+            r"""(?P<scacco>[+#]?)"""
+            r"""(?:\s*(?:ep|e\.p\.))?$"""
+        )
 
     def parse_mossa(self, notazione: str, colore):
         """Converti una notazione scacchistica in una mossa strutturata.
@@ -47,10 +57,32 @@ class Parser:
         notazione = notazione.strip()
 
         if notazione in ("0-0", "O-O"):
-            return {"tipo": "arrocco", "lato": "corto", "cattura": False, "iniziale": None, "finale": None, "simbolo": None, "promozione": None, "en_passant": False, "scacco": False, "matto": False   }
+            return {
+                "tipo": "arrocco",
+                "lato": "corto",
+                "cattura": False,
+                "iniziale": None,
+                "finale": None,
+                "simbolo": None,
+                "promozione": None,
+                "en_passant": False,
+                "scacco": False,
+                "matto": False
+            }
     
         if notazione in ("0-0-0", "O-O-O"):
-            return {"tipo": "arrocco", "lato": "lungo", "cattura": False, "iniziale": None, "finale": None, "simbolo": None, "promozione": None, "en_passant": False, "scacco": False, "matto": False   }
+            return {
+                "tipo": "arrocco",
+                "lato": "lungo",
+                "cattura": False,
+                "iniziale": None,
+                "finale": None,
+                "simbolo": None,
+                "promozione": None,
+                "en_passant": False,
+                "scacco": False,
+                "matto": False
+            }
         
         
         match = self.espressione.match(notazione)
