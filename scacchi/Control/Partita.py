@@ -219,24 +219,24 @@ class Partita:
                     if mossa.get("matto"):
                         if not is_matto:
                             raise ValueError(
-                                "Hai dichiarato scacco matto (#), ma la mossa"
+                                "Hai dichiarato scacco matto (#), ma la mossa "
                                 "non mette il re avversario sotto scacco matto."
                             )
                     else:
                         if is_matto:
                             raise ValueError(
-                                "Hai messo il re avversario sotto scacco"
+                                "Hai messo il re avversario sotto scacco "
                                 "matto ma non lo hai dichiarato."
                             )
                         if not mossa.get("scacco") and is_scacco:
                             raise ValueError(
                                 "Hai messo il re avversario sotto scacco ma"
-                                "non lo hai dichiarato (+)."
+                                " non lo hai dichiarato (+)."
                             )
                         if mossa.get("scacco") and not is_scacco:
                             raise ValueError(
                                 "Hai dichiarato scacco (+) ma la mossa non"
-                                "mette il re avversario sotto scacco."
+                                " mette il re avversario sotto scacco."
                             )
 
                     self.controllo_pezzi.muovi(
