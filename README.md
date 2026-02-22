@@ -53,3 +53,7 @@ The game implements the following functionalities:
 ### Project's year
 2024/2025
 
+### Final grade
+30L
+
+
