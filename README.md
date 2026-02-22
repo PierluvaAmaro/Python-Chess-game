@@ -49,3 +49,7 @@ The game implements the following functionalities:
    ```bash
    git clone https://github.com/YourUsername/Python-Chess-Game.git
    cd Python-Chess-Game
+
+### Project's year
+2024/2025
+
